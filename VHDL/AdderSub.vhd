@@ -15,6 +15,7 @@ ARCHITECTURE AdderTwo_Architecture OF AdderTwo IS
 	SIGNAL outSig : STD_LOGIC_VECTOR(n DOWNTO 0);
 	SIGNAL cin_0,subMSBit:  STD_LOGIC;
 
+
 BEGIN
 
 	initY : FOR a IN 0 TO n-1 GENERATE
@@ -39,6 +40,7 @@ BEGIN
 			cout => reg(i)
 		);
 	END GENERATE;
+
 
 	last : FA PORT MAP(
 			xi => x(n-1),
