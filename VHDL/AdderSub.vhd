@@ -13,6 +13,7 @@ END AdderTwo;
 ARCHITECTURE AdderTwo_Architecture OF AdderTwo IS
 	SIGNAL reg,yXored : STD_LOGIC_VECTOR(n-1 DOWNTO 0);
 	SIGNAL cin_0:  STD_LOGIC;
+
 BEGIN
 
 	initY : FOR a IN 0 TO n-1 GENERATE
@@ -37,13 +38,13 @@ BEGIN
 			cout => reg(i)
 		);
 	END GENERATE;
-	
-	last : FA PORT MAP(
-			xi => x(n-1),
-			yi => yXored(n-1),
-			cin =>reg(n-1),
-			s => s(n),
-			cout => OPEN
-	);
+	s(n) <= s(n-1) when sel="10" else reg(n-1);
+	--last : FA PORT MAP(
+--			xi => x(n-1),
+	--		yi => yXored(n-1),
+		--	cin =>reg(n-1),
+	--		s => s(n),
+	--		cout => OPEN
+	--);
 
 END AdderTwo_Architecture;
