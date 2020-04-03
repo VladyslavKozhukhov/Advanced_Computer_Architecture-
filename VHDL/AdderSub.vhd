@@ -40,16 +40,14 @@ BEGIN
 		);
 	END GENERATE;
 
-
+subMSBit <= x(n-1) XOR yXored(n-1) XOR reg(n-2) when sel ="10" else reg(n-1);
 	last : FA PORT MAP(
-			xi => x(n-1),
-			yi => yXored(n-1),
-			cin =>reg(n-1),
-			s => subMSBit,
+			xi => '0',
+			yi => '0',
+			cin =>subMSBit,
+			s => s(n),
 			cout => OPEN
 	);
-	
-	s(n) <= subMSBit WHEN sel="10" ELSE
-			reg(n-1);
+
 	
 END AdderTwo_Architecture;
