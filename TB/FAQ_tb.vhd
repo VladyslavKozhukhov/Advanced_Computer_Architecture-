@@ -31,9 +31,11 @@ BEGIN
 			y <= "01011100";  
 			wait for 5 us;
 			y <= "11111001";  
-			wait ;
-
-
+			wait  for 5 us;
+			y <= "11111011";
+			wait  for 5 us;
+			y <= "11111010";
+			wait;
         end process tb_y;
 		
     tb_x : process
@@ -49,8 +51,13 @@ BEGIN
 			wait for 5 us;
 			sel<="10";
 			x <= "11101101";
-			wait ;
-
+			wait for 5 us;
+			sel<="11";
+			x <= "11010111";
+			wait for 5 us;
+			sel<="11";
+			x <= "11010111";
+			wait;
         end process tb_x;
   
 END top_Testbench;
