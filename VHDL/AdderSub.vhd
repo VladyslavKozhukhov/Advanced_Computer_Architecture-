@@ -12,7 +12,8 @@ END AdderTwo;
 --------------------------------------------------------------
 ARCHITECTURE AdderTwo_Architecture OF AdderTwo IS
 	SIGNAL reg,yXored : STD_LOGIC_VECTOR(n-1 DOWNTO 0);
-	SIGNAL cin_0:  STD_LOGIC;
+	SIGNAL outSig : STD_LOGIC_VECTOR(n DOWNTO 0);
+	SIGNAL cin_0,subMSBit:  STD_LOGIC;
 
 BEGIN
 
@@ -25,7 +26,7 @@ BEGIN
 			xi => x(0),
 			yi => yXored(0),
 			cin =>cin_0,
-			s => s(0),
+			s => outSig(0),
 			cout => reg(0)
 	);
 	
@@ -34,17 +35,22 @@ BEGIN
 			xi => x(i),
 			yi => yXored(i),
 			cin => reg(i-1),
-			s => s(i),
+			s => outSig(i),
 			cout => reg(i)
 		);
 	END GENERATE;
-	s(n) <= s(n-1) when sel="10" else reg(n-1);
-	--last : FA PORT MAP(
---			xi => x(n-1),
-	--		yi => yXored(n-1),
-		--	cin =>reg(n-1),
-	--		s => s(n),
-	--		cout => OPEN
-	--);
 
+	last : FA PORT MAP(
+			xi => x(n-1),
+			yi => yXored(n-1),
+			cin =>reg(n-1),
+			s => subMSBit,
+			cout => OPEN
+	);
+	
+	outSig(n) <= subMSBit WHEN sel="10" ELSE
+				 reg(n-1);
+				 
+	s <= outSig;
+	
 END AdderTwo_Architecture;
