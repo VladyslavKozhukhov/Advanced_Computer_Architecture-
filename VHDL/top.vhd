@@ -15,16 +15,20 @@ END top;
 ARCHITECTURE struct OF top IS
 	SIGNAL AdderSubSig: STD_LOGIC_VECTOR(n DOWNTO 0);
 	signal x_shift : STD_LOGIC_VECTOR(7 DOWNTO 0);
-	signal y_shift : STD_LOGIC_VECTOR(7 DOWNTO 0);
+	signal y_shift : STD_LOGIC_VECTOR(2 DOWNTO 0);
 	signal barrelSig : STD_LOGIC_VECTOR(8 DOWNTO 0);
 
 
 BEGIN
-	x_shift<=std_logic_vector(resize(signed(X), 8));
-	y_shift<=std_logic_vector(resize(signed(Y), 8));
+	x_shift <= STD_LOGIC_VECTOR(resize(unsigned(X), 8)) WHEN n<8 ELSE
+	           X(7 DOWNTO 0) WHEN n>8 ELSE
+			   X;
+	y_shift <= STD_LOGIC_VECTOR(resize(signed(Y), 3)) WHEN n<3 ELSE
+	           Y(2 DOWNTO 0) WHEN n>3 ELSE
+			   Y;
 	BarrelEntity : Barrel  PORT MAP(
 				   x => x_shift,
-				   y => y_shift(2 DOWNTO 0),
+				   y => y_shift,
 				   output => barrelSig
 	);
 	
