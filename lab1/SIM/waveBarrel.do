@@ -1,0 +1,267 @@
+%!PS-Adobe-3.0
+%%Creator: Model Technology ModelSim ALTERA STARTER EDITION vsim 10.1b Simulator 2012.04 Apr 27 2012
+%%Title: barrel.do
+%%CreationDate: 2020-04-04 06:49:59 PM
+%%DocumentData: Clean8Bit
+%%DocumentNeededResources: font Helvetica
+%%Orientation: Landscape
+%%PageOrder: ascend
+%%Pages: 1
+%%EndComments
+%%BeginSetup
+%%BeginFeature: *PageSize 8.5x11.0
+<< /PageSize [612.0 792.0]
+/ImagingBBox null
+>> setpagedevice
+%%EndFeature
+%%EndSetup
+%%Page: 1 1
+gsave
+90 rotate 0.12 dup neg scale
+% dump string table
+/NP {newpath} def/SD {setdash} def/CL {setrgbcolor} def/GR {setgray} def
+/SX {exch LEdge sub XScale mul MaxLabelWidth add LMargin add LEdge LabelWidth sub add exch} def/CSX {exch dup LabelWidth gt {exch SX} {exch} ifelse} def
+/MT {SX moveto} def/LS {SX lineto stroke} def/LT {SX lineto} def/LFS {SX lineto fill stroke} def/RSS {rmoveto show stroke} def/ST {stroke} def/WT {CSX moveto dup stringwidth pop} def/TSW {pop 0 originOffset} def
+/TSE {MaxLabelWidth LabelWidth sub LMargin add 0 rmoveto neg originOffset} def/TS {-2 div originOffset CSX} def
+/MLW {stringwidth pop dup MaxLabelWidth gt {/MaxLabelWidth exch def}{pop} ifelse XS} def
+/XS {/XScale LabelWidth LMargin sub MaxLabelWidth LEdge LabelWidth sub add sub REdge LEdge sub div 1 add def} def
+/ARC {5 -2 roll SX 5 2 roll arc} def/LC {1 index stringwidth pop lt {pop ()} if} def
+/SW {stringwidth pop} def
+/ESTR {   dup 3 add string   /CurrentStr exch def   exch 0 2 index getinterval   0 1 3 index 1 sub {     dup     2 index exch get exch     CurrentStr exch 3 -1 roll put   } for   pop   dup 1 2 2 index add {     CurrentStr exch 46 put   } for   pop} def
+/LC {   exch  dup dup /CurrentStr exch def   SW 2 index gt {     CurrentStr length     dup     {       2 div cvi       3 index       CurrentStr SW       sub       dup 0 lt {         1 index         4 -1 roll         exch sub         3 1 roll       }       {         dup 5 index gt {           1 index 4 -1 roll add 3 1 roll         }         {           exit         } ifelse       } ifelse       3 index 2 index ESTR       1 index 0 eq {         exit       } if       pop     } loop     pop pop pop pop pop     CurrentStr   }   {     CurrentStr   } ifelse} def
+/XScale 1 def/MaxLabelWidth 0 def/LMargin 118 def/LEdge 1596 def/REdge 6244 def/LabelWidth 1559 def
+/Helvetica findfont [66 0 0 -66 0 0] makefont setfont
+/originOffset   currentfont   /FontBBox get 1 get   currentfont  /FontMatrix get 3 get   mul   currentfont   /FontType get   42 eq {     1000000 div   } {     neg   } ifelse def
+(/top_tb/L0/BarrelEntity/x) MLW
+(/top_tb/L0/BarrelEntity/y) MLW
+(/top_tb/L0/BarrelEntity/output) MLW
+(/top_tb/L0/BarrelEntity/mux1OutSig) MLW
+(/top_tb/L0/BarrelEntity/mux2OutSig) MLW
+(/top_tb/L0/BarrelEntity/firstReg) MLW
+(/top_tb/L0/BarrelEntity/secondReg) MLW
+(/top_tb/L0/BarrelEntity/thirdReg) MLW
+(/top_tb/L0/BarrelEntity/outputSig) MLW
+(/top_tb/L0/BarrelEntity/coutSig) MLW
+% draw waveform shading
+0 0 0 CL
+(01111111) 4610 LC 1610 175 WT pop 0 originOffset 33 add RSS
+[] 0 SD
+3 setlinewidth
+0 setlinejoin
+2 setlinecap
+1596 139 MT 1596 139 LT 6234 139 LT ST
+1596 211 MT 1596 211 LT 6234 211 LT ST
+(001) 4610 LC 1610 294 WT pop 0 originOffset 33 add RSS
+1596 258 MT 1596 258 LT 6234 258 LT ST
+1596 330 MT 1596 330 LT 6234 330 LT ST
+(011111110) 4610 LC 1610 413 WT pop 0 originOffset 33 add RSS
+1596 377 MT 1596 377 LT 6234 377 LT ST
+1596 449 MT 1596 449 LT 6234 449 LT ST
+(11111110) 4610 LC 1610 532 WT pop 0 originOffset 33 add RSS
+1596 496 MT 1596 496 LT 6234 496 LT ST
+1596 568 MT 1596 568 LT 6234 568 LT ST
+(11111110) 4610 LC 1610 651 WT pop 0 originOffset 33 add RSS
+1596 615 MT 1596 615 LT 6234 615 LT ST
+1596 687 MT 1596 687 LT 6234 687 LT ST
+(11111110) 4610 LC 1610 770 WT pop 0 originOffset 33 add RSS
+1596 734 MT 1596 734 LT 6234 734 LT ST
+1596 806 MT 1596 806 LT 6234 806 LT ST
+(11111000) 4610 LC 1610 889 WT pop 0 originOffset 33 add RSS
+1596 853 MT 1596 853 LT 6234 853 LT ST
+1596 925 MT 1596 925 LT 6234 925 LT ST
+(11100000) 4610 LC 1610 1008 WT pop 0 originOffset 33 add RSS
+1596 972 MT 1596 972 LT 6234 972 LT ST
+1596 1044 MT 1596 1044 LT 6234 1044 LT ST
+(11111110) 4610 LC 1610 1127 WT pop 0 originOffset 33 add RSS
+1596 1091 MT 1596 1091 LT 6234 1091 LT ST
+1596 1163 MT 1596 1163 LT 6234 1163 LT ST
+1597 1282 MT 6234 1282 LS
+6234 1282 MT 6234 1282 LS
+% draw timeline
+1742 4738 MT 1742 4775 LS
+1937 4738 MT 1937 4775 LS
+2132 4738 MT 2132 4775 LS
+2328 4711 MT 2328 4775 LS
+(69999200 ps) 9999 LC 2328 4846 WT TS RSS
+2523 4738 MT 2523 4775 LS
+2719 4738 MT 2719 4775 LS
+2914 4738 MT 2914 4775 LS
+3109 4738 MT 3109 4775 LS
+3305 4711 MT 3305 4775 LS
+3500 4738 MT 3500 4775 LS
+3696 4738 MT 3696 4775 LS
+3891 4738 MT 3891 4775 LS
+4086 4738 MT 4086 4775 LS
+4281 4711 MT 4281 4775 LS
+(69999600 ps) 9999 LC 4281 4846 WT TS RSS
+4476 4738 MT 4476 4775 LS
+4672 4738 MT 4672 4775 LS
+4867 4738 MT 4867 4775 LS
+5062 4738 MT 5062 4775 LS
+5258 4711 MT 5258 4775 LS
+5453 4738 MT 5453 4775 LS
+5649 4738 MT 5649 4775 LS
+5844 4738 MT 5844 4775 LS
+6039 4738 MT 6039 4775 LS
+6234 4711 MT 6234 4775 LS
+(70000000 ps) 9999 LC 6234 4846 WT TS RSS
+6429 4738 MT 6429 4775 LS
+6625 4738 MT 6625 4775 LS
+6820 4738 MT 6820 4775 LS
+7015 4738 MT 7015 4775 LS
+% draw grid
+1840 118 MT 1840 4711 LS
+2328 118 MT 2328 4711 LS
+2816 118 MT 2816 4711 LS
+3305 118 MT 3305 4711 LS
+3793 118 MT 3793 4711 LS
+4281 118 MT 4281 4711 LS
+4769 118 MT 4769 4711 LS
+5258 118 MT 5258 4711 LS
+5746 118 MT 5746 4711 LS
+6234 118 MT 6234 4711 LS
+% draw waveforms
+(/top_tb/L0/BarrelEntity/x) 9999 LC 1559 210 WT TSE RSS
+1833 118 MT 1847 118 LS
+2321 118 MT 2335 118 LS
+2809 118 MT 2823 118 LS
+3298 118 MT 3312 118 LS
+3786 118 MT 3800 118 LS
+4274 118 MT 4288 118 LS
+4762 118 MT 4776 118 LS
+5251 118 MT 5265 118 LS
+5739 118 MT 5753 118 LS
+6227 118 MT 6241 118 LS
+(01111111) 4610 LC 1610 175 WT pop 0 originOffset 33 add RSS
+1596 139 MT 1596 139 LT 6234 139 LT ST
+1596 211 MT 1596 211 LT 6234 211 LT ST
+(/top_tb/L0/BarrelEntity/y) 9999 LC 1559 329 WT TSE RSS
+1833 237 MT 1847 237 LS
+2321 237 MT 2335 237 LS
+2809 237 MT 2823 237 LS
+3298 237 MT 3312 237 LS
+3786 237 MT 3800 237 LS
+4274 237 MT 4288 237 LS
+4762 237 MT 4776 237 LS
+5251 237 MT 5265 237 LS
+5739 237 MT 5753 237 LS
+6227 237 MT 6241 237 LS
+(001) 4610 LC 1610 294 WT pop 0 originOffset 33 add RSS
+1596 258 MT 1596 258 LT 6234 258 LT ST
+1596 330 MT 1596 330 LT 6234 330 LT ST
+(/top_tb/L0/BarrelEntity/output) 9999 LC 1559 448 WT TSE RSS
+1833 356 MT 1847 356 LS
+2321 356 MT 2335 356 LS
+2809 356 MT 2823 356 LS
+3298 356 MT 3312 356 LS
+3786 356 MT 3800 356 LS
+4274 356 MT 4288 356 LS
+4762 356 MT 4776 356 LS
+5251 356 MT 5265 356 LS
+5739 356 MT 5753 356 LS
+6227 356 MT 6241 356 LS
+(011111110) 4610 LC 1610 413 WT pop 0 originOffset 33 add RSS
+1596 377 MT 1596 377 LT 6234 377 LT ST
+1596 449 MT 1596 449 LT 6234 449 LT ST
+(/top_tb/L0/BarrelEntity/mux1OutSig) 9999 LC 1559 567 WT TSE RSS
+1833 475 MT 1847 475 LS
+2321 475 MT 2335 475 LS
+2809 475 MT 2823 475 LS
+3298 475 MT 3312 475 LS
+3786 475 MT 3800 475 LS
+4274 475 MT 4288 475 LS
+4762 475 MT 4776 475 LS
+5251 475 MT 5265 475 LS
+5739 475 MT 5753 475 LS
+6227 475 MT 6241 475 LS
+(11111110) 4610 LC 1610 532 WT pop 0 originOffset 33 add RSS
+1596 496 MT 1596 496 LT 6234 496 LT ST
+1596 568 MT 1596 568 LT 6234 568 LT ST
+(/top_tb/L0/BarrelEntity/mux2OutSig) 9999 LC 1559 686 WT TSE RSS
+1833 594 MT 1847 594 LS
+2321 594 MT 2335 594 LS
+2809 594 MT 2823 594 LS
+3298 594 MT 3312 594 LS
+3786 594 MT 3800 594 LS
+4274 594 MT 4288 594 LS
+4762 594 MT 4776 594 LS
+5251 594 MT 5265 594 LS
+5739 594 MT 5753 594 LS
+6227 594 MT 6241 594 LS
+(11111110) 4610 LC 1610 651 WT pop 0 originOffset 33 add RSS
+1596 615 MT 1596 615 LT 6234 615 LT ST
+1596 687 MT 1596 687 LT 6234 687 LT ST
+(/top_tb/L0/BarrelEntity/firstReg) 9999 LC 1559 805 WT TSE RSS
+1833 713 MT 1847 713 LS
+2321 713 MT 2335 713 LS
+2809 713 MT 2823 713 LS
+3298 713 MT 3312 713 LS
+3786 713 MT 3800 713 LS
+4274 713 MT 4288 713 LS
+4762 713 MT 4776 713 LS
+5251 713 MT 5265 713 LS
+5739 713 MT 5753 713 LS
+6227 713 MT 6241 713 LS
+(11111110) 4610 LC 1610 770 WT pop 0 originOffset 33 add RSS
+1596 734 MT 1596 734 LT 6234 734 LT ST
+1596 806 MT 1596 806 LT 6234 806 LT ST
+(/top_tb/L0/BarrelEntity/secondReg) 9999 LC 1559 924 WT TSE RSS
+1833 832 MT 1847 832 LS
+2321 832 MT 2335 832 LS
+2809 832 MT 2823 832 LS
+3298 832 MT 3312 832 LS
+3786 832 MT 3800 832 LS
+4274 832 MT 4288 832 LS
+4762 832 MT 4776 832 LS
+5251 832 MT 5265 832 LS
+5739 832 MT 5753 832 LS
+6227 832 MT 6241 832 LS
+(11111000) 4610 LC 1610 889 WT pop 0 originOffset 33 add RSS
+1596 853 MT 1596 853 LT 6234 853 LT ST
+1596 925 MT 1596 925 LT 6234 925 LT ST
+(/top_tb/L0/BarrelEntity/thirdReg) 9999 LC 1559 1043 WT TSE RSS
+1833 951 MT 1847 951 LS
+2321 951 MT 2335 951 LS
+2809 951 MT 2823 951 LS
+3298 951 MT 3312 951 LS
+3786 951 MT 3800 951 LS
+4274 951 MT 4288 951 LS
+4762 951 MT 4776 951 LS
+5251 951 MT 5265 951 LS
+5739 951 MT 5753 951 LS
+6227 951 MT 6241 951 LS
+(11100000) 4610 LC 1610 1008 WT pop 0 originOffset 33 add RSS
+1596 972 MT 1596 972 LT 6234 972 LT ST
+1596 1044 MT 1596 1044 LT 6234 1044 LT ST
+(/top_tb/L0/BarrelEntity/outputSig) 9999 LC 1559 1162 WT TSE RSS
+1833 1070 MT 1847 1070 LS
+2321 1070 MT 2335 1070 LS
+2809 1070 MT 2823 1070 LS
+3298 1070 MT 3312 1070 LS
+3786 1070 MT 3800 1070 LS
+4274 1070 MT 4288 1070 LS
+4762 1070 MT 4776 1070 LS
+5251 1070 MT 5265 1070 LS
+5739 1070 MT 5753 1070 LS
+6227 1070 MT 6241 1070 LS
+(11111110) 4610 LC 1610 1127 WT pop 0 originOffset 33 add RSS
+1596 1091 MT 1596 1091 LT 6234 1091 LT ST
+1596 1163 MT 1596 1163 LT 6234 1163 LT ST
+(/top_tb/L0/BarrelEntity/coutSig) 9999 LC 1559 1281 WT TSE RSS
+1833 1189 MT 1847 1189 LS
+2321 1189 MT 2335 1189 LS
+2809 1189 MT 2823 1189 LS
+3298 1189 MT 3312 1189 LS
+3786 1189 MT 3800 1189 LS
+4274 1189 MT 4288 1189 LS
+4762 1189 MT 4776 1189 LS
+5251 1189 MT 5265 1189 LS
+5739 1189 MT 5753 1189 LS
+6227 1189 MT 6241 1189 LS
+1597 1282 MT 6234 1282 LS
+6234 1282 MT 6234 1282 LS
+% draw footer
+(Entity:top_tb  Architecture:top_testbench  Date: Sat Apr 04 6:49:59 PM Jerusalem Daylight Time 2020   Row: 1 Page: 1) 9999 LC 118 4980 WT TSW RSS
+grestore
+showpage
+%%EOF
