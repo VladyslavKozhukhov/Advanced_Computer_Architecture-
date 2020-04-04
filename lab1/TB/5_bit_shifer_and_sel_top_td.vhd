@@ -1,11 +1,11 @@
-LIBRARY IEEE;
+ LIBRARY IEEE;
 USE ieee.std_logic_1164.all;
 USE ieee.std_logic_arith.all;
 USE ieee.std_logic_unsigned.all;
 USE work.aux_package.all;
 
 ENTITY top_tb IS
-	CONSTANT m : INTEGER := 8;
+	CONSTANT m : INTEGER :=	5;
 END top_tb;
 
 architecture top_Testbench OF top_tb IS
@@ -22,35 +22,29 @@ BEGIN
 	
     tb_y : process
 		begin
-			y <= "01111111";
+			y <= "11000";
 			wait for 5 us;
-			y <= "11111111";
+			y <= "11001";
 			wait for 5 us;
-			y <= "11101101";  
+			y <= "11010"; 
 			wait for 5 us;
-			y <= "01011100";  
+			y <= "11011"; 
 			wait for 5 us;
-			y <= "11111001";  
-			wait ;
-
-
+			y <= "11100";
+			wait for 5 us;
+			y <= "11101"; 
+			wait for 5 us;
+			y <= "11110"; 
+			wait for 5 us;
+			y <= "11111"; 	  
+			wait;
         end process tb_y;
 		
     tb_x : process
 		begin
-			sel<="00";
-			x <= "00000001"; 			
-			wait for 10 us;
-			sel<="00";
-			x <= "11111001";
-			wait for 5 us;
-			sel<="10";
-			x <= "11011001";
-			wait for 5 us;
-			sel<="10";
-			x <= "11101101";
-			wait ;
-
+		sel<="11";
+			x <= "00001"; 			
+			wait;
         end process tb_x;
   
 END top_Testbench;
