@@ -1,50 +1,28 @@
+סדר קומפילציה לפי סימולטור:
+AdderSub.vhd:
+ בקובץ נמצא ENTITY בשם AdderTwo שמקבל 2 וקטורים בגודל N,  ביט בשם CIN ווקטור בגודל 2 ביט של מצב הפעולה של המודול הספיציפי הזה ומוציא וקטור של N ביט של חישוב הנקבע על פי ווקטור הפעולה.
+ מודול מבטיח פעולה תקינה רק עבור מצבי פעולה תקינים  "01" " 10" "10" כפי שהוגדר בקובץ הדרישות, 
+זאת אומרת שאם מצב פעולה שווה ל"11" אנו לא מבטיחים פעולה תקינה מכיוון שזה לא מצב תקין עבור מודול הזה כפי שהוגדר בתרגיל אף מודול לא קורס.מודול הנוכחי משתמש בתת מודל בנמצא בקובץ FA.vhd
+aux_package.vhd: 
+בקובץ הזה נמצא PACKAGE בשם aux_package שמכיל בתוכו כל המודולים שאנו משתמשים עבור הפרויקט הספיצי הזה כמו: top,FA,selector,Barrel,MuxCombined,mux2on1,AdderTwo.
+בעצם אם נרצה לשלב ולהשתמש במודול שאנו בונים עכשיו בפרויקט אחר אז נוכל לעשות  USE לPACKAGE הזה בצורה פשוטה שזה טוב למודולריות מפני שאין תלות במימוש בפנימי אם נשמור על אותן חתימות של ENTITY\COMPONENT.
+Barrel.vhd:
+בקובץ הזה נמצא ENTITY בשם BARREL שמקבל וקטור בגודל 8 ביט שאנו רוצים לבצע עליו פעולת הזזה ווקטור בגודל 3 ביט שבעצם אומר לנו כמה להזיז, מוציא וקטור בגודל 9 ביט כך שביט ה 9  זה CARRY.
+BARREL משתמש ב2 תת מודולים הנמצאים בקבצי  mux2on1.vhd וMuxCombined.vhd. 
+ FA.vhd:
+בקובץ הזה נמצא ENTITY בשם FA שמקבל 3 ביט שמצבעים סכום ביניהם ומוציא 2 ביט ש אחד זה CARRY לחישוב הבא ו1 זה תוצאה עבור חישוב נוכחי.
+mux2on1.vhd: 
+בקובץ הזה נמצא ENTITY בשם mux2on1 שמקבל 2 ביטים וביט שלישי שבעצם בוחר בין ביט 0 לביט 1,מוציא ביט שSELECTOR בחר. מימוש קלאסי של MUX.
+MuxCombined.vhd:
+בקובץ הזה נמצא ENTITY בשם MuxCombined שמקבל 2 וקטורים בגודל N ,ביט 1 של SELECTOR ומוציא וקטור בגודל N. המודול נוכחי מבצע באופן גינארי פעולת MUX על כל ביט של 2 וקטורים ומוציא וקטור תוצאות עבור כל זוג ביטים.
+משתמש בתת מודול הנמצא בקובץ mux2on1.
+selector.vhd: 
+בקובץ הזה נמצא ENTITY בשםselector אשר מקבל שני וקטורים  ווקטור בגודל 2 ביט ועל סמך וקטור בחירה מחליט איזה מ2 וקטורים להוציא החוצה. 
+top.vhd:
+בקובץ הזה נמצא ENTITY בשם top שמקבל 2 וקטורים בגודל N,וקטור מצב פעולה בגודל 2 ביט,ביט בשם CIN ומוציא תוצאה לפי מצב פעולה וקלט שהוא קיבל. מודול מכיל תת מודולם הנמצאים בAdderSub.vhd ,Barrel.vhd,selector.vhd.
+בעצם מודול ראשי שמנהל את כל הלוגיקה.
 
-	COMPONENT top IS
-	GENERIC (n : INTEGER);
-	PORT (  cin : IN STD_LOGIC;
-			sel : IN STD_LOGIC_VECTOR (1 DOWNTO 0);
-			X,Y: IN STD_LOGIC_VECTOR (n-1 DOWNTO 0);
-		    result: OUT STD_LOGIC_VECTOR(n downto 0));
-	END COMPONENT;
+Test benches, for exmaple:
+FAQ_tb.vhd:
 
-	COMPONENT FA IS
-	PORT (  xi,yi,cin : IN STD_LOGIC;
-			s,cout: OUT STD_LOGIC);
-	END COMPONENT;
-
-	COMPONENT selector IS
-	GENERIC (n : INTEGER := 8);
-	PORT (     in1:  IN STD_LOGIC_VECTOR(n DOWNTO 0);
-			  in2: IN STD_LOGIC_VECTOR(8 DOWNTO 0);
-		     sel: IN STD_LOGIC_VECTOR(1 downto 0);
-             output: OUT STD_LOGIC_VECTOR(n DOWNTO 0));
-	END COMPONENT;
-	
-	COMPONENT Barrel IS
-	PORT (  x: IN STD_LOGIC_VECTOR(7 DOWNTO 0);
-			y: IN STD_LOGIC_VECTOR(2 DOWNTO 0);
-			output: OUT STD_LOGIC_VECTOR(8 downto 0));
-	END COMPONENT;
-	
-	COMPONENT MuxCombined IS
-	GENERIC (n : INTEGER);
-	PORT (  x1,x2: IN STD_LOGIC_VECTOR (n-1 DOWNTO 0);
-			sel: IN STD_LOGIC;
-			output: OUT STD_LOGIC_VECTOR(n-1 downto 0));
-	END COMPONENT;
-	
-	COMPONENT mux2on1 IS
-	PORT (  in1,in2,sel: IN STD_LOGIC;
-			output: OUT STD_LOGIC);
-	END COMPONENT;
-	
-	
-	COMPONENT AdderTwo IS
-	GENERIC (n : INTEGER);
-	PORT (   cin: IN STD_LOGIC;
-			 x,y: IN STD_LOGIC_VECTOR (n-1 DOWNTO 0);
-			 sel : IN STD_LOGIC_VECTOR (1 DOWNTO 0);
-             s: OUT STD_LOGIC_VECTOR(n DOWNTO 0));
-	END COMPONENT;
-  
-
+בקובץ הזה נמצא ENTITY בשם top_tb שבעצם בעזרת PROCESSים מכניס כניסות למודול שלנו בשם TOP ובעזרת סימולטור אנו יכולים לוודא את הפעולות של המערכת שלנו.
