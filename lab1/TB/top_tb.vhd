@@ -18,7 +18,8 @@ BEGIN
 
     
 	--------- start of stimulus section ------------------	
-
+--0 -40 test shifter
+--
 	
     tb_y : process
 		begin
@@ -38,13 +39,49 @@ BEGIN
 			wait for 5 us;
 			y <= "11111111"; 	  
 			wait for 5 us;
+			y <= "00111111"; ---sum
+			wait for 20 us;
+			y <= "00000001";----sub
+			wait;
         end process tb_y;
-		
+	tb_cin : process
+		begin
+			cin<='1';
+			wait for 20 us;
+			cin<='0';
+			wait;
+			
+	end process tb_cin;	
     tb_x : process
 		begin
 		sel<="11";
-			x <= "00000001"; 			
-			wait;
+		x <= "00000001"; 			
+		wait for 20 us;
+		sel<="11";
+		x <= "11111111"; 			
+		wait for 20 us;
+		sel<="00";			-----sum
+		x <= "00000001"; 
+		cin<='0';
+		wait for 5 us;
+		sel<="00";
+		x <= "00000001"; 	
+		cin<='1';		
+		wait for 5 us;
+		sel<="01";			
+		x <= "00000001"; 
+		cin<='0';
+		wait for 5 us;
+		sel<="01";
+		x <= "00000001"; 	
+		cin<='1';		
+		wait for 5 us;-------sum
+		sel<="11";
+		x <= "11111001";--sub
+		wait for 5 us;
+		sel<="11";
+		x <= "01111111";--sub
+		wait;
         end process tb_x;
   
 END top_Testbench;
