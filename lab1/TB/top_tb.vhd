@@ -49,9 +49,15 @@ BEGIN
 			cin<='1';
 			wait for 20 us;
 			cin<='0';
+			wait for  5 us;
+			cin<='1';
+			wait for 5 us;
+			cin<='0';
+			wait for  5 us;
+			cin<='1';
 			wait;
-			
 	end process tb_cin;	
+	
     tb_x : process
 		begin
 		sel<="11";
@@ -62,24 +68,24 @@ BEGIN
 		wait for 20 us;
 		sel<="00";			-----sum
 		x <= "00000001"; 
-		cin<='0';
+		--cin<='0';
 		wait for 5 us;
 		sel<="00";
 		x <= "00000001"; 	
-		cin<='1';		
+		--cin<='1';		
 		wait for 5 us;
 		sel<="01";			
 		x <= "00000001"; 
-		cin<='0';
+		--cin<='0';
 		wait for 5 us;
 		sel<="01";
 		x <= "00000001"; 	
-		cin<='1';		
+		--cin<='1';		
 		wait for 5 us;-------sum
-		sel<="11";
+		sel<="10";
 		x <= "11111001";--sub
 		wait for 5 us;
-		sel<="11";
+		sel<="10";
 		x <= "01111111";--sub
 		wait;
         end process tb_x;
