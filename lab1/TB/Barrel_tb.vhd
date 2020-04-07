@@ -13,7 +13,7 @@ ARCHITECTURE Barrel_Testbench of Barrel_tb is
 	SIGNAL y : STD_LOGIC_VECTOR(2 DOWNTO 0);
 	SIGNAL output: STD_LOGIC_VECTOR(m DOWNTO 0);
 begin
-	L0 : Barrel generic map (m) port map(x,y,output);
+	L0 : Barrel port map(x,y,output);
 --	
     
 	
