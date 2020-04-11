@@ -12,7 +12,7 @@ END MuxCombined;
 --------------------------------------------------------------
 ARCHITECTURE MuxCombinedArchitecture OF MuxCombined IS
 BEGIN
-	muxChain : FOR i IN 0 TO n-1 GENERATE
+	muxChain : FOR i IN 0 TO n-1 GENERATE   -- Just a group of n muxes (n is 8 by default)
 		chain : mux2on1 PORT MAP(
 			in1 => x1(i),
 			in2 => x2(i),

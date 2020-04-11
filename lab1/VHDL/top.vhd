@@ -20,8 +20,8 @@ ARCHITECTURE struct OF top IS
 
 
 BEGIN
-	x_shift<=std_logic_vector(resize(signed(X), 8));
-	y_shift<=std_logic_vector(resize(signed(Y), 8));
+	x_shift<=std_logic_vector(resize(signed(X), 8)); -- Protection against n<8
+	y_shift<=std_logic_vector(resize(signed(Y), 8)); -- Protection against n<8
 	BarrelEntity : Barrel  PORT MAP(
 				   x => x_shift,
 				   y => y_shift(2 DOWNTO 0),

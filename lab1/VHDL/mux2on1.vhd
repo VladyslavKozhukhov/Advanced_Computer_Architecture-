@@ -11,7 +11,7 @@ END mux2on1;
 ARCHITECTURE MuxArchitecture OF mux2on1 IS
 	SIGNAL outSig : STD_LOGIC;
 BEGIN
-	outSig <= in1 WHEN sel='0' ELSE
+	outSig <= in1 WHEN sel='0' ELSE -- The basic 1 bit mux
 	          in2 WHEN sel='1' ELSE
 		      'Z';
 	output <= outSig;

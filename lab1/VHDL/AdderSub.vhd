@@ -11,19 +11,19 @@ USE work.aux_package.all;
 END AdderTwo;
 --------------------------------------------------------------
 ARCHITECTURE AdderTwo_Architecture OF AdderTwo IS
-	SIGNAL reg,yXored : STD_LOGIC_VECTOR(n-1 DOWNTO 0);
+	SIGNAL reg,yXored : STD_LOGIC_VECTOR(n-1 DOWNTO 0); -- We use them to only store temporary signals
 	SIGNAL cin_0,subMSBit:  STD_LOGIC;
 
 
 BEGIN
 
-	initY : FOR a IN 0 TO n-1 GENERATE
-		yXored(a) <= y(a) XOR sel(1);
+	initY : FOR a IN 0 TO n-1 GENERATE -- This is how we initiate the input y
+		yXored(a) <= y(a) XOR sel(1); -- Because y xor the sel(1) means xor with the sub control bit
 	END GENERATE;
 	
-	cin_0 <= (cin AND sel(0)) OR sel(1);
-	first : FA PORT MAP(
-			xi => x(0),
+	cin_0 <= (cin AND sel(0)) OR sel(1);  -- cin is '1' when we use sub
+	first : FA PORT MAP(                  -- else, cin is '1' when we use the 2nd option and we have cin in the input
+			xi => x(0),                   -- This is the chain of FA
 			yi => yXored(0),
 			cin =>cin_0,
 			s => s(0),
@@ -40,7 +40,9 @@ BEGIN
 		);
 	END GENERATE;
 
-subMSBit <= x(n-1) XOR yXored(n-1) XOR reg(n-2) when sel ="10" else reg(n-1);
+	subMSBit <= x(n-1) XOR yXored(n-1) XOR reg(n-2) WHEN sel ="10" ELSE
+				reg(n-1);
+			
 	last : FA PORT MAP(
 			xi => '0',
 			yi => '0',

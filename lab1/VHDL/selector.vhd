@@ -16,9 +16,9 @@ ARCHITECTURE OutputSelector OF selector IS
 	signal out_shift : STD_LOGIC_VECTOR(n DOWNTO 0);
 
 BEGIN
-	out_shift<=std_logic_vector(resize(signed(in2), in1'length));
+	out_shift<=std_logic_vector(resize(signed(in2), in1'length)); -- Protection against n<8
 
-	output <= out_shift  WHEN sel="11" ELSE
+	output <= out_shift  WHEN sel="11" ELSE  -- select barrel shifter if '11', else we choose addersub otput
 	          in1;
 END OutputSelector;
 
