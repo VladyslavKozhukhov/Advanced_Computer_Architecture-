@@ -28,7 +28,17 @@ package aux_package is
 			cout: OUT STD_LOGIC);
 	END component;
 -----------------------------------------------------------------
-
+	component SynchronousDelay IS
+		generic (
+			n : positive := 8 ;
+		);
+		PORT(
+			rst,ena,clk : in std_logic;
+			din : in std_logic_vector(n-1 downto 0);
+			din_i,din_iMinus : out std_logic_vector(n-1 downto 0)
+		);
+	END component;
+-----------------------------------------------------------------
 
 
 
