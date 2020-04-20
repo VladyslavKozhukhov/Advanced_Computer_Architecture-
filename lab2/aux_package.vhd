@@ -39,7 +39,14 @@ package aux_package is
 		);
 	END component;
 -----------------------------------------------------------------
-
+	component ConditionCheck IS
+		PORT(
+			D_next,D_prev : in std_logic_vector(n-1 downto 0);
+			cond : in integer range 0 to 3;
+			rise : out std_logic
+			);
+	END component;
+-----------------------------------------------------------------
 
 
 
