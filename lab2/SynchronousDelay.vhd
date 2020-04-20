@@ -18,18 +18,17 @@ architecture arc_SynchronousDelay of SynchronousDelay is
 SIGNAL D_next,D_prev,Diff : STD_LOGIC_VECTOR(n-1 DOWNTO 0); 
 begin
 	delayProc :process (clk,rst,ena,din)
-		VARIABLE Znext,Zprev: STD_LOGIC_VECTOR(n-1 DOWNTO 0);
+		VARIABLE Zprev: STD_LOGIC_VECTOR(n-1 DOWNTO 0);
 		begin
 			if(rst='1') then
 				D_next <= (others => '0'); -- d_i
 				D_prev <= (others => '0'); -- d_i-1
-				Z :=(others => '0');-- <= (others => '0');
+				Zprev :=(others => '0');-- <= (others => '0');
 			elsif (rising_edge(clk)) then	
 				IF(ena = '1') THEN
-					Znext := din;
 					Zprev := D_next;
-					D_next <= Znext;
-					D_prev <= Zprev;			
+					D_next <= din;
+					D_prev <= Zprev;
 				end IF;
 			end IF;
 		END PROCESS delayProc;			
