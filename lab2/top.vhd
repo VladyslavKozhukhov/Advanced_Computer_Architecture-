@@ -24,7 +24,7 @@ architecture arc_sys of top is
 	SIGNAL D_next,D_prev,Diff : STD_LOGIC_VECTOR(n-1 DOWNTO 0); 
 	SIGNAL adderS,adderInSIG : STD_LOGIC_VECTOR(n-1 DOWNTO 0);
 	SIGNAL adderC : STD_LOGIC;
-	SIGNAL cinSIG : STD_LOGIC; 
+	SIGNAL cinSIG,riseSig : STD_LOGIC; 
 	SIGNAL X,Y : STD_LOGIC_VECTOR(n-1 DOWNTO 0);
 
 begin
@@ -38,28 +38,28 @@ begin
 		begin
 			adderInVar := (others => '0');
 			cinVar := '0';
-			if(cond='1') then
+			if(cond = 1) then
 				cinVar := '1';
-			elsif (cond='2') then
+			elsif (cond = 2) then
 				adderInVar(1) := '1';
-			elsif (cond='3') then
+			elsif (cond = 3) then
 				adderInVar(1) := '1';
 				cinVar := '1';
-			elsif (cond='4') then
+			elsif (cond= 4) then
 				adderInVar(2) := '1';
 			end IF;
+			cinSIG <= cinVar;
+			adderInSIG <= adderInVar;
 	END PROCESS updateCondProcess;
 	
-	cinSIG <= cinVar;
-	adderInSIG <= cinVar;
-	
 	sProcess : process (adderS)
-		VARIABLE rise : STD_LOGIC;
+		VARIABLE riseVar : STD_LOGIC;
 		begin
-			rise := '0';
-			if (adderS = D_next)
-				rise := '1';
+			riseVar := '0';
+			if (adderS = D_next) then
+				riseVar := '1';
 			end IF;
+			riseSig <= riseVar;
 	END PROCESS sProcess;
 	
 

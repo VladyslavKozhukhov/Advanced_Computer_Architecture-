@@ -5,7 +5,7 @@ USE work.aux_package.all;
 -------------------------------------------------------------
 entity SynchronousDelay is
 	generic (
-		n : positive := 8 ;
+		n : positive := 8
 	);
 	port(
 		rst,ena,clk : in std_logic;
