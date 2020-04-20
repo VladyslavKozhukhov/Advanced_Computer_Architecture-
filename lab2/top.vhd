@@ -22,38 +22,49 @@ end top;
 architecture arc_sys of top is
 
 	SIGNAL D_next,D_prev,Diff : STD_LOGIC_VECTOR(n-1 DOWNTO 0); 
+	SIGNAL adderS,adderInSIG : STD_LOGIC_VECTOR(n-1 DOWNTO 0);
+	SIGNAL adderC : STD_LOGIC;
+	SIGNAL cinSIG : STD_LOGIC; 
 	SIGNAL X,Y : STD_LOGIC_VECTOR(n-1 DOWNTO 0);
 
 begin
-	delayProc :process (clk,rst,ena)
-		VARIABLE Z: STD_LOGIC_VECTOR(n-1 DOWNTO 0);
-		--SIGNAL yXored : STD_LOGIC_VECTOR(n-1 DOWNTO 0);
-		--SIGNAL cout : STD_LOGIC;
-		variable count1 : INTEGER RANGE 0 TO 3 ;--delay for rst stage
+
+	AdderComponent : Adder generic map(n) port map(adderInSIG,D_prev,cinSIG,adderS,adderC);
+	SyncDelayComponent : SynchronousDelay generic map(n) port map(rst,ena,clk,din,D_next,D_prev);
+	
+	updateCondProcess : process (cond)
+		VARIABLE adderInVar : STD_LOGIC_VECTOR(n-1 DOWNTO 0);
+		VARIABLE cinVar : STD_LOGIC;
 		begin
-			if(rst='1') then
-				X <= (others => '0'); -- d_i
-				Y <= (others => '0'); -- d_i-1
-				Z :=(others => '0');-- <= (others => '0');
-				count1:=0;
-			elsif (rising_edge(clk)) then	
-				IF(ena = '1') THEN
-					count1:= count1 + 1;
-					IF(count1=1)THEN
-						X<=din;
-					end IF;
-					IF(count1 = 2) THEN
-						Z:=X;
-						Y<=Z;
-						X<=din;
-					    count1:=1;
-					end IF;
-					
-				end IF;
+			adderInVar := (others => '0');
+			cinVar := '0';
+			if(cond='1') then
+				cinVar := '1';
+			elsif (cond='2') then
+				adderInVar(1) := '1';
+			elsif (cond='3') then
+				adderInVar(1) := '1';
+				cinVar := '1';
+			elsif (cond='4') then
+				adderInVar(2) := '1';
 			end IF;
-		END PROCESS delayProc;			
-		XX<=X;
-		YY<=Y;
+	END PROCESS updateCondProcess;
+	
+	cinSIG <= cinVar;
+	adderInSIG <= cinVar;
+	
+	sProcess : process (adderS)
+		VARIABLE rise : STD_LOGIC;
+		begin
+			rise := '0';
+			if (adderS = D_next)
+				rise := '1';
+			end IF;
+	END PROCESS sProcess;
+	
+
+	
+	
 	--	initY : FOR a IN 0 TO n-1 GENERATE -- This is how we initiate the input y
 		--	yXored(a) <= Y(a) XOR '1';						
 		--END GENERATE;
@@ -68,7 +79,7 @@ begin
 		--elsif
 			--detector<='0';
 		--end if;
-		detector<='1';
+		--detector<='1';
 end arc_sys;
 
 
