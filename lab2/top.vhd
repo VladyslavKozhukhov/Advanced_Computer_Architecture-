@@ -38,14 +38,14 @@ begin
 		begin
 			adderInVar := (others => '0');
 			cinVar := '0';
-			if(cond = 1) then
+			if(cond = 0) then
 				cinVar := '1';
+			elsif (cond = 1) then
+				adderInVar(1) := '1';
 			elsif (cond = 2) then
 				adderInVar(1) := '1';
-			elsif (cond = 3) then
-				adderInVar(1) := '1';
 				cinVar := '1';
-			elsif (cond= 4) then
+			elsif (cond= 3) then
 				adderInVar(2) := '1';
 			end IF;
 			cinSIG <= cinVar;
@@ -61,8 +61,9 @@ begin
 			end IF;
 			riseSig <= riseVar;
 	END PROCESS sProcess;
-	
-
+			XX<=D_prev;
+		YY<=D_next;
+detector <= riseSig;
 	
 	
 	--	initY : FOR a IN 0 TO n-1 GENERATE -- This is how we initiate the input y

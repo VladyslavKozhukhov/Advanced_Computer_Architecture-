@@ -22,10 +22,17 @@ BEGIN
 		tb_ena : process
 			begin 
 			ena<='1';
-			cond<=1;
 			
 			wait;
         end process tb_ena;
+		
+	tb_cond : process
+		begin
+				cond<=0;
+			wait;
+			
+	end process tb_cond;
+
         tb_clk : process
 			begin 
 			clk<='1';
