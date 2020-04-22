@@ -33,7 +33,10 @@ BEGIN
 		
 	tb_cond : process
 		begin
-				cond<=0;
+				cond<=0;				
+				wait for 120 us; 
+				cond<=1;				
+
 			wait;
 			
 	end process tb_cond;
@@ -82,11 +85,32 @@ BEGIN
 			din <= "00001011";--11
 			wait for 10 us;	
 			
-			din <= "00000000";
+			din <= "00000000";--0
 			wait for 10 us;
-			din <= "00000010";
+			din <= "00000010";--2
 			wait for 10 us;
-			din <= "00000100";
+			din <= "00000100";--4
+			wait for 10 us;
+			din <= "00000110";--6
+			wait for 10 us;
+			din <= "00001000";--8
+			wait for 10 us;
+			din <= "00001010";--10
+			wait for 10 us;
+			din <= "00001100";--12
+			wait for 10 us;
+			din <= "00001110";--14
+			wait for 10 us;
+			din <= "00010000";--16
+			wait for 10 us;
+			din <= "00010010";--18
+			wait for 10 us;
+			din <= "00010100";--20
+			wait for 10 us;
+			din <= "00010110";--22
+			
+			wait for 10 us;
+			din <= "00000000";--0
 			wait ;
         end process tb_din;
 		
