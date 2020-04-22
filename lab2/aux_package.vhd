@@ -14,9 +14,11 @@ package aux_package is
 			rst,ena,clk : in std_logic;
 			din : in std_logic_vector(n-1 downto 0);
 			cond : in integer range 0 to 3;
-			detector : out std_logic;
+			detector,riseSIGG : out std_logic;
 					XX: out std_logic_vector(n-1 downto 0);
-		YY: out std_logic_vector(n-1 downto 0)
+		YY: out std_logic_vector(n-1 downto 0);
+		CR :out STD_LOGIC_VECTOR(k-1 DOWNTO 0)
+
 		);
 	end component;
 -----------------------------------------------------------------
@@ -41,11 +43,22 @@ package aux_package is
 -----------------------------------------------------------------
 
 
+component Counter is
+	generic (
+		k : positive := 3
+	);
+	port(
+		rst,ena,clk : in std_logic;
+		riseSig :in STD_LOGIC;
+		counterResult: out std_logic_vector(k-1 downto 0)
+	);
+END component;
 
 
 
   
-  
+  -----------------------------------------------------------------
+
   
   
 end aux_package;
