@@ -14,10 +14,12 @@ package aux_package is
 			rst,ena,clk : in std_logic;
 			din : in std_logic_vector(n-1 downto 0);
 			cond : in integer range 0 to 3;
-			detector,riseSIGG : out std_logic;
-					XX: out std_logic_vector(n-1 downto 0);
-		YY: out std_logic_vector(n-1 downto 0);
-		CR :out STD_LOGIC_VECTOR(k-1 DOWNTO 0)
+			detector : out std_logic
+			--,riseSIGG
+				--	XX: out std_logic_vector(n-1 downto 0);
+		--YY: out std_logic_vector(n-1 downto 0);
+	--	CR :out STD_LOGIC_VECTOR(k-1 DOWNTO 0);
+	--	--		CRT :out STD_LOGIC_VECTOR(k-1 DOWNTO 0)
 
 		);
 	end component;

@@ -12,14 +12,15 @@ architecture top_Testbench OF top_tb IS
 SIGNAL rst,ena,clk: STD_LOGIC;
 	SIGNAL din: STD_LOGIC_VECTOR (m-1 DOWNTO 0);
 	SIGNAL cond : INTEGER range 0 to 3;
-	SIGNAL	detector ,riseSIGG:  std_logic;
-	SIGNAL	XX:  std_logic_vector(m-1 downto 0);
-	SIGNAL	YY:  std_logic_vector(m-1 downto 0);
-	SIGNAL	counter:  std_logic_vector(2 downto 0);
+	SIGNAL	detector : std_logic;
+--	SIGNAL	XX:  std_logic_vector(m-1 downto 0);
+--	SIGNAL	YY:  std_logic_vector(m-1 downto 0);
+--	SIGNAL	counter:  std_logic_vector(2 downto 0);,riseSIGG: 
+--	SIGNAL	counterTMP:  std_logic_vector(2 downto 0);
 
 BEGIN
 
-	L0 : top PORT MAP(rst,ena,clk,din,cond,detector,riseSIGG,XX,YY,counter);
+	L0 : top PORT MAP(rst,ena,clk,din,cond,detector);--,riseSIGG,XX,YY,counter,counterTMP);
 		tb_ena : process
 			begin 
 			ena<='1';
@@ -72,6 +73,8 @@ BEGIN
 			din <= "00001001";
 			wait for 10 us;
 			din <= "00001010";--10
+			wait for 10 us;
+			din <= "00001011";--10
 			wait ;
         end process tb_din;
 		

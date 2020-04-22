@@ -13,24 +13,27 @@ entity top is
 		rst,ena,clk : in std_logic;
 		din : in std_logic_vector(n-1 downto 0);
 		cond : in integer range 0 to 3;
-		detector,riseSIGG : out std_logic;
-		XX: out std_logic_vector(n-1 downto 0);
-		YY: out std_logic_vector(n-1 downto 0);
-		CR :out STD_LOGIC_VECTOR(k-1 DOWNTO 0)
+		detector: out std_logic
+		--riseSIGG : out std_logic;
+	--	XX: out std_logic_vector(n-1 downto 0);
+		--YY: out std_logic_vector(n-1 downto 0);
+		--CR :out STD_LOGIC_VECTOR(k-1 DOWNTO 0);
+	--	CRT :out STD_LOGIC_VECTOR(k-1 DOWNTO 0)
 
 	);
 end top;
 ------------- complete the top Architecture code --------------
 architecture arc_sys of top is
 
-	SIGNAL D_next,D_prev,Diff : STD_LOGIC_VECTOR(n-1 DOWNTO 0); 
+	SIGNAL D_next,D_prev : STD_LOGIC_VECTOR(n-1 DOWNTO 0); 
 	SIGNAL adderS,adderInSIG : STD_LOGIC_VECTOR(n-1 DOWNTO 0);
 	SIGNAL counterResult : STD_LOGIC_VECTOR(k-1 DOWNTO 0);
 	SIGNAL adderC,isOne : STD_LOGIC;
 	SIGNAL cinSIG,riseSig : STD_LOGIC; 
 	SIGNAL X,Y : STD_LOGIC_VECTOR(n-1 DOWNTO 0);
 	SIGNAL cntTotal : STD_LOGIC_VECTOR(k-1 DOWNTO 0);
-	
+	SIGNAL trigger : INTEGER RANGE 0 TO 8 ;		
+
 
 begin
 
@@ -66,9 +69,16 @@ begin
 				riseVar := '1';
 			end IF;
 			riseSig <= riseVar;
+			if(trigger = 8)then
+				trigger<=0;
+			else
+				trigger<=trigger+1;
+			end if;
 	END PROCESS sProcess;
 	
-	cntProc : process (riseSig)
+	
+	
+	cntProc : process (trigger)
 		begin
 			IF (riseSig = '1') then
 				if(counterResult = "111" and cntTotal ="111") then
@@ -83,11 +93,12 @@ begin
 			end IF;
 	END PROCESS cntProc;	
 -----validating each part of design-------------
-	XX<=D_prev;
-	YY<=D_next;
-	riseSIGG <= riseSig;
+	--XX<=D_prev;
+	--YY<=D_next;
+	--riseSIGG <= riseSig;
 	detector<=isOne;
-	CR<=counterResult;
+	--CRT<=cntTotal;
+	--CR<=counterResult;
 ------------------------------------------------
 end arc_sys;
 
