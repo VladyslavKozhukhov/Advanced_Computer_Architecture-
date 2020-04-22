@@ -22,7 +22,10 @@ BEGIN
 
 	L0 : top PORT MAP(rst,ena,clk,din,cond,detector);--,riseSIGG,XX,YY,counter,counterTMP);
 		tb_ena : process
-			begin 
+			begin
+			ena<='0';
+			wait for 20 us;
+
 			ena<='1';
 			
 			wait;
@@ -37,16 +40,16 @@ BEGIN
 
         tb_clk : process
 			begin 
-			clk<='1';
-			wait for 5 us;
 			clk<='0';
+			wait for 5 us;
+			clk<='1';
 			wait for 5 us;
         end process tb_clk;
 		
 		tb_rst : process
 			begin 
 			rst<='1';
-			wait for 5 us;
+			wait for 10 us;
 			rst<='0';
 			wait;
         end process tb_rst;
@@ -54,8 +57,10 @@ BEGIN
 		
     tb_din : process
 		begin
+			din <= "00000000";
+			wait for 10 us;
 			din <= "00000001";
-			wait for 20 us;
+			wait for 10 us;
 			din <= "00000010";
 			wait for 10 us;
 			din <= "00000011"; 
@@ -74,7 +79,14 @@ BEGIN
 			wait for 10 us;
 			din <= "00001010";--10
 			wait for 10 us;
-			din <= "00001011";--10
+			din <= "00001011";--11
+			wait for 10 us;	
+			
+			din <= "00000000";
+			wait for 10 us;
+			din <= "00000010";
+			wait for 10 us;
+			din <= "00000100";
 			wait ;
         end process tb_din;
 		

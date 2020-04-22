@@ -67,13 +67,16 @@ begin
 			riseVar := '0';
 			if (adderS = D_next) then
 				riseVar := '1';
-			end IF;
-			riseSig <= riseVar;
-			if(trigger = 8)then
-				trigger<=0;
+				if(trigger = 8)then
+					trigger<=8;
+				else				
+					trigger<=trigger+1;
+				end if;
 			else
-				trigger<=trigger+1;
-			end if;
+				trigger<=0;
+			end IF;			
+			riseSig <= riseVar;
+			
 	END PROCESS sProcess;
 	
 	
@@ -81,14 +84,14 @@ begin
 	cntProc : process (trigger)
 		begin
 			IF (riseSig = '1') then
-				if(counterResult = "111" and cntTotal ="111") then
+				if(counterResult = "111" and trigger =8) then
 					isOne <= '1';
 				else
-					cntTotal<=counterResult;
+					--cntTotal<=counterResult;
 					isOne<='0';
 				end if;
 			ELSE
-				cntTotal<="000";
+				--cntTotal<="000";
 				isOne<='0';
 			end IF;
 	END PROCESS cntProc;	
