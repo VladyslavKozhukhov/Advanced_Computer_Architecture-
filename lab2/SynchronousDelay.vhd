@@ -26,9 +26,11 @@ begin
 				Zprev :=(others => '0');-- <= (others => '0');
 			elsif (rising_edge(clk)) then	
 				IF(ena = '1') THEN
-					Zprev := D_next;
-					D_next <= din;
-					D_prev <= Zprev;
+					IF(D_next /= din) THEN
+						Zprev := D_next;
+						D_next <= din;
+						D_prev <= Zprev;
+					end IF;
 				end IF;
 			end IF;
 		END PROCESS delayProc;			
