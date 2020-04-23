@@ -44,9 +44,9 @@ BEGIN
         tb_clk : process
 			begin 
 			clk<='0';
-			wait for 5 us;
+			wait for 1 us;
 			clk<='1';
-			wait for 5 us;
+			wait for 1 us;
         end process tb_clk;
 		
 		tb_rst : process
