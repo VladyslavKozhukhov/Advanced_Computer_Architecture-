@@ -4,13 +4,13 @@ USE ieee.std_logic_arith.all;
 USE ieee.std_logic_unsigned.all;
 USE work.aux_package.all;
 
-ENTITY top_tb_cond0 IS
+ENTITY top_tb_cond2 IS
 	CONSTANT n : INTEGER := 8;
 	CONSTANT m : positive := 7 ;
 	CONSTANT k : positive := 3
-END top_tb_cond0;
+END top_tb_cond2;
 
-architecture top_Testbench_cond0 OF top_tb_cond0 IS
+architecture top_Testbench_cond2 OF top_tb_cond2 IS
 SIGNAL rst,ena,clk: STD_LOGIC;
 	SIGNAL din: STD_LOGIC_VECTOR (n-1 DOWNTO 0);
 	SIGNAL cond : INTEGER range 0 to 3;
@@ -21,7 +21,7 @@ SIGNAL rst,ena,clk: STD_LOGIC;
 --	SIGNAL	counterTMP:  std_logic_vector(2 downto 0);
 
 BEGIN
-
+cond<=2;
 	L0 : top generic map(n,m,k) PORT MAP(rst,ena,clk,din,cond,detector);--,riseSIGG,XX,YY,counter,counterTMP);
 		tb_ena : process
 			begin
@@ -29,7 +29,10 @@ BEGIN
 			wait for 20 us;
 
 			ena<='1';
-			
+			wait for 140 us;
+			ena<='0';
+			wait for 20 us;
+			ena<='1';
 			wait;
         end process tb_ena;
 		
@@ -54,10 +57,10 @@ BEGIN
 			rst<='1';
 			wait for 10 us;
 			rst<='0';
-			wait for 140 us;
-			rst<='1';
-			wait for 10 us;
-			rst<='0';
+--			wait for 140 us;
+--			rst<='1';
+--			wait for 10 us;
+--			rst<='0';
 			wait;
         end process tb_rst;
 		
@@ -66,52 +69,52 @@ BEGIN
 		begin
 			din <= "00000000";--0
 			wait for 10 us;
-			din <= "00000001";--1
-			wait for 10 us;
-			din <= "00000010";--2
-			wait for 10 us;
 			din <= "00000011";--3
 			wait for 10 us;
-			din <= "00000100";--4
+			din <= "00000010";--6
 			wait for 10 us;
-			din <= "00000101";--5
+			din <= "00000011";--9
 			wait for 10 us;
-			din <= "00000110";--6
+			din <= "00000100";--12
 			wait for 10 us;
-			din <= "00000111";--7
+			din <= "00000101";--15
 			wait for 10 us;
-			din <= "00001000";--8
+			din <= "00000110";--18
 			wait for 10 us;
-			din <= "00001001";--9
+			din <= "00000111";--21
 			wait for 10 us;
-			din <= "00001010";--10
+			din <= "00001000";--24
 			wait for 10 us;
-			din <= "00001011";--11
+			din <= "00001001";--27
+			wait for 10 us;
+			din <= "00001010";--30
+			wait for 10 us;
+			din <= "00001011";--33
 			wait for 10 us;	
 			
-			din <= "00001100";--12
+			din <= "00001100";--36
 			wait for 10 us;
-			din <= "00001101";--13
+			din <= "00001101";--39
 			wait for 10 us;
-			din <= "00001110";--14
+			din <= "00001110";--42
 			wait for 10 us;
-			din <= "00001111";--15
+			din <= "00001111";--45
 			wait for 10 us;
-			din <= "00010000";--16
+			din <= "00010000";--48
 			wait for 10 us;
-			din <= "00010001";--17
+			din <= "00010001";--51
 			wait for 10 us;
-			din <= "00010010";--18
+			din <= "00010010";--54
 			wait for 10 us;
-			din <= "00010011";--19
+			din <= "00010011";--57
 			wait for 10 us;
-			din <= "00010100";--20
+			din <= "00010100";--60
 			wait for 10 us;
-			din <= "00010101";--21
+			din <= "00010101";--63
 			wait for 10 us;
-			din <= "00010110";--22
+			din <= "00010110";--66
 			wait for 10 us;
-			din <= "00010111";--23
+			din <= "00010111";--69
 			
 			wait for 10 us;
 			din <= "00000000";--0
@@ -120,4 +123,4 @@ BEGIN
 		
 
   
-END top_Testbench_cond0;
+END top_Testbench_cond2;
