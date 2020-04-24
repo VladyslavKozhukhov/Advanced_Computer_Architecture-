@@ -27,7 +27,11 @@ BEGIN
 			wait for 20 us;
 
 			ena<='1';
-			
+			--wait for 170 us;
+		---	ena<='0';
+		--	wait for 20 us;
+		--	ena<='1';
+
 			wait;
         end process tb_ena;
 		
@@ -56,6 +60,12 @@ BEGIN
 			rst<='1';
 			wait for 10 us;
 			rst<='0';
+						wait for 120 us;
+								rst<='1';
+	
+			wait for 20 us;
+			rst<='0';
+			
 			wait;
         end process tb_rst;
 		
