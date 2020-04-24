@@ -14,7 +14,7 @@ SIGNAL din,din_i,din_iMinus : STD_LOGIC_VECTOR (m-1 DOWNTO 0);
 
 BEGIN
 
-	L0 : top PORT MAP(rst,ena,clk,din,din_i,din_iMinus);
+	L0 : SynchronousDelay_tb generic map(m) port map(rst,ena,clk,din,din_i,din_iMinus);
 		tb_ena : process
 			begin
 			ena<='0';

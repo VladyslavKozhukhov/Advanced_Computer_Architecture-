@@ -5,12 +5,14 @@ USE ieee.std_logic_unsigned.all;
 USE work.aux_package.all;
 
 ENTITY top_tb_cond0to1 IS
-	CONSTANT m : INTEGER := 8;
+	CONSTANT n : INTEGER := 8;
+	CONSTANT m : positive := 7 ;
+	CONSTANT k : positive := 3
 END top_tb_cond0to1;
 
 architecture top_Testbench_cond0to1 OF top_tb_cond0to1 IS
 SIGNAL rst,ena,clk: STD_LOGIC;
-	SIGNAL din: STD_LOGIC_VECTOR (m-1 DOWNTO 0);
+	SIGNAL din: STD_LOGIC_VECTOR (n-1 DOWNTO 0);
 	SIGNAL cond : INTEGER range 0 to 3;
 	SIGNAL	detector : std_logic;
 --	SIGNAL	XX:  std_logic_vector(m-1 downto 0);
@@ -20,7 +22,7 @@ SIGNAL rst,ena,clk: STD_LOGIC;
 
 BEGIN
 
-	L0 : top PORT MAP(rst,ena,clk,din,cond,detector);--,riseSIGG,XX,YY,counter,counterTMP);
+	L0 : top generic map(n,m,k) PORT MAP(rst,ena,clk,din,cond,detector);--,riseSIGG,XX,YY,counter,counterTMP);
 		tb_ena : process
 			begin
 			ena<='0';
