@@ -45,14 +45,14 @@ begin
 	CounterComponent : Counter generic map(k) port map(rst,ena,clk,riseSig,counterResult);
 	DetectorComponent : detector_val generic map(k) port map(trigger,counterResult,isOne);
 
-	updateCondProcess : process (cond)
-		VARIABLE adderInVar : STD_LOGIC_VECTOR(n-1 DOWNTO 0);
-		VARIABLE cinVar : STD_LOGIC;
+	updateCondProcess : process (cond)  --UPDATE THE VALUES FOR THE INPUT TO ADDER
+		VARIABLE adderInVar : STD_LOGIC_VECTOR(n-1 DOWNTO 0);  --Holds vector for cond addition
+		VARIABLE cinVar : STD_LOGIC;  --Carry holds bit for odd addition
 		begin
 			adderInVar := (others => '0');
 			cinVar := '0';
 			if(cond = 0) then
-				cinVar := '1';
+				cinVar := '1'; 
 			elsif (cond = 1) then
 				adderInVar(1) := '1';
 			elsif (cond = 2) then

@@ -26,14 +26,14 @@ begin
 				Zprev :=(others => '0');-- <= (others => '0');
 			elsif (rising_edge(clk)) then	
 				IF(ena = '1') THEN
-						Zprev := D_next;
-						D_next <= din;
-						D_prev <= Zprev;
+						Zprev := D_next;  --save d_i temporarily
+						D_next <= din; --update d_i
+						D_prev <= Zprev; --update d_i-1
 				end IF;
 			end IF;
 		END PROCESS delayProc;			
-		din_i <= D_next;
-		din_iMinus <= D_prev;
+		din_i <= D_next;  --implied process, update d_i
+		din_iMinus <= D_prev;  --implied process, update d_i-1
 	
 end arc_SynchronousDelay;
 
