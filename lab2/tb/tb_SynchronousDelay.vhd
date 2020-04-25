@@ -14,14 +14,17 @@ SIGNAL din,din_i,din_iMinus : STD_LOGIC_VECTOR (m-1 DOWNTO 0);
 
 BEGIN
 
-	L0 : SynchronousDelay_tb generic map(m) port map(rst,ena,clk,din,din_i,din_iMinus);
+	L0 : SynchronousDelay generic map(m) port map(rst,ena,clk,din,din_i,din_iMinus);
 		tb_ena : process
 			begin
 			ena<='0';
 			wait for 20 us;
 
 			ena<='1';
-			
+			wait for 50 us;
+			ena<='0';
+			wait for 30 us;
+			ena<='1';
 			wait;
         end process tb_ena;
 		
@@ -38,6 +41,10 @@ BEGIN
 			begin 
 			rst<='1';
 			wait for 10 us;
+			rst<='0';
+			wait for 120 us;
+			rst<='1';
+			wait for 20 us;
 			rst<='0';
 			wait;
         end process tb_rst;

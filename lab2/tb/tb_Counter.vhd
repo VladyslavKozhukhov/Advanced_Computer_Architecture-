@@ -9,8 +9,8 @@ ENTITY Counter_tb IS
 END Counter_tb;
 
 architecture Arc_Counter_tb OF Counter_tb IS
-SIGNAL rst,ena,clk: STD_LOGIC;
-SIGNAL din,din_i,din_iMinus : STD_LOGIC_VECTOR (m-1 DOWNTO 0);
+SIGNAL rst,ena,clk,riseSig : STD_LOGIC;
+SIGNAL counterResult : STD_LOGIC_VECTOR (k-1 DOWNTO 0);
 
 BEGIN
 
@@ -19,10 +19,11 @@ BEGIN
 			begin
 			ena<='0';
 			wait for 20 us;
+
 			ena<='1';
 			wait for 180 us;
 			ena<='0';
-			wait for 20 us;
+			wait for 30 us;
 			ena<='1';
 			wait;
         end process tb_ena;
@@ -41,9 +42,9 @@ BEGIN
 			rst<='1';
 			wait for 10 us;
 			rst<='0';
-			wait for 150 us;
+			wait for 120 us;
 			rst<='1';
-			wait for 10 us;
+			wait for 20 us;
 			rst<='0';
 			wait;
         end process tb_rst;
@@ -54,7 +55,7 @@ BEGIN
 			riseSig <= '0';
 			wait for 10 us;
 			riseSig <= '1';
-			wait for 50 us;
+			wait for 900 us;
 			riseSig <= '0';
 			wait for 10 us;
 			riseSig <= '1';

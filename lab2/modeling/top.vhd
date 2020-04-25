@@ -39,8 +39,9 @@ architecture arc_sys of top is
 
 begin
 
-	AdderComponent : Adder generic map(n) port map(adderInSIG,D_prev,cinSIG,adderS,adderC);
+	
 	SyncDelayComponent : SynchronousDelay generic map(n) port map(rst,ena,clk,din,D_next,D_prev);
+	AdderComponent : Adder generic map(n) port map(adderInSIG,D_prev,cinSIG,adderS,adderC);
 	CounterComponent : Counter generic map(k) port map(rst,ena,clk,riseSig,counterResult);
 	DetectorComponent : detector_val generic map(k) port map(trigger,counterResult,isOne);
 

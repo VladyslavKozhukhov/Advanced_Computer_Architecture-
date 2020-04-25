@@ -15,7 +15,7 @@ entity SynchronousDelay is
 end SynchronousDelay;
 ------------- SynchronousDelay Architecture code --------------
 architecture arc_SynchronousDelay of SynchronousDelay is
-SIGNAL D_next,D_prev,Diff : STD_LOGIC_VECTOR(n-1 DOWNTO 0); 
+SIGNAL D_next,D_prev : STD_LOGIC_VECTOR(n-1 DOWNTO 0); 
 begin
 	delayProc :process (clk,rst,ena,din)
 		VARIABLE Zprev: STD_LOGIC_VECTOR(n-1 DOWNTO 0);

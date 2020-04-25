@@ -9,9 +9,9 @@ entity detector_val is
 	);
 	port(
 		trigger: IN STD_LOGIC_VECTOR(8 DOWNTO 0);
-			counterResult: IN STD_LOGIC_VECTOR(k-1 DOWNTO 0);
-			--riseSig :IN STD_LOGIC; 
-			isOne: OUT STD_LOGIC);
+		counterResult: IN STD_LOGIC_VECTOR(k-1 DOWNTO 0);
+		--riseSig :IN STD_LOGIC; 
+		isOne: OUT STD_LOGIC);
 	
 end detector_val;
 ------------- SynchronousDelay Architecture code --------------
