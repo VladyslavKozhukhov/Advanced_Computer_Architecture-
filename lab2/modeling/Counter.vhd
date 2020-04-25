@@ -17,7 +17,7 @@ end Counter;
 architecture arc_Counter of Counter is
 SIGNAL tmpResult: STD_LOGIC_VECTOR(k-1 DOWNTO 0); 
 begin
-	counterProc :process (clk,rst,ena)
+	counterProc :process (clk,rst,ena,riseSig)
 		VARIABLE countVar: STD_LOGIC_VECTOR(7 DOWNTO 0);
 		begin
 			if(rst='1') then
@@ -49,14 +49,9 @@ begin
 						countVar := "00000001";
 						tmpResult<="000";
 					end IF;
-				ELSE
-					tmpResult<=(others => '0');
-					countVar := "00000001";
 				end IF;
 			end IF;
 		END PROCESS counterProc;			
 		counterResult <= tmpResult;
 	
 end arc_Counter;
-	--output(n-1 DOWNTO 0) <= outputSig;
-
