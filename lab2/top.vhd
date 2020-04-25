@@ -13,8 +13,7 @@ entity top is
 		rst,ena,clk : in std_logic;
 		din : in std_logic_vector(n-1 downto 0);
 		cond : in integer range 0 to 3;
-		detector : out std_logic
-	);
+		detector : out std_logic);
 end top;
 ------------- complete the top Architecture code --------------
 architecture arc_sys of top is
@@ -29,6 +28,8 @@ architecture arc_sys of top is
 	SIGNAL trigger : STD_LOGIC_VECTOR(8 DOWNTO 0);	
 	SIGNAL tmpResult: STD_LOGIC_VECTOR(k-1 DOWNTO 0); 
 	SIGNAL count : STD_LOGIC_VECTOR (7 DOWNTO 0)  ;	
+
+
 
 begin
 
@@ -52,58 +53,56 @@ begin
 		END PROCESS delayProc;			
 
 		
-		counterProc :process (clk,rst,ena)
+
+	counterProc :process (clk,rst,ena,riseSig)
+		VARIABLE countVar: STD_LOGIC_VECTOR(7 DOWNTO 0);
 		begin
 			if(rst='1') then
-				count <= "00000001";
+				countVar := "00000001";
+
 				counterResult <= (others => '0');
 			elsif (rising_edge(clk)) then	
 				IF(ena = '1') THEN
 					IF(riseSig = '1') THEN
-							count <= count( 6 downto 0 )&'0';
-							if(count = "00000010") then							
+							countVar := countVar( 6 downto 0 )&'0';
+							if(countVar = "00000010") then							
 								counterResult <= "001";
-							elsif(count = "00000100") then
+							elsif(countVar = "00000100") then
 								counterResult <= "010";
-							elsif(count = "00001000") then
+							elsif(countVar = "00001000") then
 								counterResult <= "011";
-							elsif(count = "00001000") then
+							elsif(countVar = "00001000") then
 								counterResult <= "100";
-							elsif(count = "00010000") then
+							elsif(countVar = "00010000") then
 								counterResult <= "101";
-							elsif(count = "00100000") then
+							elsif(countVar = "00100000") then
 								counterResult <= "110";
-							elsif(count = "01000000") then
+							elsif(countVar = "01000000") then
 								counterResult <= "111";							
-							elsif(count = "10000000") THEN
+							elsif(countVar = "10000000") THEN
 								counterResult<="111";
-								count<="01000000";
+								countVar := "01000000";
 							end if;				
 					ELSE 
-						count <= "00000001";
+						countVar := "00000001";
 						counterResult<="000";
 					end IF;
-				ELSE
-					counterResult<=(others => '0');
-					count <= "00000001";
 				end IF;
 			end IF;
-		END PROCESS counterProc;			
+		END PROCESS counterProc;						
 		
 	
 	cntProc : process (trigger)
 		begin
-		--	IF (riseSig = '1') then
 				if(counterResult = "111" and trigger ="100000000") then
+					isOne <= '1';
+				elsif(counterResult = "111" and trigger ="100000001") then
 					isOne <= '1';
 				else
 					isOne<='0';
 				end if;
-			--ELSE
-				--isOne<='0';
-			--end IF;
+
 	END PROCESS cntProc;
-	
 
 	updateCondProcess : process (cond)
 		VARIABLE adderInVar : STD_LOGIC_VECTOR(n-1 DOWNTO 0);
@@ -125,7 +124,9 @@ begin
 			adderInSIG <= adderInVar;
 	END PROCESS updateCondProcess;
 	
-	sProcess : process (adderS)
+	
+	
+sProcess : process (adderS)
 		VARIABLE riseVar : STD_LOGIC;
 		begin
 			riseVar := '0';
@@ -133,11 +134,17 @@ begin
 				riseVar := '1';
 				if(trigger = "100000000")then
 					trigger<="100000000";
+				elsif(trigger = "100000001")then
+					trigger<="000000010";
 				else	
 					trigger <= trigger( 7 downto 0 )&'0';				
 				end if;
 			else
-				trigger<="000000001";
+				if(trigger = "100000000")then
+					trigger<="100000001";
+				else	
+					trigger<="000000001";
+				end if;
 			end IF;			
 			riseSig <= riseVar;
 			
@@ -149,9 +156,10 @@ begin
 	--XX<=D_prev;
 	--YY<=D_next;
 	--riseSIGG <= riseSig;
+	--outtt<=flag;
 	detector<=isOne;
 	--CRT<=cntTotal;
-	--CR<=counterResult;
+--		CR<=counterResult;
 ------------------------------------------------
 end arc_sys;
 

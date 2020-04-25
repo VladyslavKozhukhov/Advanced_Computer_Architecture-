@@ -18,9 +18,9 @@ SIGNAL rst,ena,clk: STD_LOGIC;
 --	SIGNAL	counter:  std_logic_vector(2 downto 0);,riseSIGG: 
 --	SIGNAL	counterTMP:  std_logic_vector(2 downto 0);
 
-BEGIN
+		BEGIN
 
-	L0 : top PORT MAP(rst,ena,clk,din,cond,detector);--,riseSIGG,XX,YY,counter,counterTMP);
+	L0 : top PORT MAP(rst,ena,clk,din,cond,detector);--,outtt,CR);--,riseSIGG,XX,YY,counter,counterTMP);
 		tb_ena : process
 			begin
 			ena<='0';
