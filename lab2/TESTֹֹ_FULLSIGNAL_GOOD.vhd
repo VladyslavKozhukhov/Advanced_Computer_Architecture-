@@ -30,11 +30,7 @@ BEGIN
 			wait for 20 us;
 
 			ena<='1';
-			--wait for 170 us;
-		---	ena<='0';
-		--	wait for 20 us;
-		--	ena<='1';
-
+			
 			wait;
         end process tb_ena;
 		
@@ -43,7 +39,7 @@ BEGIN
 				cond<=0;				
 				wait for 120 us; 
 				cond<=1;
-				wait for 160 us; 
+				wait for 120 us; 
 				cond<=2;				
 
 			wait;
@@ -63,12 +59,6 @@ BEGIN
 			rst<='1';
 			wait for 10 us;
 			rst<='0';
-		--				wait for 120 us;
-		--						rst<='1';
-	
-	--		wait for 20 us;
-	--		rst<='0';
-			
 			wait;
         end process tb_rst;
 		
@@ -95,7 +85,7 @@ BEGIN
 			wait for 10 us;
 			din <= "00001001";
 			wait for 10 us;
-			din <= "00001010";--10
+			din <= "00001011";--10
 			wait for 10 us;
 			din <= "00001011";--11
 			wait for 10 us;	

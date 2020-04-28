@@ -2,6 +2,7 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.std_logic_unsigned.all;
 USE work.aux_package.all;
+use IEEE.std_logic_arith.all;
 -------------------------------------------------------------
 entity top is
 	generic (
@@ -13,7 +14,15 @@ entity top is
 		rst,ena,clk : in std_logic;
 		din : in std_logic_vector(n-1 downto 0);
 		cond : in integer range 0 to 3;
-		detector : out std_logic);
+		detector : out std_logic;
+		 X,Y : out STD_LOGIC_VECTOR(n-1 DOWNTO 0);
+		 riseSIGG: out std_logic;
+		 CR 	 : out STD_LOGIC_VECTOR(k-1 DOWNTO 0);
+		 
+		trig : out STD_LOGIC_VECTOR(1 DOWNTO 0)	
+
+		 );
+		
 end top;
 ------------- complete the top Architecture code --------------
 architecture arc_sys of top is
@@ -21,11 +30,11 @@ architecture arc_sys of top is
 	SIGNAL D_next,D_prev: STD_LOGIC_VECTOR(n-1 DOWNTO 0); 
 	SIGNAL adderS,adderInSIG : STD_LOGIC_VECTOR(n-1 DOWNTO 0);
 	SIGNAL counterResult : STD_LOGIC_VECTOR(k-1 DOWNTO 0);
-	SIGNAL adderC,isOne : STD_LOGIC;
+	SIGNAL adderC,isOne: STD_LOGIC;
 	SIGNAL cinSIG,riseSig : STD_LOGIC; 
-	--SIGNAL X,Y : STD_LOGIC_VECTOR(n-1 DOWNTO 0);
+	SIGNAL isUp,isUpTwo:STD_LOGIC_VECTOR(1 DOWNTO 0);
 	SIGNAL cntTotal : STD_LOGIC_VECTOR(k-1 DOWNTO 0);
-	SIGNAL trigger : STD_LOGIC_VECTOR(8 DOWNTO 0);	
+	SIGNAL trigger : STD_LOGIC_VECTOR(m DOWNTO 0);	
 	SIGNAL tmpResult: STD_LOGIC_VECTOR(k-1 DOWNTO 0); 
 	SIGNAL count : STD_LOGIC_VECTOR (7 DOWNTO 0)  ;	
 
@@ -55,54 +64,34 @@ begin
 		
 
 	counterProc :process (clk,rst,ena,riseSig)
-		VARIABLE countVar: STD_LOGIC_VECTOR(7 DOWNTO 0);
 		begin
 			if(rst='1') then
-				countVar := "00000001";
-
-				counterResult <= (others => '0');
+				counterResult <= (others => '0') ;
 			elsif (rising_edge(clk)) then	
 				IF(ena = '1') THEN
-					IF(riseSig = '1') THEN
-							countVar := countVar( 6 downto 0 )&'0';
-							if(countVar = "00000010") then							
-								counterResult <= "001";
-							elsif(countVar = "00000100") then
-								counterResult <= "010";
-							elsif(countVar = "00001000") then
-								counterResult <= "011";
-							elsif(countVar = "00001000") then
-								counterResult <= "100";
-							elsif(countVar = "00010000") then
-								counterResult <= "101";
-							elsif(countVar = "00100000") then
-								counterResult <= "110";
-							elsif(countVar = "01000000") then
-								counterResult <= "111";							
-							elsif(countVar = "10000000") THEN
-								counterResult<="111";
-								countVar := "01000000";
-							end if;				
+					IF(riseSig = '1') THEN							
+						if counterResult = m then
+						   counterResult<=counterResult;
+						else
+						   counterResult <= counterResult + 1;
+						end if;											
 					ELSE 
-						countVar := "00000001";
-						counterResult<="000";
+						counterResult <= (others => '0');
 					end IF;
 				end IF;
 			end IF;
 		END PROCESS counterProc;						
 		
 	
-	cntProc : process (trigger)
-		begin
-				if(counterResult = "111" and trigger ="100000000") then
-					isOne <= '1';
-				elsif(counterResult = "111" and trigger ="100000001") then
-					isOne <= '1';
-				else
-					isOne<='0';
-				end if;
 
-	END PROCESS cntProc;
+
+	cntProc : process (counterResult)
+		BEGIN		
+		isOne<='0';
+		if(counterResult  = m  AND riseSig = '1') THEN
+			isOne<='1';					
+		END IF;
+	 END PROCESS cntProc;
 
 	updateCondProcess : process (cond)
 		VARIABLE adderInVar : STD_LOGIC_VECTOR(n-1 DOWNTO 0);
@@ -132,19 +121,6 @@ sProcess : process (adderS)
 			riseVar := '0';
 			if (adderS = D_next) then
 				riseVar := '1';
-				if(trigger = "100000000")then
-					trigger<="100000000";
-				elsif(trigger = "100000001")then
-					trigger<="000000010";
-				else	
-					trigger <= trigger( 7 downto 0 )&'0';				
-				end if;
-			else
-				if(trigger = "100000000")then
-					trigger<="100000001";
-				else	
-					trigger<="000000001";
-				end if;
 			end IF;			
 			riseSig <= riseVar;
 			
@@ -153,13 +129,14 @@ sProcess : process (adderS)
 	
 	
 -----validating each part of design-------------
-	--XX<=D_prev;
-	--YY<=D_next;
-	--riseSIGG <= riseSig;
+	X<=D_prev;
+	Y<=D_next;
+	riseSIGG <= riseSig;
 	--outtt<=flag;
+	trig<=isUp;
 	detector<=isOne;
 	--CRT<=cntTotal;
---		CR<=counterResult;
+		CR<=counterResult;
 ------------------------------------------------
 end arc_sys;
 

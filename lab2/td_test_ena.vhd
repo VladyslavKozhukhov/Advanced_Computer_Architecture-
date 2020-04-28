@@ -1,4 +1,4 @@
- LIBRARY IEEE;
+  LIBRARY IEEE;
 USE ieee.std_logic_1164.all;
 USE ieee.std_logic_arith.all;
 USE ieee.std_logic_unsigned.all;
@@ -13,27 +13,24 @@ SIGNAL rst,ena,clk: STD_LOGIC;
 	SIGNAL din: STD_LOGIC_VECTOR (m-1 DOWNTO 0);
 	SIGNAL cond : INTEGER range 0 to 3;
 	SIGNAL	detector : std_logic;
-	SIGNAL riseSIGG:  std_logic;
-	SIGNAL CR :  STD_LOGIC_VECTOR(3-1 DOWNTO 0);
-	SIGNAL trig :  STD_LOGIC_VECTOR(1 DOWNTO 0);
-	SIGNAL XX:  std_logic_vector(m-1 downto 0);
-	SIGNAL YY:  std_logic_vector(m-1 downto 0);
+--	SIGNAL	XX:  std_logic_vector(m-1 downto 0);
+--	SIGNAL	YY:  std_logic_vector(m-1 downto 0);
 --	SIGNAL	counter:  std_logic_vector(2 downto 0);,riseSIGG: 
 --	SIGNAL	counterTMP:  std_logic_vector(2 downto 0);
 
-BEGIN
+		BEGIN
 
-	L0 : top PORT MAP(rst,ena,clk,din,cond,detector,XX,YY,riseSIGG,CR,trig);--,riseSIGG,XX,YY,counter,counterTMP);
+	L0 : top PORT MAP(rst,ena,clk,din,cond,detector);--,outtt,CR);--,riseSIGG,XX,YY,counter,counterTMP);
 		tb_ena : process
 			begin
 			ena<='0';
 			wait for 20 us;
-
 			ena<='1';
-			--wait for 170 us;
-		---	ena<='0';
-		--	wait for 20 us;
-		--	ena<='1';
+			wait for 140 us;
+			ena<='0';
+			wait for 20 us;
+			ena<='1';
+
 
 			wait;
         end process tb_ena;
@@ -43,7 +40,7 @@ BEGIN
 				cond<=0;				
 				wait for 120 us; 
 				cond<=1;
-				wait for 160 us; 
+				wait for 180 us; 
 				cond<=2;				
 
 			wait;
@@ -63,12 +60,6 @@ BEGIN
 			rst<='1';
 			wait for 10 us;
 			rst<='0';
-		--				wait for 120 us;
-		--						rst<='1';
-	
-	--		wait for 20 us;
-	--		rst<='0';
-			
 			wait;
         end process tb_rst;
 		
@@ -98,20 +89,24 @@ BEGIN
 			din <= "00001010";--10
 			wait for 10 us;
 			din <= "00001011";--11
-			wait for 10 us;	
+			wait for 10 us;	   --- 120us
 			
 			din <= "00000000";--0
-			wait for 10 us;
+			wait for 10 us;   --130
 			din <= "00000010";--2
-			wait for 10 us;
+			wait for 10 us; --   140
 			din <= "00000100";--4
-			wait for 10 us;
+			wait for 10 us;   --150 
 			din <= "00000110";--6
-			wait for 10 us;
+			wait for 10 us; -- 160 -- enter
 			din <= "00001000";--8
-			wait for 10 us;
+			wait for 10 us;   ---****
 			din <= "00001010";--10
-			wait for 10 us;
+			wait for 10 us;   ----***
+			din <= "00001000";--8  -----out
+			wait for 10 us;   
+			din <= "00001010";--10
+			wait for 10 us;   
 			din <= "00001100";--12
 			wait for 10 us;
 			din <= "00001110";--14

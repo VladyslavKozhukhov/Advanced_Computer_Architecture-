@@ -14,8 +14,11 @@ package aux_package is
 			rst,ena,clk : in std_logic;
 			din : in std_logic_vector(n-1 downto 0);
 			cond : in integer range 0 to 3;
-			detector : out std_logic
-		);
+			detector : out std_logic;
+					 X,Y : out STD_LOGIC_VECTOR(n-1 DOWNTO 0);
+					 riseSIGG: out std_logic;
+		 CR 	 : out STD_LOGIC_VECTOR(k-1 DOWNTO 0);		 
+		trig : out STD_LOGIC_VECTOR(1 DOWNTO 0)	);
 	end component;
 -----------------------------------------------------------------
 	component Adder IS
@@ -24,6 +27,7 @@ package aux_package is
 			cin: IN STD_LOGIC;
             s: OUT STD_LOGIC_VECTOR (length-1 DOWNTO 0);
 			cout: OUT STD_LOGIC);
+			--SIGNAL X,Y : STD_LOGIC_VECTOR(n-1 DOWNTO 0));
 	END component;
 -----------------------------------------------------------------
 
