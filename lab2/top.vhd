@@ -84,14 +84,16 @@ begin
 		
 	
 
-
-	cntProc : process (counterResult)
+	--isOne<='1' when counterResult = m and riseSig = '1' else '0';
+	cntProc : process (counterResult,isUp)
 		BEGIN		
 		isOne<='0';
-		if(counterResult  = m  AND riseSig = '1') THEN
+		if(counterResult  = m  AND isUp = "11") THEN
 			isOne<='1';					
+		elsif(counterResult  = m  AND isUp = "10") THEN
+			isOne<='1';
 		END IF;
-	 END PROCESS cntProc;
+	END PROCESS cntProc;
 
 	updateCondProcess : process (cond)
 		VARIABLE adderInVar : STD_LOGIC_VECTOR(n-1 DOWNTO 0);
@@ -121,6 +123,21 @@ sProcess : process (adderS)
 			riseVar := '0';
 			if (adderS = D_next) then
 				riseVar := '1';
+				if(counterResult = m AND isUp="01") then -- m+1  times AND rise = 1 => 8 times
+					isUp <= "11";
+				elsif(counterResult = m AND isUp="11") then -- m+1 ++ times +
+					isUp <= "11";
+				elsif(isUp = "10") then -- back to be 1
+					isUp <="11";
+				elsif(counterResult +1 = m)then  -- 6 times
+					isUp<="01";		
+				end if;
+			else
+				if( isUp="11")then 
+					isUp<="10";
+				else			
+					isUp<="00";	
+				end if;
 			end IF;			
 			riseSig <= riseVar;
 			
