@@ -15,12 +15,10 @@ entity top is
 		din : in std_logic_vector(n-1 downto 0);
 		cond : in integer range 0 to 3;
 		detector : out std_logic;
-		 X,Y : out STD_LOGIC_VECTOR(n-1 DOWNTO 0);
-		 riseSIGG: out std_logic;
-		 CR 	 : out STD_LOGIC_VECTOR(k-1 DOWNTO 0);
-		 
+		X,Y : out STD_LOGIC_VECTOR(n-1 DOWNTO 0);
+		riseSIGG: out std_logic;
+		CR : out STD_LOGIC_VECTOR(k-1 DOWNTO 0);
 		trig : out STD_LOGIC_VECTOR(1 DOWNTO 0)	
-
 		 );
 		
 end top;
@@ -37,7 +35,7 @@ architecture arc_sys of top is
 	SIGNAL trigger : STD_LOGIC_VECTOR(m DOWNTO 0);	
 	SIGNAL tmpResult: STD_LOGIC_VECTOR(k-1 DOWNTO 0); 
 	SIGNAL count : STD_LOGIC_VECTOR (7 DOWNTO 0)  ;	
-
+	SIGNAL countMax : STD_LOGIC;
 
 
 begin
@@ -63,14 +61,14 @@ begin
 
 		
 
-	counterProc :process (clk,rst,ena,riseSig)
+	counterProc :process (clk,rst,ena,riseSig,countMax)
 		begin
 			if(rst='1') then
 				counterResult <= (others => '0') ;
 			elsif (rising_edge(clk)) then	
 				IF(ena = '1') THEN
 					IF(riseSig = '1') THEN							
-						if counterResult = m then
+						if (countMax='1') then
 						   counterResult<=counterResult;
 						else
 						   counterResult <= counterResult + 1;
@@ -82,7 +80,9 @@ begin
 			end IF;
 		END PROCESS counterProc;						
 		
-	
+	countMax <= '1' when (counterResult = m) else
+				'0';						
+		
 
 	--isOne<='1' when counterResult = m and riseSig = '1' else '0';
 	cntProc : process (counterResult,isUp)
@@ -149,11 +149,9 @@ sProcess : process (adderS)
 	X<=D_prev;
 	Y<=D_next;
 	riseSIGG <= riseSig;
-	--outtt<=flag;
 	trig<=isUp;
 	detector<=isOne;
-	--CRT<=cntTotal;
-		CR<=counterResult;
+	CR<=counterResult;
 ------------------------------------------------
 end arc_sys;
 
