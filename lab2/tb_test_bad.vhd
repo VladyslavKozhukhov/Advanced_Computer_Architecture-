@@ -13,17 +13,13 @@ SIGNAL rst,ena,clk: STD_LOGIC;
 	SIGNAL din: STD_LOGIC_VECTOR (m-1 DOWNTO 0);
 	SIGNAL cond : INTEGER range 0 to 3;
 	SIGNAL	detector : std_logic;
-	SIGNAL riseSIGG:  std_logic;
-	SIGNAL CR :  STD_LOGIC_VECTOR(3-1 DOWNTO 0);
-	SIGNAL trig :  STD_LOGIC_VECTOR(1 DOWNTO 0);
-	SIGNAL XX:  std_logic_vector(m-1 downto 0);
-	SIGNAL YY:  std_logic_vector(m-1 downto 0);
+	
 --	SIGNAL	counter:  std_logic_vector(2 downto 0);,riseSIGG: 
 --	SIGNAL	counterTMP:  std_logic_vector(2 downto 0);
 
 BEGIN
 
-	L0 : top PORT MAP(rst,ena,clk,din,cond,detector,XX,YY,riseSIGG,CR,trig);--,riseSIGG,XX,YY,counter,counterTMP);
+	L0 : top PORT MAP(rst,ena,clk,din,cond,detector);--,riseSIGG,XX,YY,counter,counterTMP);
 		tb_ena : process
 			begin
 			ena<='0';
