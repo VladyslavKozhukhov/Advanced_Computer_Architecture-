@@ -15,7 +15,7 @@ entity top is
 		din : in std_logic_vector(n-1 downto 0);
 		cond : in integer range 0 to 3;
 		detector : out std_logic;
-		X : out STD_LOGIC_VECTOR(n-1 DOWNTO 0);
+		X,Y : out STD_LOGIC_VECTOR(n-1 DOWNTO 0);
 		riseSIGG: out std_logic;
 		CR : out STD_LOGIC_VECTOR(k DOWNTO 0)
 		 );
@@ -84,9 +84,10 @@ begin
 	END PROCESS cntProc;
 	count<=counterResult;
 
-	updateCondProcess : process (cond)
+	updateCondProcess : process (din)
 		VARIABLE adderInVar : STD_LOGIC_VECTOR(n-1 DOWNTO 0);
 		VARIABLE cinVar : STD_LOGIC;
+		--VARIABLE riseVar : STD_LOGIC;
 		begin
 			adderInVar := (others => '0');
 			cinVar := '0';
@@ -102,26 +103,32 @@ begin
 			end IF;
 			cinSIG <= cinVar;
 			adderInSIG <= adderInVar;
+			--riseVar := '0';
+			--if (adderS = din) then
+			--	riseVar := '1';
+			--end IF;			
+			--riseSig <= riseVar;
 	END PROCESS updateCondProcess;
 	
+		riseSig<='1' WHEN adderS = din ELSE '0'; 
 	
-	
-sProcess : process (din)
-		VARIABLE riseVar : STD_LOGIC;
-		begin
-			riseVar := '0';
-			if (adderS = din) then
-				riseVar := '1';
-			end IF;			
-			riseSig <= riseVar;
+  --sProcess : process (adderS)
+	--	VARIABLE riseVar : STD_LOGIC;
+		--begin
+			--riseVar := '0';
+			--if (adderS = din) then
+		--		riseVar := '1';
+	--		end IF;			
+	--		riseSig <= riseVar;
 			
-	END PROCESS sProcess;
+--	END PROCESS sProcess;
 	
 	
 -----validating each part of design-------------
 	X<=D_prev;
+	Y<=adderS;
 	riseSIGG <= riseSig;
-
+		
 	CR<=count;--
 ----------------------------------------------
 end arc_sys;
