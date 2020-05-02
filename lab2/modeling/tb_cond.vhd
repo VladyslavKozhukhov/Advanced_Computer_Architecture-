@@ -2,26 +2,23 @@
 USE ieee.std_logic_1164.all;
 USE ieee.std_logic_arith.all;
 USE ieee.std_logic_unsigned.all;
-USE work.aux_package_counter.all;
+USE work.aux_package_cond.all;
 
-ENTITY top_tb IS
-	CONSTANT m : INTEGER := 8;
-END top_tb;
-
-architecture top_Testbench OF top_tb IS
+ENTITY cond_tb IS
+	CONSTANT n : INTEGER := 8;
+END cond_tb;
+ 
+ 
+architecture cond_Testbench OF cond_tb IS
 SIGNAL rst,ena,clk: STD_LOGIC;
-	SIGNAL din: STD_LOGIC_VECTOR (m-1 DOWNTO 0);
-	SIGNAL cond : INTEGER range 0 to 3;
+	SIGNAL din: STD_LOGIC_VECTOR (n-1 DOWNTO 0);
+	SIGNAL condd: INTEGER range 0 to 3;
 	SIGNAL	detector : std_logic;
---	SIGNAL	X,Y : STD_LOGIC_VECTOR(8-1 DOWNTO 0);
-	--SIGNAL	riseSIGG:  std_logic;
---	SIGNAL	CR :  STD_LOGIC_VECTOR(3 DOWNTO 0);
-		 
-
+	SIGNAL	D_prev :  std_logic_vector(n-1 downto 0);
 BEGIN
 
-	L0 : top PORT MAP(rst,ena,clk,din,cond,detector);
-			tb_ena : process
+	L0 : Cond PORT MAP(rst,ena,clk,D_prev,condd,din,detector);
+tb_ena : process
 			begin
 			ena<='0';
 			wait for 20 us;
@@ -31,6 +28,54 @@ BEGIN
 			wait;
         end process tb_ena;
 		
+	tb_cond : process
+		begin
+				condd<=0;		
+
+			wait;
+			
+	end process tb_cond;
+
+        tb_clk : process
+			begin 
+			clk<='0';
+			wait for 5 us;
+			clk<='1';
+			wait for 5 us;
+        end process tb_clk;
+		
+		tb_rst : process
+			begin 
+			rst<='1';
+			wait for 10 us;
+			rst<='0';
+			wait;
+        end process tb_rst;
+		
+		
+    tb_din : process
+		begin
+			D_prev <= "00000000";
+			din<="00000001";
+			wait for 10 us;
+			D_prev <= "00000001";
+			din<="00000010";
+
+			wait for 10 us;
+			D_prev <= "00000010";
+			din<="00000011";
+
+			wait for 10 us;
+			din <= "00000011"; 
+			D_prev<="00000011";
+			wait for 10 us;
+			D_prev <= "00000100";
+			din<="00000101";
+			
+			wait ;
+        end process tb_din;
+		
 
   
-END top_Testbench;
+  
+END cond_Testbench;
