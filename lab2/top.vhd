@@ -16,8 +16,8 @@ entity top is
 		cond : in integer range 0 to 3;
 		detector : out std_logic
 --		X,Y : out STD_LOGIC_VECTOR(n-1 DOWNTO 0);
---		riseSIGG: out std_logic;
---		CR : out STD_LOGIC_VECTOR(k DOWNTO 0)
+	--	riseSIGG: out std_logic;
+		--CR : out STD_LOGIC_VECTOR(k DOWNTO 0)
 		 );
 		
 end top;
