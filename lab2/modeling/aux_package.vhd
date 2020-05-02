@@ -3,26 +3,7 @@ USE ieee.std_logic_1164.all;
 
 
 package aux_package is
------------------------------------------------------------------
-	component top is
-		generic (
-			n : positive := 8 ;
-			m : positive := 7 ;
-			k : positive := 3
-		); -- where k=log2(m+1)
-		port(
-			rst,ena,clk : in std_logic;
-			din : in std_logic_vector(n-1 downto 0);
-			cond : in integer range 0 to 3;
-			detector : out std_logic
-			--,riseSIGG
-				--	XX: out std_logic_vector(n-1 downto 0);
-		--YY: out std_logic_vector(n-1 downto 0);
-	--	CR :out STD_LOGIC_VECTOR(k-1 DOWNTO 0);
-	--	--		CRT :out STD_LOGIC_VECTOR(k-1 DOWNTO 0)
 
-		);
-	end component;
 -----------------------------------------------------------------
 	component Adder IS
 		GENERIC (length : INTEGER := 8);
@@ -32,16 +13,16 @@ package aux_package is
 			cout: OUT STD_LOGIC);
 	END component;
 -----------------------------------------------------------------
-	component SynchronousDelay IS
-		generic (
-			n : positive := 8
-		);
-		PORT(
-			rst,ena,clk : in std_logic;
-			din : in std_logic_vector(n-1 downto 0);
-			din_i,din_iMinus : out std_logic_vector(n-1 downto 0)
-		);
-	END component;
+component SynchronousDelay is
+	generic (
+		n : positive := 8
+	);
+	port(
+		rst,ena,clk : in std_logic;
+		din : in std_logic_vector(n-1 downto 0);
+		din_i,din_iMinus : out std_logic_vector(n-1 downto 0)
+	);
+end component;
 -----------------------------------------------------------------
 
 
@@ -52,26 +33,36 @@ component Counter is
 	port(
 		rst,ena,clk : in std_logic;
 		riseSig :in STD_LOGIC;
-		counterResult: out std_logic_vector(k-1 downto 0)
+		counterResult: out std_logic_vector(k downto 0)
 	);
-END component;
+end component;
 
 
   -----------------------------------------------------------------
-COMPONENT detector_val IS
-	generic(
+component detector_val is
+	generic (
 		k: positive :=3
-		);
-	PORT (  trigger: IN STD_LOGIC_VECTOR(8 DOWNTO 0);
-			counterResult: IN STD_LOGIC_VECTOR(k-1 DOWNTO 0);
-			--riseSig :IN STD_LOGIC; 
-			isOne: OUT STD_LOGIC);
-	END COMPONENT;
-
+		m:positive :=8
+	);
+	port(
+		trigger: IN STD_LOGIC_VECTOR(8 DOWNTO 0);
+		count: IN STD_LOGIC_VECTOR(k DOWNTO 0);
+		detector: OUT STD_LOGIC);
+	
+end component;
   
 
 -----------------------------------------------------------------
-
-  
+component Cond is
+	generic (
+		n : positive := 8
+	);
+	port(
+		rst,ena,clk : in std_logic;
+		D_prev : in std_logic_vector(n-1 downto 0);
+		condition : in integer range 0 to 3;
+		riseSig: out std_logic;
+	);
+end component;
+  -----------------------------------------------------------------
 end aux_package;
-

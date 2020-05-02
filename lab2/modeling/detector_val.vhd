@@ -11,21 +11,13 @@ entity detector_val is
 	port(
 		trigger: IN STD_LOGIC_VECTOR(8 DOWNTO 0);
 		count: IN STD_LOGIC_VECTOR(k DOWNTO 0);
-		--riseSig :IN STD_LOGIC; 
 		detector: OUT STD_LOGIC);
 	
 end detector_val;
 ------------- SynchronousDelay Architecture code --------------
 architecture arc_detector_val of detector_val is
 begin
-	cntProc : process (count)
-		BEGIN		
-		detector<='0';
-				IF (count = m+1) THEN
-					detector<='1';
-				END IF;
-	END PROCESS cntProc;
-	
+		detector<='1' when (count = m+1) else '0';
 end arc_detector_val;
 
 

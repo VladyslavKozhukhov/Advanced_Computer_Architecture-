@@ -28,9 +28,6 @@ architecture arc_sys of top is
 	SIGNAL adderS,adderInSIG : STD_LOGIC_VECTOR(n-1 DOWNTO 0);
 	SIGNAL counterResult : STD_LOGIC_VECTOR(k DOWNTO 0);
 	SIGNAL cinSIG,riseSig,counterMax : STD_LOGIC; 
-
-
-
 begin
 
 	L0 : Adder generic map(n) port map(adderInSIG,D_prev,cinSIG,adderS,OPEN);
@@ -66,14 +63,9 @@ begin
 			end IF;
 			cinSIG <= cinVar;
 			adderInSIG <= adderInVar;
-	END PROCESS updateCondProcess;
-
-		
+	END PROCESS updateCondProcess;		
 	riseSig<='1' WHEN (adderS = din) ELSE '0'; 
-
-
-	counterMax<= '1' when (counterResult = m+1) else '0';
-	
+	counterMax<= '1' when (counterResult = m+1) else '0';	
 	counterProc :process (clk,rst,riseSig,counterMax)
 		begin
 			if(rst='1') then
@@ -90,7 +82,6 @@ begin
 				end IF;
 			end IF;
 		END PROCESS counterProc;
-
 
 	detector<='1' when (counterResult = m+1) else '0';
 

@@ -15,25 +15,21 @@ entity SynchronousDelay is
 end SynchronousDelay;
 ------------- SynchronousDelay Architecture code --------------
 architecture arc_SynchronousDelay of SynchronousDelay is
-SIGNAL D_next,D_prev : STD_LOGIC_VECTOR(n-1 DOWNTO 0); 
+SIGNAL D_prev : STD_LOGIC_VECTOR(n-1 DOWNTO 0); 
 begin
-	delayProc :process (clk,rst,ena,din)
+		delayProc :process (clk,rst,ena,din)
 		VARIABLE Zprev: STD_LOGIC_VECTOR(n-1 DOWNTO 0);
 		begin
 			if(rst='1') then
-				D_next <= (others => '0'); -- d_i
 				D_prev <= (others => '0'); -- d_i-1
-				Zprev :=(others => '0');-- <= (others => '0');
 			elsif (rising_edge(clk)) then	
 				IF(ena = '1') THEN
-						Zprev := D_next;  --save d_i temporarily
-						D_next <= din; --update d_i
-						D_prev <= Zprev; --update d_i-1
+						D_prev <= din;
 				end IF;
 			end IF;
-		END PROCESS delayProc;			
-		din_i <= D_next;  --implied process, update d_i
-		din_iMinus <= D_prev;  --implied process, update d_i-1
+		END PROCESS delayProc;	
+		din_i <= din;  
+		din_iMinus <= D_prev; 
 	
 end arc_SynchronousDelay;
 
