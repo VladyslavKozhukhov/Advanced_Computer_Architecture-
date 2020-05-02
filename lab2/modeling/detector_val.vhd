@@ -9,25 +9,20 @@ entity detector_val is
 	);
 	port(
 		trigger: IN STD_LOGIC_VECTOR(8 DOWNTO 0);
-		counterResult: IN STD_LOGIC_VECTOR(k-1 DOWNTO 0);
+		count: IN STD_LOGIC_VECTOR(k DOWNTO 0);
 		--riseSig :IN STD_LOGIC; 
-		isOne: OUT STD_LOGIC);
+		detector: OUT STD_LOGIC);
 	
 end detector_val;
 ------------- SynchronousDelay Architecture code --------------
 architecture arc_detector_val of detector_val is
 begin
-	cntProc : process (trigger)
-		begin
-		--	IF (riseSig = '1') then
-				if(counterResult = "111" and trigger ="100000000") then
-					isOne <= '1';
-				else
-					isOne<='0';
-				end if;
-			--ELSE
-				--isOne<='0';
-			--end IF;
+	cntProc : process (count)
+		BEGIN		
+		detector<='0';
+				IF (count = m+1) THEN
+					detector<='1';
+				END IF;
 	END PROCESS cntProc;
 	
 end arc_detector_val;

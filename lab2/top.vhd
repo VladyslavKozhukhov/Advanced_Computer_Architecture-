@@ -31,13 +31,8 @@ architecture arc_sys of top is
 	SIGNAL cinSIG,riseSig : STD_LOGIC; 
 	SIGNAL count: std_logic_vector (k downto 0);
 
-
-
 begin
-
-	L0 : Adder generic map(n) port map(adderInSIG,D_prev,cinSIG,adderS,adderC);
-	
-	
+	L0 : Adder generic map(n) port map(adderInSIG,D_prev,cinSIG,adderS,adderC);	
 	delayProc :process (clk,rst,ena,din)
 		VARIABLE Zprev: STD_LOGIC_VECTOR(n-1 DOWNTO 0);
 		begin
@@ -50,8 +45,6 @@ begin
 				end IF;
 			end IF;
 		END PROCESS delayProc;			
-
-		
 
 	counterProc :process (clk,rst)
 		begin
@@ -70,10 +63,7 @@ begin
 					end IF;
 				end IF;
 			end IF;
-		END PROCESS counterProc;						
-		
-						
-		
+		END PROCESS counterProc;	
 
 	cntProc : process (count)
 		BEGIN		
@@ -87,7 +77,6 @@ begin
 	updateCondProcess : process (din)
 		VARIABLE adderInVar : STD_LOGIC_VECTOR(n-1 DOWNTO 0);
 		VARIABLE cinVar : STD_LOGIC;
-		--VARIABLE riseVar : STD_LOGIC;
 		begin
 			adderInVar := (others => '0');
 			cinVar := '0';
@@ -103,26 +92,8 @@ begin
 			end IF;
 			cinSIG <= cinVar;
 			adderInSIG <= adderInVar;
-			--riseVar := '0';
-			--if (adderS = din) then
-			--	riseVar := '1';
-			--end IF;			
-			--riseSig <= riseVar;
-	END PROCESS updateCondProcess;
-	
-		riseSig<='1' WHEN adderS = din ELSE '0'; 
-	
-  --sProcess : process (adderS)
-	--	VARIABLE riseVar : STD_LOGIC;
-		--begin
-			--riseVar := '0';
-			--if (adderS = din) then
-		--		riseVar := '1';
-	--		end IF;			
-	--		riseSig <= riseVar;
-			
---	END PROCESS sProcess;
-	
+	END PROCESS updateCondProcess;	
+	riseSig<='1' WHEN adderS = din ELSE '0'; 
 	
 -----validating each part of design-------------
 	X<=D_prev;
