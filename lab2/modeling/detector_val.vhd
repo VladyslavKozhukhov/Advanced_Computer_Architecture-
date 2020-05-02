@@ -5,11 +5,10 @@ USE work.aux_package.all;
 -------------------------------------------------------------
 entity detector_val is
 	generic (
-		k: positive :=3
+		k: positive :=3;
 		m:positive :=8
 	);
 	port(
-		trigger: IN STD_LOGIC_VECTOR(8 DOWNTO 0);
 		count: IN STD_LOGIC_VECTOR(k DOWNTO 0);
 		detector: OUT STD_LOGIC);
 	

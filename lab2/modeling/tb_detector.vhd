@@ -2,35 +2,51 @@
 USE ieee.std_logic_1164.all;
 USE ieee.std_logic_arith.all;
 USE ieee.std_logic_unsigned.all;
-USE work.aux_package.all;
+USE work.aux_package_detector.all;
 
-ENTITY top_tb IS
-	CONSTANT m : INTEGER := 8;
-END top_tb;
+ENTITY detector_tb IS
+	CONSTANT 		k: positive :=3;
+	CONSTANT	m:positive :=8;
+END detector_tb;
 
-architecture top_Testbench OF top_tb IS
-SIGNAL rst,ena,clk: STD_LOGIC;
-	SIGNAL din: STD_LOGIC_VECTOR (m-1 DOWNTO 0);
-	SIGNAL cond : INTEGER range 0 to 3;
-	SIGNAL	detector : std_logic;
---	SIGNAL	X,Y : STD_LOGIC_VECTOR(8-1 DOWNTO 0);
-	--SIGNAL	riseSIGG:  std_logic;
---	SIGNAL	CR :  STD_LOGIC_VECTOR(3 DOWNTO 0);
+architecture detector_Testbench OF detector_tb IS
+
+	SIGNAL count: STD_LOGIC_VECTOR (k DOWNTO 0);
+		SIGNAL	detector:  STD_LOGIC;
 		 
 
 BEGIN
 
-	L0 : top PORT MAP(rst,ena,clk,din,cond,detector);
-				tb_ena : process
-			begin
-			ena<='0';
-			wait for 20 us;
-
-			ena<='1';
+	L0 : detector_val PORT MAP(count,detector);
+				tb_din : process
+		begin
+			count <= "0000";
+			wait for 10 us;
+			count <= "0001";
+			wait for 10 us;
+			count <= "0010";
+			wait for 10 us;
+			count <= "0011"; 
+			wait for 10 us;
+			count <= "0100";
+			wait for 10 us;
+			count <= "0101";
+			wait for 10 us;
+			count <= "0110";
+			wait for 10 us;
+			count <= "0111";--7
+			wait for 10 us;
+			count <= "1000";
+			wait for 10 us;
+			count <= "1001";
+			wait for 10 us;
+			count <= "1010";
+			wait for 10 us;
+			count <= "1011";--10
+	wait;	
 			
-			wait;
-        end process tb_ena;
+  end process tb_din;
 		
 
   
-END top_Testbench;
+END detector_Testbench;
