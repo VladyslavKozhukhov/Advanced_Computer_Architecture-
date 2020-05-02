@@ -71,6 +71,9 @@ begin
 		
 	riseSig<='1' WHEN (adderS = din) ELSE '0'; 
 
+
+	counterMax<= '1' when (counterResult = m+1) else '0';
+	
 	counterProc :process (clk,rst,riseSig,counterMax)
 		begin
 			if(rst='1') then
@@ -88,8 +91,8 @@ begin
 			end IF;
 		END PROCESS counterProc;
 
-	counterMax<= '1' when (counterResult = m+1) else '0';
-	detector<='1' when (counterMax = '1') else '0';
+
+	detector<='1' when (counterResult = m+1) else '0';
 
 end arc_sys;
 
