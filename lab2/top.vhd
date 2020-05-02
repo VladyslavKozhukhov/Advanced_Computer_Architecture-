@@ -14,31 +14,33 @@ entity top is
 		rst,ena,clk : in std_logic;
 		din : in std_logic_vector(n-1 downto 0);
 		cond : in integer range 0 to 3;
-		detector : out std_logic;
-		X,Y : out STD_LOGIC_VECTOR(n-1 DOWNTO 0);
-		riseSIGG: out std_logic;
-		CR : out STD_LOGIC_VECTOR(k DOWNTO 0)
+		detector : out std_logic
+--		X,Y : out STD_LOGIC_VECTOR(n-1 DOWNTO 0);
+--		riseSIGG: out std_logic;
+--		CR : out STD_LOGIC_VECTOR(k DOWNTO 0)
 		 );
 		
 end top;
 ------------- complete the top Architecture code --------------
 architecture arc_sys of top is
 
-	SIGNAL D_next,D_prev: STD_LOGIC_VECTOR(n-1 DOWNTO 0); 
+	SIGNAL D_prev: STD_LOGIC_VECTOR(n-1 DOWNTO 0); 
 	SIGNAL adderS,adderInSIG : STD_LOGIC_VECTOR(n-1 DOWNTO 0);
 	SIGNAL counterResult : STD_LOGIC_VECTOR(k DOWNTO 0);
-	SIGNAL adderC: STD_LOGIC;
-	SIGNAL cinSIG,riseSig : STD_LOGIC; 
-	SIGNAL count: std_logic_vector (k downto 0);
+	SIGNAL cinSIG,riseSig,counterMax : STD_LOGIC; 
+
+
 
 begin
-	L0 : Adder generic map(n) port map(adderInSIG,D_prev,cinSIG,adderS,adderC);	
+
+	L0 : Adder generic map(n) port map(adderInSIG,D_prev,cinSIG,adderS,OPEN);
+	
+	
 	delayProc :process (clk,rst,ena,din)
 		VARIABLE Zprev: STD_LOGIC_VECTOR(n-1 DOWNTO 0);
 		begin
 			if(rst='1') then
 				D_prev <= (others => '0'); -- d_i-1
-			
 			elsif (rising_edge(clk)) then	
 				IF(ena = '1') THEN
 						D_prev <= din;
@@ -46,35 +48,7 @@ begin
 			end IF;
 		END PROCESS delayProc;			
 
-	counterProc :process (clk,rst)
-		begin
-			if(rst='1') then
-				counterResult <= (others => '0') ;
-			elsif (rising_edge(clk)) then	
-				IF(ena = '1') THEN
-					IF(riseSig = '1') THEN							
-						if (counterResult<=m) then
-						   counterResult<=counterResult +1 ;
-						else
-						   counterResult <= counterResult;
-						end if;											
-					ELSE 
-						counterResult <= (others => '0');
-					end IF;
-				end IF;
-			end IF;
-		END PROCESS counterProc;	
-
-	cntProc : process (count)
-		BEGIN		
-		detector<='0';
-				IF (count = m+1) THEN
-					detector<='1';
-				END IF;
-	END PROCESS cntProc;
-	count<=counterResult;
-
-	updateCondProcess : process (din)
+	updateCondProcess : process (cond)
 		VARIABLE adderInVar : STD_LOGIC_VECTOR(n-1 DOWNTO 0);
 		VARIABLE cinVar : STD_LOGIC;
 		begin
@@ -92,16 +66,31 @@ begin
 			end IF;
 			cinSIG <= cinVar;
 			adderInSIG <= adderInVar;
-	END PROCESS updateCondProcess;	
-	riseSig<='1' WHEN adderS = din ELSE '0'; 
-	
------validating each part of design-------------
-	X<=D_prev;
-	Y<=adderS;
-	riseSIGG <= riseSig;
+	END PROCESS updateCondProcess;
+
 		
-	CR<=count;--
-----------------------------------------------
+	riseSig<='1' WHEN (adderS = din) ELSE '0'; 
+
+	counterProc :process (clk,rst,riseSig,counterMax)
+		begin
+			if(rst='1') then
+				counterResult <= (others => '0') ;
+			elsif (rising_edge(clk)) then	
+				IF(ena = '1') THEN
+					IF(riseSig = '1') THEN							
+						if (counterMax = '0') then
+						   counterResult <= counterResult +1 ;
+						end if;											
+					ELSE 
+						counterResult <= (others => '0');
+					end IF;
+				end IF;
+			end IF;
+		END PROCESS counterProc;
+
+	counterMax<= '1' when (counterResult = m+1) else '0';
+	detector<='1' when (counterMax = '1') else '0';
+
 end arc_sys;
 
 
