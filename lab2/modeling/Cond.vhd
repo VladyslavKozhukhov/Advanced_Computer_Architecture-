@@ -1,7 +1,7 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.std_logic_unsigned.all;
-USE work.aux_package.all;
+USE work.aux_package_cond.all;
 -------------------------------------------------------------
 entity Cond is
 	generic (
@@ -11,10 +11,10 @@ entity Cond is
 		rst,ena,clk : in std_logic;
 		D_prev : in std_logic_vector(n-1 downto 0);
 		condition : in integer range 0 to 3;
-		riseSig: out std_logic;
+		din  : in std_logic_vector(n-1 downto 0);
+		riseSig: out std_logic
 	);
 end Cond;
-------------- Cond Architecture code --------------
 architecture arc_Cond of Cond is
 	SIGNAL adderS,adderInSIG : STD_LOGIC_VECTOR(n-1 DOWNTO 0);
 	SIGNAL cinSIG : STD_LOGIC; 
