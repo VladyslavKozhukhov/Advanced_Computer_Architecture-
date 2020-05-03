@@ -2,17 +2,25 @@
 USE ieee.std_logic_1164.all;
 USE ieee.std_logic_arith.all;
 USE ieee.std_logic_unsigned.all;
-USE work.aux_package_delay.all;
-
 
 ENTITY delay_tb IS
 	CONSTANT n : INTEGER := 8;
 END delay_tb;
 
 architecture Delay_Testbench OF delay_tb IS
+component SynchronousDelay is
+	generic (
+		n : positive := 8
+	);
+	port(
+		rst,ena,clk : in std_logic;
+		din : in std_logic_vector(n-1 downto 0);
+		din_i,din_iMinus : out std_logic_vector(n-1 downto 0)
+	);
+end component;
 SIGNAL rst,ena,clk: STD_LOGIC;
-	SIGNAL	din :  std_logic_vector(n-1 downto 0);
-		SIGNAL din_i,din_iMinus :  std_logic_vector(n-1 downto 0);
+SIGNAL	din :  std_logic_vector(n-1 downto 0);
+SIGNAL din_i,din_iMinus :  std_logic_vector(n-1 downto 0);
 BEGIN
 
 	L0 : SynchronousDelay generic map (n) PORT MAP(rst,ena,clk,din,din_i,din_iMinus);

@@ -2,7 +2,6 @@
 USE ieee.std_logic_1164.all;
 USE ieee.std_logic_arith.all;
 USE ieee.std_logic_unsigned.all;
-USE work.aux_package_cond.all;
 
 ENTITY cond_tb IS
 	CONSTANT n : INTEGER := 8;
@@ -10,6 +9,21 @@ END cond_tb;
  
  
 architecture cond_Testbench OF cond_tb IS
+
+-----------------------------------------------------------------
+component CheckCond is
+	generic (
+		n : positive := 8
+	);
+	port(
+		D_prev : in std_logic_vector(n-1 downto 0);
+		cond : in integer range 0 to 3;
+		din  : in std_logic_vector(n-1 downto 0);
+		riseSig: out std_logic
+	);
+end component;
+  -----------------------------------------------------------------
+
 	SIGNAL din: STD_LOGIC_VECTOR (n-1 DOWNTO 0);
 	SIGNAL cond: INTEGER range 0 to 3;
 	SIGNAL	riseSig : std_logic;

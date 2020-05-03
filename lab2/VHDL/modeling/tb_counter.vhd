@@ -2,7 +2,6 @@ LIBRARY IEEE;
 USE ieee.std_logic_1164.all;
 USE ieee.std_logic_arith.all;
 USE ieee.std_logic_unsigned.all;
-USE work.aux_package_counter.all;
 
 ENTITY top_tb IS
 	CONSTANT m : INTEGER := 8;
@@ -11,6 +10,17 @@ ENTITY top_tb IS
 END top_tb;
 
 architecture Counter_Testbench OF top_tb IS
+component Counter is
+	generic (
+		m : positive := 8;
+		k : positive := 3
+		);
+	port(
+		rst,ena,clk : in std_logic;
+		riseSig :in STD_LOGIC;
+		counterResult: out std_logic_vector(k downto 0)
+	);
+end component;
 SIGNAL rst,ena,clk: STD_LOGIC;
 SIGNAL	riseSig : STD_LOGIC;
 SIGNAL counterResult: std_logic_vector(k downto 0);	 

@@ -2,7 +2,6 @@
 USE ieee.std_logic_1164.all;
 USE ieee.std_logic_arith.all;
 USE ieee.std_logic_unsigned.all;
-USE work.aux_package_detector.all;
 
 ENTITY detector_tb IS
 	CONSTANT m : positive :=8;
@@ -10,9 +9,19 @@ ENTITY detector_tb IS
 END detector_tb;
 
 architecture detector_Testbench OF detector_tb IS
+component detector_val is
+	generic (
+		m:positive :=8;
+		k: positive :=3
+	);
+	port(
+		count: IN STD_LOGIC_VECTOR(k DOWNTO 0);
+		detector: OUT STD_LOGIC);
+	
+end component;
 
-	SIGNAL count: STD_LOGIC_VECTOR (k DOWNTO 0);
-	SIGNAL detector : STD_LOGIC;
+SIGNAL count: STD_LOGIC_VECTOR (k DOWNTO 0);
+SIGNAL detector : STD_LOGIC;
 		 
 
 BEGIN

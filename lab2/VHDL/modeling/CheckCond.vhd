@@ -1,7 +1,6 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.std_logic_unsigned.all;
-USE work.aux_package_cond.all;
 -------------------------------------------------------------
 entity CheckCond is
 	generic (
@@ -15,6 +14,17 @@ entity CheckCond is
 	);
 end CheckCond;
 architecture arc_CheckCond of CheckCond is
+
+component Adder IS
+	GENERIC (length : INTEGER := 8);
+	PORT(
+		a, b: IN STD_LOGIC_VECTOR (length-1 DOWNTO 0);
+		cin: IN STD_LOGIC;
+        s: OUT STD_LOGIC_VECTOR (length-1 DOWNTO 0);
+		cout: OUT STD_LOGIC);
+	END component;
+
+
 	SIGNAL adderS,adderInSIG : STD_LOGIC_VECTOR(n-1 DOWNTO 0);
 	SIGNAL cinSIG : STD_LOGIC; 
 
