@@ -41,8 +41,8 @@ end component;
   -----------------------------------------------------------------
 component detector_val is
 	generic (
+		m:positive :=8;
 		k: positive :=3
-		m:positive :=8
 	);
 	port(
 		trigger: IN STD_LOGIC_VECTOR(8 DOWNTO 0);

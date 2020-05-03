@@ -8,8 +8,9 @@ package aux_package_counter is
 
 component Counter is
 	generic (
-		k : positive := 3;
-		m : positive := 8	);
+		m : positive := 8;
+		k : positive := 3
+		);
 	port(
 		rst,ena,clk : in std_logic;
 		riseSig :in STD_LOGIC;

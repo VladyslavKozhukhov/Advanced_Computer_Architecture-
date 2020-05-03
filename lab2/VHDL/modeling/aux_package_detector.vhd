@@ -6,8 +6,8 @@ package aux_package_detector is
   -----------------------------------------------------------------
 component detector_val is
 	generic (
-		k: positive :=3;
-		m:positive :=8
+		m:positive :=8;
+		k: positive :=3
 	);
 	port(
 		count: IN STD_LOGIC_VECTOR(k DOWNTO 0);

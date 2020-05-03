@@ -6,8 +6,8 @@ use IEEE.std_logic_arith.all;
 -------------------------------------------------------------
 entity Counter is
 	generic (
-		k : positive := 3; 
-		m : positive :=8);
+		m : positive :=8;
+		k : positive := 3);
 	port(
 		rst,ena,clk : in std_logic;
 		riseSig :in STD_LOGIC;

@@ -6,17 +6,17 @@ USE work.aux_package_counter.all;
 
 ENTITY top_tb IS
 	CONSTANT m : INTEGER := 8;
-		CONSTANT k: INTEGER := 3;
+	CONSTANT k: INTEGER := 3;
 
 END top_tb;
 
 architecture Counter_Testbench OF top_tb IS
 SIGNAL rst,ena,clk: STD_LOGIC;
-SIGNAL		riseSig : STD_LOGIC;
+SIGNAL	riseSig : STD_LOGIC;
 SIGNAL counterResult: std_logic_vector(k downto 0);	 
 BEGIN
 
-	L0 : Counter PORT MAP(rst,ena,clk,riseSig,counterResult);
+	L0 : Counter generic map (m,k) PORT MAP(rst,ena,clk,riseSig,counterResult);
 		tb_ena : process
 			begin
 			ena<='0';

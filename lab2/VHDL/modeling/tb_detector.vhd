@@ -5,20 +5,20 @@ USE ieee.std_logic_unsigned.all;
 USE work.aux_package_detector.all;
 
 ENTITY detector_tb IS
-	CONSTANT 		k: positive :=3;
-	CONSTANT	m:positive :=8;
+	CONSTANT m : positive :=8;
+	CONSTANT k : positive :=3;
 END detector_tb;
 
 architecture detector_Testbench OF detector_tb IS
 
 	SIGNAL count: STD_LOGIC_VECTOR (k DOWNTO 0);
-		SIGNAL	detector:  STD_LOGIC;
+	SIGNAL detector : STD_LOGIC;
 		 
 
 BEGIN
 
-	L0 : detector_val PORT MAP(count,detector);
-				tb_din : process
+	L0 : detector_val generic map (m,k) PORT MAP(count,detector);
+		tb_din : process
 		begin
 			count <= "0000";
 			wait for 10 us;

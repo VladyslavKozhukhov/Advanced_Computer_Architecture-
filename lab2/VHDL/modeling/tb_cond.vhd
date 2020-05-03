@@ -10,14 +10,13 @@ END cond_tb;
  
  
 architecture cond_Testbench OF cond_tb IS
-SIGNAL rst,ena,clk: STD_LOGIC;
 	SIGNAL din: STD_LOGIC_VECTOR (n-1 DOWNTO 0);
-	SIGNAL condd: INTEGER range 0 to 3;
-	SIGNAL	detector : std_logic;
+	SIGNAL cond: INTEGER range 0 to 3;
+	SIGNAL	riseSig : std_logic;
 	SIGNAL	D_prev :  std_logic_vector(n-1 downto 0);
 BEGIN
 
-	L0 : Cond PORT MAP(rst,ena,clk,D_prev,condd,din,detector);
+	L0 : CheckCond generic map (n) PORT MAP(D_prev,cond,din,riseSig);
 tb_ena : process
 			begin
 			ena<='0';
@@ -30,7 +29,7 @@ tb_ena : process
 		
 	tb_cond : process
 		begin
-				condd<=0;		
+				cond<=0;		
 
 			wait;
 			

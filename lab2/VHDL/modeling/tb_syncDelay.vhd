@@ -7,16 +7,15 @@ USE work.aux_package_delay.all;
 
 ENTITY delay_tb IS
 	CONSTANT n : INTEGER := 8;
-
 END delay_tb;
 
 architecture Delay_Testbench OF delay_tb IS
 SIGNAL rst,ena,clk: STD_LOGIC;
 	SIGNAL	din :  std_logic_vector(n-1 downto 0);
-		SIGNAL mdin_i,din_iMinus :  std_logic_vector(n-1 downto 0);
+		SIGNAL din_i,din_iMinus :  std_logic_vector(n-1 downto 0);
 BEGIN
 
-	L0 : SynchronousDelay PORT MAP(rst,ena,clk,din,mdin_i,din_iMinus);
+	L0 : SynchronousDelay generic map (n) PORT MAP(rst,ena,clk,din,din_i,din_iMinus);
 		tb_ena : process
 			begin
 			ena<='0';

@@ -16,7 +16,7 @@ SIGNAL rst,ena,clk: STD_LOGIC;
 
 BEGIN
 
-	L0 : top PORT MAP(rst,ena,clk,din,cond,detector);--,riseSIGG,XX,YY,counter,counterTMP);
+	L0 : top PORT MAP(rst,ena,clk,din,cond,detector);
 	
 		tb_ena : process
 			begin

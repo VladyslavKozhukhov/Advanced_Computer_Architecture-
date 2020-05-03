@@ -15,14 +15,11 @@ entity top is
 		din : in std_logic_vector(n-1 downto 0);
 		cond : in integer range 0 to 3;
 		detector : out std_logic
---		X,Y : out STD_LOGIC_VECTOR(n-1 DOWNTO 0);
-		--CR : out STD_LOGIC_VECTOR(k DOWNTO 0)
-		 );
+		);
 		
 end top;
 ------------- complete the top Architecture code --------------
 architecture arc_sys of top is
-
 	SIGNAL D_prev: STD_LOGIC_VECTOR(n-1 DOWNTO 0); 
 	SIGNAL adderS,adderInSIG : STD_LOGIC_VECTOR(n-1 DOWNTO 0);
 	SIGNAL counterResult : STD_LOGIC_VECTOR(k DOWNTO 0);
@@ -61,10 +58,12 @@ begin
 			end IF;
 			cinSIG <= cinVar;
 			adderInSIG <= adderInVar;
-	END PROCESS updateCondProcess;		
+	END PROCESS updateCondProcess;
+	
 	riseSig<='1' WHEN (adderS = din) ELSE '0'; 
 	counterMax<= '1' when (counterResult = m+1) else '0';	
-	counterProc :process (clk,rst,riseSig,counterMax)
+	
+	counterProc : process (clk,rst,riseSig,counterMax)
 		begin
 			if(rst='1') then
 				counterResult <= (others => '0') ;
