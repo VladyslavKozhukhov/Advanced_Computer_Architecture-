@@ -21,6 +21,8 @@ SIGNAL arith_logic_output_LO,arith_logic_output_HI,shift_output : std_logic_vect
 
 begin
 
+	result<=A WHEN (maxFlag='0') ELSE   -- IT'S JUST FOR COMPILATION TEST
+			B;
 	
 end arc_MaxMin;
 

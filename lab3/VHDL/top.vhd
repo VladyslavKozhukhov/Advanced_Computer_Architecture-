@@ -45,7 +45,7 @@ begin
 	--add/sub
 	--acc register??
 	--multiply
-	--shift left and right
+	-- **FIX** shift left and right
 	
 end arc_sys;
 

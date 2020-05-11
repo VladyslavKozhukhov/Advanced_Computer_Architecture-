@@ -106,8 +106,7 @@ package aux_package is
   component ArithLogic is
 	generic (
 		n : positive := 8 ; -- A,B length
-		m : positive := 5 ; -- OPC length
-		k : positive := 2   -- STATUS length
+		m : positive := 5   -- OPC length
 	);
 	port(
 		OPC : in std_logic_vector(m-1 downto 0);
@@ -115,7 +114,7 @@ package aux_package is
 		cin : in std_logic;
 		----------------------------------------
 		HI,LO : out std_logic_vector(n-1 downto 0);
-		STATUS : out std_logic_vector(k-1 downto 0)
+		cout : out std_logic
 	);
   end component;
 -----------------------------------------------------------------

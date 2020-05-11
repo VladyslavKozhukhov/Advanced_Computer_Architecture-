@@ -6,8 +6,7 @@ USE work.aux_package.all;
 entity ArithLogic is
 	generic (
 		n : positive := 8 ; -- A,B length
-		m : positive := 5 ; -- OPC length
-		k : positive := 2   -- STATUS length
+		m : positive := 5   -- OPC length
 	);
 	port(
 		OPC : in std_logic_vector(m-1 downto 0);
@@ -28,18 +27,22 @@ begin
 	
 	maxMinFlag<='1' WHEN (OPC = "00111") ELSE -- MAX
 				'0' WHEN (OPC = "01000") ELSE -- MIN
+				'0';  --DELETE LATER OR CHANGE THIS ELSE LINE
+				
 	maxMinEntity : MaxMin generic map(n) port map(A,B,maxMinFlag,MaxMinAB);
 	
 	AdderSubSEL <=	"00" WHEN (OPC = "00001") ELSE -- ADD
 					"01" WHEN (OPC = "00011") ELSE -- ADDC
 					"10" WHEN (OPC = "00010") ELSE -- SUB
+					"11"; --DELETE LATER OR CHANGE THIS ELSE LINE
+					
 	adderSubEntity : AdderSub generic map(n) port map(cin,A,B,AdderSubSEL,AdderSubResult);
 	
 	
 	HI<=(others => '0') WHEN (OPC(m-1 downto m-2) = "01") ELSE -- HI=0 : MIN,AND,OR,XOR
 		(others => '0') WHEN (OPC = "00111") ELSE 			   -- HI=0 : MAX
 		(others => '0') WHEN (OPC = "00110") ELSE 			   -- HI=0 : MAC_RST
-		HI; --CONTINUE FOR ADD,ADDC,SUB,MULT,MAC
+		(others => '0'); --CONTINUE FOR ADD,ADDC,SUB,MULT,MAC
 		
 	LO<=(A AND B) WHEN (OPC = "01001") ELSE  -- AND
 		(A OR B) WHEN (OPC = "01010") ELSE   -- OR
@@ -49,8 +52,8 @@ begin
 		AdderSubResult(n-1 downto 0) WHEN (OPC = "00001") ELSE  -- ADD
 		AdderSubResult(n-1 downto 0) WHEN (OPC = "00011") ELSE  -- ADDC
 		AdderSubResult(n-1 downto 0) WHEN (OPC = "00010") ELSE  -- SUB
-		others=>'0' WHEN (OPC = "00110") ELSE  -- MAC_RST
-		others=>'0'; --CONTINUE FOR MULT,MAC
+		(others => '0') WHEN (OPC = "00110") ELSE  -- MAC_RST
+		(others => '0'); --CONTINUE FOR MULT,MAC
 	
 	cout <= '0' WHEN (OPC = "00111") ELSE -- MAX
 			'0' WHEN (OPC = "01000") ELSE -- MIN

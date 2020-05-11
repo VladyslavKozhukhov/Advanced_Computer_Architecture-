@@ -23,10 +23,13 @@ end outputSelector;
 ------------- outputSelector Architecture code --------------
 architecture arc_outputSelector of outputSelector is
 
-SIGNAL HI,LO : std_logic_vector(n-1 downto 0);
-SIGNAL carry : std_logic_vector(k-1 downto 0);
+SIGNAL carry : std_logic;
+SIGNAL HI_SIG,LO_SIG : std_logic_vector(n-1 downto 0);
+SIGNAL zeroSig : std_logic_vector(n-1 downto 0);
 
 begin
+	
+	zeroSig <= (others => '0');
 	
 	carry<= cout_arith_logic WHEN (OPC = "00001") ELSE
 			cout_arith_logic WHEN (OPC = "00010") ELSE
@@ -45,43 +48,45 @@ begin
 			cout_shifter WHEN (OPC = "01111") ELSE
 			'0';
 			
-	HI<=arith_logic_HI WHEN (OPC = "00001") ELSE
-		arith_logic_HI WHEN (OPC = "00010") ELSE
-		arith_logic_HI WHEN (OPC = "00011") ELSE
-		arith_logic_HI WHEN (OPC = "00100") ELSE
-		arith_logic_HI WHEN (OPC = "00101") ELSE
-		arith_logic_HI WHEN (OPC = "00110") ELSE
-		arith_logic_HI WHEN (OPC = "00111") ELSE
-		arith_logic_HI WHEN (OPC = "01000") ELSE
-		arith_logic_HI WHEN (OPC = "01001") ELSE
-		arith_logic_HI WHEN (OPC = "01010") ELSE
-		arith_logic_HI WHEN (OPC = "01011") ELSE
-		shifter_HI WHEN (OPC = "01100") ELSE
-		shifter_HI WHEN (OPC = "01101") ELSE
-		shifter_HI WHEN (OPC = "01110") ELSE
-		shifter_HI WHEN (OPC = "01111") ELSE
-		others => '0';
+	HI_SIG<=arith_logic_HI WHEN (OPC = "00001") ELSE
+			arith_logic_HI WHEN (OPC = "00010") ELSE
+			arith_logic_HI WHEN (OPC = "00011") ELSE
+			arith_logic_HI WHEN (OPC = "00100") ELSE
+			arith_logic_HI WHEN (OPC = "00101") ELSE
+			arith_logic_HI WHEN (OPC = "00110") ELSE
+			arith_logic_HI WHEN (OPC = "00111") ELSE
+			arith_logic_HI WHEN (OPC = "01000") ELSE
+			arith_logic_HI WHEN (OPC = "01001") ELSE
+			arith_logic_HI WHEN (OPC = "01010") ELSE
+			arith_logic_HI WHEN (OPC = "01011") ELSE
+			shifter_HI WHEN (OPC = "01100") ELSE
+			shifter_HI WHEN (OPC = "01101") ELSE
+			shifter_HI WHEN (OPC = "01110") ELSE
+			shifter_HI WHEN (OPC = "01111") ELSE
+			(others => '0');
 
-	LO<=arith_logic_LO WHEN (OPC = "00001") ELSE
-		arith_logic_LO WHEN (OPC = "00010") ELSE
-		arith_logic_LO WHEN (OPC = "00011") ELSE
-		arith_logic_LO WHEN (OPC = "00100") ELSE
-		arith_logic_LO WHEN (OPC = "00101") ELSE
-		arith_logic_LO WHEN (OPC = "00110") ELSE
-		arith_logic_LO WHEN (OPC = "00111") ELSE
-		arith_logic_LO WHEN (OPC = "01000") ELSE
-		arith_logic_LO WHEN (OPC = "01001") ELSE
-		arith_logic_LO WHEN (OPC = "01010") ELSE
-		arith_logic_LO WHEN (OPC = "01011") ELSE
-		shifter_LO WHEN (OPC = "01100") ELSE
-		shifter_LO WHEN (OPC = "01101") ELSE
-		shifter_LO WHEN (OPC = "01110") ELSE
-		shifter_LO WHEN (OPC = "01111") ELSE
-		others => '0';
+	LO_SIG<=arith_logic_LO WHEN (OPC = "00001") ELSE
+			arith_logic_LO WHEN (OPC = "00010") ELSE
+			arith_logic_LO WHEN (OPC = "00011") ELSE
+			arith_logic_LO WHEN (OPC = "00100") ELSE
+			arith_logic_LO WHEN (OPC = "00101") ELSE
+			arith_logic_LO WHEN (OPC = "00110") ELSE
+			arith_logic_LO WHEN (OPC = "00111") ELSE
+			arith_logic_LO WHEN (OPC = "01000") ELSE
+			arith_logic_LO WHEN (OPC = "01001") ELSE
+			arith_logic_LO WHEN (OPC = "01010") ELSE
+			arith_logic_LO WHEN (OPC = "01011") ELSE
+			shifter_LO WHEN (OPC = "01100") ELSE
+			shifter_LO WHEN (OPC = "01101") ELSE
+			shifter_LO WHEN (OPC = "01110") ELSE
+			shifter_LO WHEN (OPC = "01111") ELSE
+			(others => '0');
 			
+	HI <= HI_SIG;
+	LO <= LO_SIG;
 	
-	STATUS<="10" WHEN ((HI = (others => '0')) and (LO = (others => '0'))) ELSE --RES(HI,LO) = 0...0
-			"01" WHEN (carry = '1') ELSE 									   --RESULT PRODUCES CARRY
+	STATUS<="10" WHEN ((HI_SIG = zeroSig) and (LO_SIG = zeroSig)) ELSE --RES(HI,LO) = 0...0
+			"01" WHEN (carry = '1') ELSE 							   --RESULT PRODUCES CARRY
 			"00";
 
 end arc_outputSelector;
