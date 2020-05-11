@@ -29,8 +29,8 @@ SIGNAL cout_arith_logic,cout_shifter : std_logic;
 
 begin
 	
-	arithAndLogicEntity : ArithLogic generic map() port map();
-	shiftEntity : shifter generic map(n) port map(A,B(2 downto 0),OPC(1 downto 0),HI,LO);
+	arithAndLogicEntity : ArithLogic generic map() port map(OPC,A,B,cin,arith_logic_HI,arith_logic_LO,cout_arith_logic); --TO DO: Min,Max, EVERYTHING ELSE
+	shiftEntity : shifter generic map(n) port map(A,B(2 downto 0),OPC(1 downto 0),shifter_HI,shifter_LO,cout_shifter); --TO DO: BUILD RLA,RLC,RRA,RRC
 	selectorEntity : outputSelector generic map(n,m,k) port map(OPC,arith_logic_LO,arith_logic_HI,cout_arith_logic,shifter_LO,shifter_HI,cout_shifter,HI,LO,STATUS); --DONE
 	
 	

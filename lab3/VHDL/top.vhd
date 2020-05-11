@@ -38,7 +38,14 @@ begin
 	
 	RES(2*n-1 downto n) <= HI_SIG;
 	RES(n-1 downto 0) <= LO_SIG;
-	
+	--TO DO:
+	-- Read from file
+	-- Write file
+	--min/max
+	--add/sub
+	--acc register??
+	--multiply
+	--shift left and right
 	
 end arc_sys;
 
