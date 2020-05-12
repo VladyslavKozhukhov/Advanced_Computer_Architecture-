@@ -7,7 +7,7 @@ USE ieee.std_logic_unsigned.all;
 USE work.aux_package.all;
 entity WriteLogic is
 	generic (
-		n : positive := 8 ; -- A,B length
+		n : positive := 8  -- A,B length
 	);
 	port(
 		Status : in std_logic_vector(1 downto 0);

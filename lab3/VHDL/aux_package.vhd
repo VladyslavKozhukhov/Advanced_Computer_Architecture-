@@ -27,7 +27,7 @@ package aux_package is
 	);
 	port(
 		OPC : out std_logic_vector(m-1 downto 0);
-		A,B : out std_logic_vector(n-1 downto 0);
+		A,B : out std_logic_vector(n-1 downto 0)
 		cin : out std_logic
 	);
   end component;  
