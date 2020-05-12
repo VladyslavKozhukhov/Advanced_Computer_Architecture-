@@ -19,6 +19,28 @@ package aux_package is
 		STATUS : out std_logic_vector(k-1 downto 0)
 	);
   end component;
+  -----------------------------------------------------------------
+  component ReadLogic is
+	generic (
+		n : positive := 8 ; -- A,B length
+		m : positive := 5   -- OPC length
+	);
+	port(
+		OPC : out std_logic_vector(m-1 downto 0);
+		A,B : out std_logic_vector(n-1 downto 0);
+		cin : out std_logic
+	);
+  end component;  
+  -----------------------------------------------------------------  
+  component WriteLogic is
+	generic (
+		n : positive := 8 ; -- A,B length
+	);
+	port(
+		Status : in std_logic_vector(1 downto 0);
+		HI,LO : in std_logic_vector(n-1 downto 0)
+	);
+	end component;
 -----------------------------------------------------------------
   component backRegister is
 	generic (
