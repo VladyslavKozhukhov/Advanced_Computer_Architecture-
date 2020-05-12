@@ -39,9 +39,8 @@ begin
 	RES(2*n-1 downto n) <= HI_SIG;
 	RES(n-1 downto 0) <= LO_SIG;
 	--TO DO:
-	--min/max
 	--add/sub
-	--acc register??
+	--acc register + global clk
 	--multiply
 	-- **FIX** shift left and right
 	
