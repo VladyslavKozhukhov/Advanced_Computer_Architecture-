@@ -27,7 +27,7 @@ begin
 		write(v_OLINE,Status, right, n);  
         writeline(file_RESULTS,v_OLINE);
 		file_close(file_RESULTS);
-
+	wait;
    end process writeProc;
 
 end arc_WriteLogic;

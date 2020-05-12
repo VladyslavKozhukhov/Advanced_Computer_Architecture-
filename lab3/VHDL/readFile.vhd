@@ -32,21 +32,21 @@ begin
 	begin
 		file_open(file_VECTORS, "inputFile.txt",  read_mode); -- op A B cin
 		while not endfile(file_VECTORS) loop
-		readline(file_VECTORS, v_ILINE);
-		read(v_ILINE, v_OPC);
-		read(v_ILINE, v_SPACEOne);         
-		read(v_ILINE, v_A);
-		read(v_ILINE, v_SPACETwo);           
-		read(v_ILINE, v_B);
-		read(v_ILINE, v_SPACEThree);           
-		read(v_ILINE, v_Cin);
-
+			readline(file_VECTORS, v_ILINE);
+			read(v_ILINE, v_OPC);
+			read(v_ILINE, v_SPACEOne);         
+			read(v_ILINE, v_A);
+			read(v_ILINE, v_SPACETwo);           
+			read(v_ILINE, v_B);
+			read(v_ILINE, v_SPACEThree);           
+			read(v_ILINE, v_Cin);
+		end loop;
 		OPC<=v_OPC;
 		A<=v_A;
 		B<=v_B;
 		cin<=v_Cin;
 		file_close(file_VECTORS);
-
+		wait;
    end process readProc;
 
 

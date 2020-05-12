@@ -18,12 +18,31 @@ end MaxMin;
 architecture arc_MaxMin of MaxMin is
 
 SIGNAL arith_logic_output_LO,arith_logic_output_HI,shift_output : std_logic_vector(n-1 downto 0);
-
+SIGNAL found: STD_LOGIC;
 begin
-
-	result<=A WHEN (maxFlag='0') ELSE   -- IT'S JUST FOR COMPILATION TEST
-			B;
-	
+	process is
+	begin
+		for ii in n-1 downto 0 loop
+			if(A(ii)='1' and B(ii) = '0') then
+				if(maxFlag = '1') then
+					result<=A;
+				else
+					result<=B;
+				end if;
+				exit;
+			elsif (A(ii)='0' and B(ii) = '1') then
+				if(maxFlag = '1') then
+					result<=B;
+				else
+					result<=A;
+				end if;
+				exit;
+			elsif (((A(ii)='0' and B(ii)='0')or (A(ii)='1' and B(ii)='1')) and  ii=0) then
+				result<=B;
+			end if;
+		end loop;
+		wait;		
+	end process;
 end arc_MaxMin;
 
 
