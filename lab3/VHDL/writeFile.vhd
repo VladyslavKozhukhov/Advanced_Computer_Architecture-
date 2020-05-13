@@ -18,7 +18,7 @@ END WriteLogic;
 ARCHITECTURE arc_WriteLogic OF WriteLogic IS
 	FILE file_RESULTS : text;
 BEGIN
-	writeProc : PROCESS
+	writeProc : PROCESS(HI, LO, STATUS)
 		VARIABLE v_OLINE : line;
 	BEGIN
 		file_open(file_RESULTS, "outputFile.txt", write_mode);--HI LO status		

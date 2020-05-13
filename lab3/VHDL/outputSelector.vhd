@@ -27,6 +27,7 @@ architecture arc_outputSelector of outputSelector is
 SIGNAL carry : std_logic;
 SIGNAL HI_SIG,LO_SIG : std_logic_vector(n-1 downto 0);
 SIGNAL zeroSig : std_logic_vector(n-1 downto 0);
+SIGNAL OPC_INTEGER : integer;
 ---OPCODES--------
 SIGNAL OPC_ADD     : integer := 1;
 SIGNAL OPC_SUB     : integer := 2;
@@ -48,55 +49,57 @@ begin
 	
 	zeroSig <= (others => '0');
 	
-	carry<= cout_arith_logic WHEN (to_integer(unsigned(OPC)) = OPC_ADD) ELSE
-			cout_arith_logic WHEN (to_integer(unsigned(OPC)) = OPC_SUB) ELSE
-			cout_arith_logic WHEN (to_integer(unsigned(OPC)) = OPC_ADDC) ELSE
-			cout_arith_logic WHEN (to_integer(unsigned(OPC)) = OPC_MULT) ELSE
-			cout_arith_logic WHEN (to_integer(unsigned(OPC)) = OPC_MAC) ELSE
-			cout_arith_logic WHEN (to_integer(unsigned(OPC)) = OPC_MAC_RST) ELSE
-			cout_arith_logic WHEN (to_integer(unsigned(OPC)) = OPC_MAX) ELSE
-			cout_arith_logic WHEN (to_integer(unsigned(OPC)) = OPC_MIN) ELSE
-			cout_arith_logic WHEN (to_integer(unsigned(OPC)) = OPC_AND) ELSE
-			cout_arith_logic WHEN (to_integer(unsigned(OPC)) = OPC_OR) ELSE
-			cout_arith_logic WHEN (to_integer(unsigned(OPC)) = OPC_XOR) ELSE
-			cout_shifter WHEN (to_integer(unsigned(OPC)) = OPC_RLA) ELSE
-			cout_shifter WHEN (to_integer(unsigned(OPC)) = OPC_RLC) ELSE
-			cout_shifter WHEN (to_integer(unsigned(OPC)) = OPC_RRA) ELSE
-			cout_shifter WHEN (to_integer(unsigned(OPC)) = OPC_RRC) ELSE
+	OPC_INTEGER <= to_integer(unsigned(OPC));
+	
+	carry<= cout_arith_logic WHEN (OPC_INTEGER = OPC_ADD) ELSE
+			cout_arith_logic WHEN (OPC_INTEGER = OPC_SUB) ELSE
+			cout_arith_logic WHEN (OPC_INTEGER = OPC_ADDC) ELSE
+			cout_arith_logic WHEN (OPC_INTEGER = OPC_MULT) ELSE
+			cout_arith_logic WHEN (OPC_INTEGER = OPC_MAC) ELSE
+			cout_arith_logic WHEN (OPC_INTEGER = OPC_MAC_RST) ELSE
+			cout_arith_logic WHEN (OPC_INTEGER = OPC_MAX) ELSE
+			cout_arith_logic WHEN (OPC_INTEGER = OPC_MIN) ELSE
+			cout_arith_logic WHEN (OPC_INTEGER = OPC_AND) ELSE
+			cout_arith_logic WHEN (OPC_INTEGER = OPC_OR) ELSE
+			cout_arith_logic WHEN (OPC_INTEGER = OPC_XOR) ELSE
+			cout_shifter WHEN (OPC_INTEGER = OPC_RLA) ELSE
+			cout_shifter WHEN (OPC_INTEGER = OPC_RLC) ELSE
+			cout_shifter WHEN (OPC_INTEGER = OPC_RRA) ELSE
+			cout_shifter WHEN (OPC_INTEGER = OPC_RRC) ELSE
 			'0';
 			
-	HI_SIG<=arith_logic_HI WHEN (to_integer(unsigned(OPC)) = OPC_ADD) ELSE
-			arith_logic_HI WHEN (to_integer(unsigned(OPC)) = OPC_SUB) ELSE
-			arith_logic_HI WHEN (to_integer(unsigned(OPC)) = OPC_ADDC) ELSE
-			arith_logic_HI WHEN (to_integer(unsigned(OPC)) = OPC_MULT) ELSE
-			arith_logic_HI WHEN (to_integer(unsigned(OPC)) = OPC_MAC) ELSE
-			arith_logic_HI WHEN (to_integer(unsigned(OPC)) = OPC_MAC_RST) ELSE
-			arith_logic_HI WHEN (to_integer(unsigned(OPC)) = OPC_MAX) ELSE
-			arith_logic_HI WHEN (to_integer(unsigned(OPC)) = OPC_MIN) ELSE
-			arith_logic_HI WHEN (to_integer(unsigned(OPC)) = OPC_AND) ELSE
-			arith_logic_HI WHEN (to_integer(unsigned(OPC)) = OPC_OR) ELSE
-			arith_logic_HI WHEN (to_integer(unsigned(OPC)) = OPC_XOR) ELSE
-			shifter_HI WHEN (to_integer(unsigned(OPC)) = OPC_RLA) ELSE
-			shifter_HI WHEN (to_integer(unsigned(OPC)) = OPC_RLC) ELSE
-			shifter_HI WHEN (to_integer(unsigned(OPC)) = OPC_RRA) ELSE
-			shifter_HI WHEN (to_integer(unsigned(OPC)) = OPC_RRC) ELSE
+	HI_SIG<=arith_logic_HI WHEN (OPC_INTEGER = OPC_ADD) ELSE
+			arith_logic_HI WHEN (OPC_INTEGER = OPC_SUB) ELSE
+			arith_logic_HI WHEN (OPC_INTEGER = OPC_ADDC) ELSE
+			arith_logic_HI WHEN (OPC_INTEGER = OPC_MULT) ELSE
+			arith_logic_HI WHEN (OPC_INTEGER = OPC_MAC) ELSE
+			arith_logic_HI WHEN (OPC_INTEGER = OPC_MAC_RST) ELSE
+			arith_logic_HI WHEN (OPC_INTEGER = OPC_MAX) ELSE
+			arith_logic_HI WHEN (OPC_INTEGER = OPC_MIN) ELSE
+			arith_logic_HI WHEN (OPC_INTEGER = OPC_AND) ELSE
+			arith_logic_HI WHEN (OPC_INTEGER = OPC_OR) ELSE
+			arith_logic_HI WHEN (OPC_INTEGER = OPC_XOR) ELSE
+			shifter_HI WHEN (OPC_INTEGER = OPC_RLA) ELSE
+			shifter_HI WHEN (OPC_INTEGER = OPC_RLC) ELSE
+			shifter_HI WHEN (OPC_INTEGER = OPC_RRA) ELSE
+			shifter_HI WHEN (OPC_INTEGER = OPC_RRC) ELSE
 			(others => '0');
 
-	LO_SIG<=arith_logic_LO WHEN (to_integer(unsigned(OPC)) = OPC_ADD) ELSE
-			arith_logic_LO WHEN (to_integer(unsigned(OPC)) = OPC_SUB) ELSE
-			arith_logic_LO WHEN (to_integer(unsigned(OPC)) = OPC_ADDC) ELSE
-			arith_logic_LO WHEN (to_integer(unsigned(OPC)) = OPC_MULT) ELSE
-			arith_logic_LO WHEN (to_integer(unsigned(OPC)) = OPC_MAC) ELSE
-			arith_logic_LO WHEN (to_integer(unsigned(OPC)) = OPC_MAC_RST) ELSE
-			arith_logic_LO WHEN (to_integer(unsigned(OPC)) = OPC_MAX) ELSE
-			arith_logic_LO WHEN (to_integer(unsigned(OPC)) = OPC_MIN) ELSE
-			arith_logic_LO WHEN (to_integer(unsigned(OPC)) = OPC_AND) ELSE
-			arith_logic_LO WHEN (to_integer(unsigned(OPC)) = OPC_OR) ELSE
-			arith_logic_LO WHEN (to_integer(unsigned(OPC)) = OPC_XOR) ELSE
-			shifter_LO WHEN (to_integer(unsigned(OPC)) = OPC_RLA) ELSE
-			shifter_LO WHEN (to_integer(unsigned(OPC)) = OPC_RLC) ELSE
-			shifter_LO WHEN (to_integer(unsigned(OPC)) = OPC_RRA) ELSE
-			shifter_LO WHEN (to_integer(unsigned(OPC)) = OPC_RRC) ELSE
+	LO_SIG<=arith_logic_LO WHEN (OPC_INTEGER = OPC_ADD) ELSE
+			arith_logic_LO WHEN (OPC_INTEGER = OPC_SUB) ELSE
+			arith_logic_LO WHEN (OPC_INTEGER = OPC_ADDC) ELSE
+			arith_logic_LO WHEN (OPC_INTEGER = OPC_MULT) ELSE
+			arith_logic_LO WHEN (OPC_INTEGER = OPC_MAC) ELSE
+			arith_logic_LO WHEN (OPC_INTEGER = OPC_MAC_RST) ELSE
+			arith_logic_LO WHEN (OPC_INTEGER = OPC_MAX) ELSE
+			arith_logic_LO WHEN (OPC_INTEGER = OPC_MIN) ELSE
+			arith_logic_LO WHEN (OPC_INTEGER = OPC_AND) ELSE
+			arith_logic_LO WHEN (OPC_INTEGER = OPC_OR) ELSE
+			arith_logic_LO WHEN (OPC_INTEGER = OPC_XOR) ELSE
+			shifter_LO WHEN (OPC_INTEGER = OPC_RLA) ELSE
+			shifter_LO WHEN (OPC_INTEGER = OPC_RLC) ELSE
+			shifter_LO WHEN (OPC_INTEGER = OPC_RRA) ELSE
+			shifter_LO WHEN (OPC_INTEGER = OPC_RRC) ELSE
 			(others => '0');
 			
 	HI <= HI_SIG;
