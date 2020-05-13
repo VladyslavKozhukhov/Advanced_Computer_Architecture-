@@ -119,6 +119,7 @@ end component;
 		n : positive := 8   -- A,B length
 	);
 	port(
+		cin : in std_logic;
 		A : in std_logic_vector(n-1 downto 0);
 		B : in std_logic_vector(2 downto 0);
 		sel : in std_logic_vector(1 downto 0);

@@ -6,7 +6,11 @@
 +create signal and compare signal with size+value to OPC
 +convert to ineger to compare genero
 +finish output select
++status
++C_in=C_out is TOTAL C. C[n-1] is  C[n](OUTPUT FROM ALU)
++implement shifter from MSP430x4 
 
--implement shifter from MSP430x4 
--C_in=C_out is TOTAL C. C[n-1] is  C[n](OUTPUT FROM ALU)
--status
+
+
+
+- generic B(2..0)

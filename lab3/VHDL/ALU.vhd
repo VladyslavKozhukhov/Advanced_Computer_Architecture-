@@ -30,7 +30,7 @@ SIGNAL cout_arith_logic,cout_shifter : std_logic;
 begin
 	
 	arithAndLogicEntity : ArithLogic generic map(n,m) port map(clk,OPC,A,B,cin,arith_logic_HI,arith_logic_LO,cout_arith_logic); --test
-	shiftEntity : shifter generic map(n) port map(A,B(2 downto 0),OPC(1 downto 0),shifter_HI,shifter_LO,cout_shifter); --TO DO: *FIXES ONLY*
+	shiftEntity : shifter generic map(n) port map(cin,A,B(2 downto 0),OPC(1 downto 0),shifter_HI,shifter_LO,cout_shifter); --TO DO: *FIXES ONLY*
 	selectorEntity : outputSelector generic map(n,m,k) port map(OPC,arith_logic_LO,arith_logic_HI,cout_arith_logic,shifter_LO,shifter_HI,cout_shifter,HI,LO,STATUS); --DONE
 	
 	

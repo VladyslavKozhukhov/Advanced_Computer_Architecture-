@@ -9,6 +9,7 @@ entity shifter is
 		n : positive := 8   -- A length
 	);
 	port(
+		cin : in std_logic;
 		A : in std_logic_vector(n-1 downto 0);
 		B : in std_logic_vector(2 downto 0);
 		sel : in std_logic_vector(1 downto 0);
@@ -41,23 +42,27 @@ begin
 					resultVar := resultVar(n-2 downto 0) & '0';
 					shiftVar := shiftVar-1;
 				end loop;
+				
+			elsif (sel = "10") then  --RRA
+				while (shiftVar > 0) loop
+					coutVar := resultVar(0);
+					resultVar := resultVar(n-1) & resultVar(n-1 downto 1);	--copy msb due to manual
+					shiftVar := shiftVar-1;
+				end loop;	
+				
 			elsif (sel = "01") then  --RLC
-				resultVar := A(n-2 downto 0) & '0';
+				resultVar := A(n-2 downto 0) & cin;
 				coutVar := A(n-1);
 				shiftVar := shiftVar-1;
 				while (shiftVar > 0) loop
 					coutVar := resultVar(n-1);
 					resultVar := resultVar(n-2 downto 0) & coutVar;
 					shiftVar := shiftVar-1;
-				end loop;
-			elsif (sel = "10") then  --RRA
-				while (shiftVar > 0) loop
-					coutVar := resultVar(0);
-					resultVar := '0' & resultVar(n-1 downto 1);	
-					shiftVar := shiftVar-1;
-				end loop;
+				end loop;			
+				
+
 			elsif (sel = "11") then  --RRC
-				resultVar := '0' & A(n-1 downto 1);
+				resultVar := cin & A(n-1 downto 1);
 				coutVar := A(0);
 				shiftVar := shiftVar-1;
 				while (shiftVar > 0) loop
