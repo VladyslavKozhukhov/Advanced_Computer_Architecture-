@@ -1,53 +1,46 @@
 LIBRARY ieee;
-USE ieee.std_logic_1164.all;
-USE ieee.std_logic_unsigned.all;
-USE work.aux_package.all;
+USE ieee.std_logic_1164.ALL;
+USE ieee.std_logic_unsigned.ALL;
+USE work.aux_package.ALL;
 -------------------------------------------------------------
-entity MaxMin is
-	generic (
-		n : positive := 8   -- A,B length
+ENTITY MaxMin IS
+	GENERIC (
+		n : POSITIVE := 8 -- A,B length
 	);
-	port(
-		A,B : in std_logic_vector(n-1 downto 0);
-		maxFlag : in std_logic;
+	PORT (
+		A, B : IN std_logic_vector(n - 1 DOWNTO 0);
+		maxFlag : IN std_logic;
 		----------------------------------------
-		result : out std_logic_vector(n-1 downto 0)
+		result : OUT std_logic_vector(n - 1 DOWNTO 0)
 	);
-end MaxMin;
+END MaxMin;
 ------------- MaxMin Architecture code --------------
-architecture arc_MaxMin of MaxMin is
+ARCHITECTURE arc_MaxMin OF MaxMin IS
 
-SIGNAL arith_logic_output_LO,arith_logic_output_HI,shift_output : std_logic_vector(n-1 downto 0);
-SIGNAL found: STD_LOGIC;
-begin
-	process is
-	begin
-		for ii in n-1 downto 0 loop
-			if(A(ii)='1' and B(ii) = '0') then
-				if(maxFlag = '1') then
-					result<=A;
-				else
-					result<=B;
-				end if;
-				exit;
-			elsif (A(ii)='0' and B(ii) = '1') then
-				if(maxFlag = '1') then
-					result<=B;
-				else
-					result<=A;
-				end if;
-				exit;
-			elsif (((A(ii)='0' and B(ii)='0')or (A(ii)='1' and B(ii)='1')) and  ii=0) then
-				result<=B;
-			end if;
-		end loop;
-		wait;		
-	end process;
-end arc_MaxMin;
-
-
-
-
-
-
-
+	SIGNAL arith_logic_output_LO, arith_logic_output_HI, shift_output : std_logic_vector(n - 1 DOWNTO 0);
+	SIGNAL found : STD_LOGIC;
+BEGIN
+	PROCESS IS
+	BEGIN
+		FOR ii IN n - 1 DOWNTO 0 LOOP
+			IF (A(ii) = '1' AND B(ii) = '0') THEN
+				IF (maxFlag = '1') THEN
+					result <= A;
+				ELSE
+					result <= B;
+				END IF;
+				EXIT;
+			ELSIF (A(ii) = '0' AND B(ii) = '1') THEN
+				IF (maxFlag = '1') THEN
+					result <= B;
+				ELSE
+					result <= A;
+				END IF;
+				EXIT;
+			ELSIF (((A(ii) = '0' AND B(ii) = '0') OR (A(ii) = '1' AND B(ii) = '1')) AND ii = 0) THEN
+				result <= B;
+			END IF;
+		END LOOP;
+		WAIT;
+	END PROCESS;
+END arc_MaxMin;

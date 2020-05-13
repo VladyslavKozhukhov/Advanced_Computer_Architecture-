@@ -27,14 +27,28 @@ package aux_package is
 	);
 	port(
 		OPC : out std_logic_vector(m-1 downto 0);
-		A,B : out std_logic_vector(n-1 downto 0)
+		A,B : out std_logic_vector(n-1 downto 0);
 		cin : out std_logic
 	);
   end component;  
+    -----------------------------------------------------------------  
+
+  
+  component MACModule is
+	generic (
+		n : positive := 8  -- A,B length
+	);
+	port(
+		rst,clk : in std_logic;
+		A,B : in std_logic_vector(n-1 downto 0);		
+		----------------------------------------
+		ACC :out  std_logic_vector(2*n DOWNTO 0)
+	);
+end component; 
   -----------------------------------------------------------------  
   component WriteLogic is
 	generic (
-		n : positive := 8 ; -- A,B length
+		n : positive := 8  -- A,B length
 	);
 	port(
 		Status : in std_logic_vector(1 downto 0);
@@ -66,6 +80,7 @@ package aux_package is
 		k : positive := 2   -- STATUS length
 	);
 	port(
+		clk : in std_logic;
 		OPC : in std_logic_vector(m-1 downto 0);
 		A,B : in std_logic_vector(n-1 downto 0);
 		cin : in std_logic;
@@ -116,13 +131,12 @@ package aux_package is
 	generic (
 		n : INTEGER := 8   -- x,y length
 	);
-	port(
-		cin : in std_logic;
-		x,y: in std_logic_vector (n-1 DOWNTO 0);
-		sel: in std_logic_vector (1 DOWNTO 0);
-		----------------------------------------
-		s: out std_logic_vector(n DOWNTO 0)
-	);
+  PORT (     cin: IN STD_LOGIC;
+			 x,y: IN STD_LOGIC_VECTOR (n-1 DOWNTO 0);
+			 sel : IN STD_LOGIC_VECTOR (1 DOWNTO 0);
+			 --------------------------------------------
+             s: OUT STD_LOGIC_VECTOR(n DOWNTO 0)
+			 );
   end component;
 -----------------------------------------------------------------
   component ArithLogic is
@@ -131,6 +145,7 @@ package aux_package is
 		m : positive := 5   -- OPC length
 	);
 	port(
+		clk : in std_logic;
 		OPC : in std_logic_vector(m-1 downto 0);
 		A,B : in std_logic_vector(n-1 downto 0);
 		cin : in std_logic;

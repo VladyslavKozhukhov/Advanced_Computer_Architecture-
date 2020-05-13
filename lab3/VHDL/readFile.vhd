@@ -1,53 +1,51 @@
-library ieee;
-use ieee.numeric_std.all;
-use STD.textio.all;
-use ieee.std_logic_textio.all;
-USE ieee.std_logic_1164.all;
-USE ieee.std_logic_unsigned.all;
-USE work.aux_package.all;
-entity ReadLogic is
-	generic (
-		n : positive := 8 ; -- A,B length
-		m : positive := 5   -- OPC length
+LIBRARY ieee;
+USE ieee.numeric_std.ALL;
+USE STD.textio.ALL;
+USE ieee.std_logic_textio.ALL;
+USE ieee.std_logic_1164.ALL;
+USE ieee.std_logic_unsigned.ALL;
+USE work.aux_package.ALL;
+ENTITY ReadLogic IS
+	GENERIC (
+		n : POSITIVE := 8; -- A,B length
+		m : POSITIVE := 5 -- OPC length
 	);
-	port(
-		OPC : out std_logic_vector(m-1 downto 0);
-		A,B : out std_logic_vector(n-1 downto 0);
-		cin : out std_logic
+	PORT (
+		OPC : OUT std_logic_vector(m - 1 DOWNTO 0);
+		A, B : OUT std_logic_vector(n - 1 DOWNTO 0);
+		cin : OUT std_logic
 	);
-end ReadLogic;
+END ReadLogic;
 ------------- ReadLogic Architecture code --------------
-architecture arc_ReadLogic of ReadLogic is
-  file file_VECTORS : text;
-begin
-	readProc:process
-		variable v_ILINE     : line;
-		variable v_A,v_B : std_logic_vector(n-1 downto 0);
-		variable v_Cin : std_logic;
-		variable v_OPC : std_logic_vector(m-1 downto 0);
-		variable v_SPACEOne    : character;
-		variable v_SPACETwo  : character;
-		variable v_SPACEThree  : character;
+ARCHITECTURE arc_ReadLogic OF ReadLogic IS
+	FILE file_VECTORS : text;
+BEGIN
+	readProc : PROCESS
+		VARIABLE v_ILINE : line;
+		VARIABLE v_A, v_B : std_logic_vector(n - 1 DOWNTO 0);
+		VARIABLE v_Cin : std_logic;
+		VARIABLE v_OPC : std_logic_vector(m - 1 DOWNTO 0);
+		VARIABLE v_SPACEOne : CHARACTER;
+		VARIABLE v_SPACETwo : CHARACTER;
+		VARIABLE v_SPACEThree : CHARACTER;
 
-	begin
-		file_open(file_VECTORS, "inputFile.txt",  read_mode); -- op A B cin
-		while not endfile(file_VECTORS) loop
+	BEGIN
+		file_open(file_VECTORS, "inputFile.txt", read_mode); -- op A B cin
+		WHILE NOT endfile(file_VECTORS) LOOP
 			readline(file_VECTORS, v_ILINE);
 			read(v_ILINE, v_OPC);
-			read(v_ILINE, v_SPACEOne);         
+			read(v_ILINE, v_SPACEOne);
 			read(v_ILINE, v_A);
-			read(v_ILINE, v_SPACETwo);           
+			read(v_ILINE, v_SPACETwo);
 			read(v_ILINE, v_B);
-			read(v_ILINE, v_SPACEThree);           
+			read(v_ILINE, v_SPACEThree);
 			read(v_ILINE, v_Cin);
-		end loop;
-		OPC<=v_OPC;
-		A<=v_A;
-		B<=v_B;
-		cin<=v_Cin;
+		END LOOP;
+		OPC <= v_OPC;
+		A <= v_A;
+		B <= v_B;
+		cin <= v_Cin;
 		file_close(file_VECTORS);
-		wait;
-   end process readProc;
-
-
-end arc_ReadLogic;
+		WAIT;
+	END PROCESS readProc;
+END arc_ReadLogic;

@@ -33,7 +33,7 @@ SIGNAL HI_SIG,LO_SIG : std_logic_vector(n-1 downto 0); --FOR THE FRONT REGISTER
 begin
 	
 	backREG : BACKregister generic map(n,m) port map(rst,ena,clk,OPC,A,B,cin,OPC_SIG,A_SIG,B_SIG,cin_SIG);
-	aluEntity : ALU generic map(n,m,k) port map(OPC_SIG,A_SIG,B_SIG,cin_SIG,HI,LO,alu_status);
+	aluEntity : ALU generic map(n,m,k) port map(clk,A_SIG,B_SIG,OPC_SIG,cin_SIG,HI,LO,alu_status);
 	frontREG : FRONTregister generic map(n,k) port map(rst,ena,clk,HI,LO,alu_status,HI_SIG,LO_SIG,STATUS);
 	
 	RES(2*n-1 downto n) <= HI_SIG;
