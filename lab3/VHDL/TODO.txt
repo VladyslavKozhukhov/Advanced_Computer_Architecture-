@@ -1,0 +1,2 @@
+-implement shifter from MSP430x4 
+-C_in=C_out is TOTAL C. C[n-1] is  C[n](OUTPUT FROM ALU)

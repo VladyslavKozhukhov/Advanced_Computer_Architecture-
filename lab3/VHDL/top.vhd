@@ -40,8 +40,6 @@ begin
 	RES(n-1 downto 0) <= LO_SIG;
 	--TO DO:
 	--add/sub
-	--acc register + global clk
-	--multiply
 	-- **FIX** shift left and right
 	
 end arc_sys;

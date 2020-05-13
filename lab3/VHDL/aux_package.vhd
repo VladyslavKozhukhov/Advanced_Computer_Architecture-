@@ -42,7 +42,7 @@ package aux_package is
 		rst,clk : in std_logic;
 		A,B : in std_logic_vector(n-1 downto 0);		
 		----------------------------------------
-		ACC :out  std_logic_vector(2*n DOWNTO 0)
+		ACC :out  std_logic_vector(2*n-1 DOWNTO 0)
 	);
 end component; 
   -----------------------------------------------------------------  
@@ -72,6 +72,15 @@ end component;
 		cin_out : out std_logic
 	);
   end component;
+  
+  -----------------------------------------------------------------
+component MultSub IS
+  GENERIC (n : INTEGER := 8);
+  PORT (
+		 x,y: IN STD_LOGIC_VECTOR (n-1 DOWNTO 0);
+		 s: OUT STD_LOGIC_VECTOR(2*n-1 DOWNTO 0)
+		 );
+end component;
 -----------------------------------------------------------------
   component ALU is
 	generic (
@@ -135,7 +144,7 @@ end component;
 			 x,y: IN STD_LOGIC_VECTOR (n-1 DOWNTO 0);
 			 sel : IN STD_LOGIC_VECTOR (1 DOWNTO 0);
 			 --------------------------------------------
-             s: OUT STD_LOGIC_VECTOR(n DOWNTO 0)
+             s: OUT STD_LOGIC_VECTOR(2*n-1 DOWNTO 0)
 			 );
   end component;
 -----------------------------------------------------------------

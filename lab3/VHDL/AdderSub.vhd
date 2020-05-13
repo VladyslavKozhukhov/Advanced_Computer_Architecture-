@@ -7,7 +7,7 @@ USE work.aux_package.all;
   PORT (     cin: IN STD_LOGIC;
 			 x,y: IN STD_LOGIC_VECTOR (n-1 DOWNTO 0);
 			 sel : IN STD_LOGIC_VECTOR (1 DOWNTO 0);
-             s: OUT STD_LOGIC_VECTOR(n DOWNTO 0));
+             s: OUT STD_LOGIC_VECTOR(2*n-1 DOWNTO 0));
 END AdderSub;
 --------------------------------------------------------------
 ARCHITECTURE AdderSub_Architecture OF AdderSub IS
