@@ -23,7 +23,7 @@ ARCHITECTURE arc_MACModule OF MACModule IS
 
 BEGIN
 			multEntity : MultSub generic map(n) port map(A,B,mult_tmp);
-			adderSubEntity : AdderSub generic map(n) port map('0',mult_tmp,ACC_tmp,"00",AdderSubResult);
+			adderSubEntity : AdderSub generic map(2 * n-1) port map('0',mult_tmp,ACC_tmp,"00",AdderSubResult);
 		--	adderSubEntity : AdderSub generic map(n) port map('0',A,AdderSubResultZERO,"00",AdderSubResult);--check
 
 	PROCESS (clk, rst)
