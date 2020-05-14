@@ -1,47 +1,40 @@
 LIBRARY ieee;
-USE ieee.std_logic_1164.all;
-USE ieee.std_logic_unsigned.all;
-USE work.aux_package.all;
+USE ieee.std_logic_1164.ALL;
+USE ieee.std_logic_unsigned.ALL;
+USE work.aux_package.ALL;
 -------------------------------------------------------------
-entity frontRegister is
-	generic (
-		n : positive := 8 ; -- A,B length
-		k : positive := 2   -- STATUS length
+ENTITY frontRegister IS
+	GENERIC (
+		n : POSITIVE := 8; -- A,B length
+		k : POSITIVE := 2 -- STATUS length
 	);
-	port(
-		rst,ena,clk : in std_logic;
-		HI_in,LO_in : in std_logic_vector(n-1 downto 0);
-		Status_in : in std_logic_vector(k-1 downto 0);
+	PORT (
+		rst, ena, clk : IN std_logic;
+		HI_in, LO_in : IN std_logic_vector(n - 1 DOWNTO 0);
+		Status_in : IN std_logic_vector(k - 1 DOWNTO 0);
 		----------------------------------------
-		HI_out,LO_out : out std_logic_vector(n-1 downto 0);
-		Status_out : out std_logic_vector(k-1 downto 0)
+		HI_out, LO_out : OUT std_logic_vector(n - 1 DOWNTO 0);
+		Status_out : OUT std_logic_vector(k - 1 DOWNTO 0)
 	);
-end frontRegister;
+END frontRegister;
 ------------- frontRegister Architecture code --------------
-architecture arc_frontRegister of frontRegister is
+ARCHITECTURE arc_frontRegister OF frontRegister IS
 
-begin
-	
-	syncProcessFRONT : process (rst,ena,clk,HI_in,LO_in,Status_in)
-	begin
-		if(rst='1') then
-			HI_out <= (others => '0');
-			LO_out <= (others => '0');
-			Status_out <= (others => '0');
-		elsif (rising_edge(clk)) then	
-			IF(ena = '1') THEN
+BEGIN
+
+	syncProcessFRONT : PROCESS (rst, ena, clk, HI_in, LO_in, Status_in)
+	BEGIN
+		IF (rst = '1') THEN
+			HI_out <= (OTHERS => '0');
+			LO_out <= (OTHERS => '0');
+			Status_out <= (OTHERS => '0');
+		ELSIF (rising_edge(clk)) THEN
+			IF (ena = '1') THEN
 				HI_out <= HI_in;
 				LO_out <= LO_in;
 				Status_out <= Status_in;
-			end IF;
-		end IF;
-	END PROCESS syncProcessFRONT;	
-	
-end arc_frontRegister;
+			END IF;
+		END IF;
+	END PROCESS syncProcessFRONT;
 
-
-
-
-
-
-
+END arc_frontRegister;

@@ -11,28 +11,26 @@ ENTITY MACModule IS
 		rst, clk : IN std_logic;
 		A, B : IN std_logic_vector(n - 1 DOWNTO 0);
 		----------------------------------------
-		ACC : OUT std_logic_vector(2 * n-1 DOWNTO 0)
+		ACC : OUT std_logic_vector(2 * n - 1 DOWNTO 0)
 	);
 END MACModule;
 ------------- MACModule Architecture code --------------
 ARCHITECTURE arc_MACModule OF MACModule IS
-	SIGNAL ACC_tmp : std_logic_vector (2 * n-1 DOWNTO 0);
-	SIGNAL mult_tmp : std_logic_vector (2 * n-1 DOWNTO 0);
-	SIGNAL AdderSubResult : std_logic_vector (2 * n-1 DOWNTO 0);
-
-
+	SIGNAL ACC_tmp : std_logic_vector (2 * n - 1 DOWNTO 0);
+	SIGNAL mult_tmp : std_logic_vector (2 * n - 1 DOWNTO 0);
+	SIGNAL AdderSubResult : std_logic_vector (2 * n - 1 DOWNTO 0);
 BEGIN
-			multEntity : MultSub generic map(n) port map(A,B,mult_tmp);
-			adderSubEntity : AdderSub generic map(2 * n-1) port map('0',mult_tmp,ACC_tmp,"00",AdderSubResult);
-		--	adderSubEntity : AdderSub generic map(n) port map('0',A,AdderSubResultZERO,"00",AdderSubResult);--check
+	multEntity : MultSub GENERIC MAP(n) PORT MAP(A, B, mult_tmp);
+	adderSubEntity : AdderSub GENERIC MAP(2 * n - 1) PORT MAP('0', mult_tmp, ACC_tmp, "00", AdderSubResult);
+	--	adderSubEntity : AdderSub generic map(n) port map('0',A,AdderSubResultZERO,"00",AdderSubResult);--check
 
 	PROCESS (clk, rst)
 	BEGIN
 		IF (rst = '1') THEN
 			ACC_tmp <= (OTHERS => '0');
-			end if;
+		END IF;
 		IF (rising_edge(clk)) THEN
-			ACC_tmp <=AdderSubResult; -- adder
+			ACC_tmp <= AdderSubResult; -- adder
 		END IF;
 	END PROCESS;
 	ACC <= ACC_tmp;

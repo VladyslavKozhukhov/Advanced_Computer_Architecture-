@@ -1,86 +1,77 @@
 LIBRARY ieee;
-USE ieee.std_logic_1164.all;
-USE ieee.std_logic_unsigned.all;
+USE ieee.std_logic_1164.ALL;
+USE ieee.std_logic_unsigned.ALL;
 USE ieee.numeric_std.ALL;
-USE work.aux_package.all;
+USE work.aux_package.ALL;
 -------------------------------------------------------------
-entity shifter is
-	generic (
-		n : positive := 8   -- A length
+ENTITY shifter IS
+	GENERIC (
+		n : POSITIVE := 8 -- A length
 	);
-	port(
-		cin : in std_logic;
-		A : in std_logic_vector(n-1 downto 0);
-		B : in std_logic_vector(2 downto 0);
-		sel : in std_logic_vector(1 downto 0);
+	PORT (
+		cin : IN std_logic;
+		A : IN std_logic_vector(n - 1 DOWNTO 0);
+		B : IN std_logic_vector(2 DOWNTO 0);
+		sel : IN std_logic_vector(1 DOWNTO 0);
 		----------------------------------------
-		HI,LO : out std_logic_vector(n-1 downto 0);
-		cout : out std_logic
+		HI, LO : OUT std_logic_vector(n - 1 DOWNTO 0);
+		cout : OUT std_logic
 	);
-end shifter;
+END shifter;
 ------------- shifter Architecture code --------------
-architecture arc_shifter of shifter is
-SIGNAL shiftAmount : integer range 0 to 7;
+ARCHITECTURE arc_shifter OF shifter IS
+	SIGNAL shiftAmount : INTEGER RANGE 0 TO 7;
 
-begin
-	
-	HI <= (others=>'0');
+BEGIN
+
+	HI <= (OTHERS => '0');
 	shiftAmount <= to_integer(unsigned(B));
-	
-	shiftProcess : process(A,shiftAmount,sel)
-	variable shiftVar : integer range 0 to 7;
-	variable coutVar : std_logic;
-	variable resultVar : std_logic_vector(n-1 downto 0);
-	begin
+
+	shiftProcess : PROCESS (A, shiftAmount, sel)
+		VARIABLE shiftVar : INTEGER RANGE 0 TO 7;
+		VARIABLE coutVar : std_logic;
+		VARIABLE resultVar : std_logic_vector(n - 1 DOWNTO 0);
+	BEGIN
 		shiftVar := shiftAmount;
 		coutVar := '0';
 		resultVar := A;
-		if (shiftVar /= 0) then
-			if (sel = "00") then     --RLA
-				while (shiftVar > 0) loop
-					coutVar := resultVar(n-1);
-					resultVar := resultVar(n-2 downto 0) & '0';
-					shiftVar := shiftVar-1;
-				end loop;
-				
-			elsif (sel = "10") then  --RRA
-				while (shiftVar > 0) loop
-					coutVar := resultVar(0);
-					resultVar := resultVar(n-1) & resultVar(n-1 downto 1);	--copy msb due to manual
-					shiftVar := shiftVar-1;
-				end loop;	
-				
-			elsif (sel = "01") then  --RLC
-				resultVar := A(n-2 downto 0) & cin;
-				coutVar := A(n-1);
-				shiftVar := shiftVar-1;
-				while (shiftVar > 0) loop
-					coutVar := resultVar(n-1);
-					resultVar := resultVar(n-2 downto 0) & coutVar;
-					shiftVar := shiftVar-1;
-				end loop;			
-				
+		IF (shiftVar /= 0) THEN
+			IF (sel = "00") THEN --RLA
+				WHILE (shiftVar > 0) LOOP
+					coutVar := resultVar(n - 1);
+					resultVar := resultVar(n - 2 DOWNTO 0) & '0';
+					shiftVar := shiftVar - 1;
+				END LOOP;
 
-			elsif (sel = "11") then  --RRC
-				resultVar := cin & A(n-1 downto 1);
-				coutVar := A(0);
-				shiftVar := shiftVar-1;
-				while (shiftVar > 0) loop
+			ELSIF (sel = "10") THEN --RRA
+				WHILE (shiftVar > 0) LOOP
 					coutVar := resultVar(0);
-					resultVar := coutVar & resultVar(n-1 downto 1);
-					shiftVar := shiftVar-1;
-				end loop;
-			end if;
-		end if;
+					resultVar := resultVar(n - 1) & resultVar(n - 1 DOWNTO 1); --copy msb due to manual
+					shiftVar := shiftVar - 1;
+				END LOOP;
+
+			ELSIF (sel = "01") THEN --RLC
+				resultVar := A(n - 2 DOWNTO 0) & cin;
+				coutVar := A(n - 1);
+				shiftVar := shiftVar - 1;
+				WHILE (shiftVar > 0) LOOP
+					coutVar := resultVar(n - 1);
+					resultVar := resultVar(n - 2 DOWNTO 0) & coutVar;
+					shiftVar := shiftVar - 1;
+				END LOOP;
+			ELSIF (sel = "11") THEN --RRC
+				resultVar := cin & A(n - 1 DOWNTO 1);
+				coutVar := A(0);
+				shiftVar := shiftVar - 1;
+				WHILE (shiftVar > 0) LOOP
+					coutVar := resultVar(0);
+					resultVar := coutVar & resultVar(n - 1 DOWNTO 1);
+					shiftVar := shiftVar - 1;
+				END LOOP;
+			END IF;
+		END IF;
 		cout <= coutVar;
 		LO <= resultVar;
 	END PROCESS shiftProcess;
-	
-end arc_shifter;
 
-
-
-
-
-
-
+END arc_shifter;

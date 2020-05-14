@@ -1,120 +1,113 @@
 LIBRARY ieee;
-USE ieee.std_logic_1164.all;
-USE ieee.std_logic_unsigned.all;
+USE ieee.std_logic_1164.ALL;
+USE ieee.std_logic_unsigned.ALL;
 USE ieee.numeric_std.ALL;
-USE work.aux_package.all;
+USE work.aux_package.ALL;
 -------------------------------------------------------------
-entity outputSelector is
-	generic (
-		n : positive := 8 ; -- A,B length
-		m : positive := 5 ; -- OPC length
-		k : positive := 2   -- STATUS length
+ENTITY outputSelector IS
+	GENERIC (
+		n : POSITIVE := 8; -- A,B length
+		m : POSITIVE := 5; -- OPC length
+		k : POSITIVE := 2 -- STATUS length
 	);
-	port(
-		OPC : in std_logic_vector(m-1 downto 0);
-		arith_logic_LO,arith_logic_HI : in std_logic_vector(n-1 downto 0);
-		cout_arith_logic : in std_logic;
-		shifter_LO,shifter_HI : in std_logic_vector(n-1 downto 0);
-		cout_shifter : in std_logic;
+	PORT (
+		OPC : IN std_logic_vector(m - 1 DOWNTO 0);
+		arith_logic_LO, arith_logic_HI : IN std_logic_vector(n - 1 DOWNTO 0);
+		cout_arith_logic : IN std_logic;
+		shifter_LO, shifter_HI : IN std_logic_vector(n - 1 DOWNTO 0);
+		cout_shifter : IN std_logic;
 		----------------------------------------
-		HI,LO : out std_logic_vector(n-1 downto 0);
-		STATUS : out std_logic_vector(k-1 downto 0)
+		HI, LO : OUT std_logic_vector(n - 1 DOWNTO 0);
+		STATUS : OUT std_logic_vector(k - 1 DOWNTO 0)
 	);
-end outputSelector;
+END outputSelector;
 ------------- outputSelector Architecture code --------------
-architecture arc_outputSelector of outputSelector is
+ARCHITECTURE arc_outputSelector OF outputSelector IS
 
-SIGNAL carry : std_logic;
-SIGNAL HI_SIG,LO_SIG : std_logic_vector(n-1 downto 0);
-SIGNAL zeroSig : std_logic_vector(n-1 downto 0);
-SIGNAL OPC_INTEGER : integer;
----OPCODES--------
-SIGNAL OPC_ADD     : integer := 1;
-SIGNAL OPC_SUB     : integer := 2;
-SIGNAL OPC_ADDC    : integer := 3;
-SIGNAL OPC_MULT    : integer := 4;
-SIGNAL OPC_MAC     : integer := 5;
-SIGNAL OPC_MAC_RST : integer := 6;
-SIGNAL OPC_MAX	   : integer := 7;
-SIGNAL OPC_MIN	   : integer := 8;
-SIGNAL OPC_AND     : integer := 9;
-SIGNAL OPC_OR      : integer := 10;
-SIGNAL OPC_XOR     : integer := 11;
-SIGNAL OPC_RLA     : integer :=	12;
-SIGNAL OPC_RLC     : integer := 13;
-SIGNAL OPC_RRA     : integer := 14;
-SIGNAL OPC_RRC     : integer := 15;
------------------------------------
-begin
-	
-	zeroSig <= (others => '0');
-	
+	SIGNAL carry : std_logic;
+	SIGNAL HI_SIG, LO_SIG : std_logic_vector(n - 1 DOWNTO 0);
+	SIGNAL zeroSig : std_logic_vector(n - 1 DOWNTO 0);
+	SIGNAL OPC_INTEGER : INTEGER;
+	---OPCODES--------
+	SIGNAL OPC_ADD : INTEGER := 1;
+	SIGNAL OPC_SUB : INTEGER := 2;
+	SIGNAL OPC_ADDC : INTEGER := 3;
+	SIGNAL OPC_MULT : INTEGER := 4;
+	SIGNAL OPC_MAC : INTEGER := 5;
+	SIGNAL OPC_MAC_RST : INTEGER := 6;
+	SIGNAL OPC_MAX : INTEGER := 7;
+	SIGNAL OPC_MIN : INTEGER := 8;
+	SIGNAL OPC_AND : INTEGER := 9;
+	SIGNAL OPC_OR : INTEGER := 10;
+	SIGNAL OPC_XOR : INTEGER := 11;
+	SIGNAL OPC_RLA : INTEGER := 12;
+	SIGNAL OPC_RLC : INTEGER := 13;
+	SIGNAL OPC_RRA : INTEGER := 14;
+	SIGNAL OPC_RRC : INTEGER := 15;
+	-----------------------------------
+BEGIN
+
+	zeroSig <= (OTHERS => '0');
+
 	OPC_INTEGER <= to_integer(unsigned(OPC));
-	
-	carry<= cout_arith_logic WHEN (OPC_INTEGER = OPC_ADD) ELSE
-			cout_arith_logic WHEN (OPC_INTEGER = OPC_SUB) ELSE
-			cout_arith_logic WHEN (OPC_INTEGER = OPC_ADDC) ELSE
-			cout_arith_logic WHEN (OPC_INTEGER = OPC_MULT) ELSE
-			cout_arith_logic WHEN (OPC_INTEGER = OPC_MAC) ELSE
-			cout_arith_logic WHEN (OPC_INTEGER = OPC_MAC_RST) ELSE
-			cout_arith_logic WHEN (OPC_INTEGER = OPC_MAX) ELSE
-			cout_arith_logic WHEN (OPC_INTEGER = OPC_MIN) ELSE
-			cout_arith_logic WHEN (OPC_INTEGER = OPC_AND) ELSE
-			cout_arith_logic WHEN (OPC_INTEGER = OPC_OR) ELSE
-			cout_arith_logic WHEN (OPC_INTEGER = OPC_XOR) ELSE
-			cout_shifter WHEN (OPC_INTEGER = OPC_RLA) ELSE
-			cout_shifter WHEN (OPC_INTEGER = OPC_RLC) ELSE
-			cout_shifter WHEN (OPC_INTEGER = OPC_RRA) ELSE
-			cout_shifter WHEN (OPC_INTEGER = OPC_RRC) ELSE
-			'0';
-			
-	HI_SIG<=arith_logic_HI WHEN (OPC_INTEGER = OPC_ADD) ELSE
-			arith_logic_HI WHEN (OPC_INTEGER = OPC_SUB) ELSE
-			arith_logic_HI WHEN (OPC_INTEGER = OPC_ADDC) ELSE
-			arith_logic_HI WHEN (OPC_INTEGER = OPC_MULT) ELSE
-			arith_logic_HI WHEN (OPC_INTEGER = OPC_MAC) ELSE
-			arith_logic_HI WHEN (OPC_INTEGER = OPC_MAC_RST) ELSE
-			arith_logic_HI WHEN (OPC_INTEGER = OPC_MAX) ELSE
-			arith_logic_HI WHEN (OPC_INTEGER = OPC_MIN) ELSE
-			arith_logic_HI WHEN (OPC_INTEGER = OPC_AND) ELSE
-			arith_logic_HI WHEN (OPC_INTEGER = OPC_OR) ELSE
-			arith_logic_HI WHEN (OPC_INTEGER = OPC_XOR) ELSE
-			shifter_HI WHEN (OPC_INTEGER = OPC_RLA) ELSE
-			shifter_HI WHEN (OPC_INTEGER = OPC_RLC) ELSE
-			shifter_HI WHEN (OPC_INTEGER = OPC_RRA) ELSE
-			shifter_HI WHEN (OPC_INTEGER = OPC_RRC) ELSE
-			(others => '0');
 
-	LO_SIG<=arith_logic_LO WHEN (OPC_INTEGER = OPC_ADD) ELSE
-			arith_logic_LO WHEN (OPC_INTEGER = OPC_SUB) ELSE
-			arith_logic_LO WHEN (OPC_INTEGER = OPC_ADDC) ELSE
-			arith_logic_LO WHEN (OPC_INTEGER = OPC_MULT) ELSE
-			arith_logic_LO WHEN (OPC_INTEGER = OPC_MAC) ELSE
-			arith_logic_LO WHEN (OPC_INTEGER = OPC_MAC_RST) ELSE
-			arith_logic_LO WHEN (OPC_INTEGER = OPC_MAX) ELSE
-			arith_logic_LO WHEN (OPC_INTEGER = OPC_MIN) ELSE
-			arith_logic_LO WHEN (OPC_INTEGER = OPC_AND) ELSE
-			arith_logic_LO WHEN (OPC_INTEGER = OPC_OR) ELSE
-			arith_logic_LO WHEN (OPC_INTEGER = OPC_XOR) ELSE
-			shifter_LO WHEN (OPC_INTEGER = OPC_RLA) ELSE
-			shifter_LO WHEN (OPC_INTEGER = OPC_RLC) ELSE
-			shifter_LO WHEN (OPC_INTEGER = OPC_RRA) ELSE
-			shifter_LO WHEN (OPC_INTEGER = OPC_RRC) ELSE
-			(others => '0');
-			
+	carry <= cout_arith_logic WHEN (OPC_INTEGER = OPC_ADD) ELSE
+		cout_arith_logic WHEN (OPC_INTEGER = OPC_SUB) ELSE
+		cout_arith_logic WHEN (OPC_INTEGER = OPC_ADDC) ELSE
+		cout_arith_logic WHEN (OPC_INTEGER = OPC_MULT) ELSE
+		cout_arith_logic WHEN (OPC_INTEGER = OPC_MAC) ELSE
+		cout_arith_logic WHEN (OPC_INTEGER = OPC_MAC_RST) ELSE
+		cout_arith_logic WHEN (OPC_INTEGER = OPC_MAX) ELSE
+		cout_arith_logic WHEN (OPC_INTEGER = OPC_MIN) ELSE
+		cout_arith_logic WHEN (OPC_INTEGER = OPC_AND) ELSE
+		cout_arith_logic WHEN (OPC_INTEGER = OPC_OR) ELSE
+		cout_arith_logic WHEN (OPC_INTEGER = OPC_XOR) ELSE
+		cout_shifter WHEN (OPC_INTEGER = OPC_RLA) ELSE
+		cout_shifter WHEN (OPC_INTEGER = OPC_RLC) ELSE
+		cout_shifter WHEN (OPC_INTEGER = OPC_RRA) ELSE
+		cout_shifter WHEN (OPC_INTEGER = OPC_RRC) ELSE
+		'0';
+
+	HI_SIG <= arith_logic_HI WHEN (OPC_INTEGER = OPC_ADD) ELSE
+		arith_logic_HI WHEN (OPC_INTEGER = OPC_SUB) ELSE
+		arith_logic_HI WHEN (OPC_INTEGER = OPC_ADDC) ELSE
+		arith_logic_HI WHEN (OPC_INTEGER = OPC_MULT) ELSE
+		arith_logic_HI WHEN (OPC_INTEGER = OPC_MAC) ELSE
+		arith_logic_HI WHEN (OPC_INTEGER = OPC_MAC_RST) ELSE
+		arith_logic_HI WHEN (OPC_INTEGER = OPC_MAX) ELSE
+		arith_logic_HI WHEN (OPC_INTEGER = OPC_MIN) ELSE
+		arith_logic_HI WHEN (OPC_INTEGER = OPC_AND) ELSE
+		arith_logic_HI WHEN (OPC_INTEGER = OPC_OR) ELSE
+		arith_logic_HI WHEN (OPC_INTEGER = OPC_XOR) ELSE
+		shifter_HI WHEN (OPC_INTEGER = OPC_RLA) ELSE
+		shifter_HI WHEN (OPC_INTEGER = OPC_RLC) ELSE
+		shifter_HI WHEN (OPC_INTEGER = OPC_RRA) ELSE
+		shifter_HI WHEN (OPC_INTEGER = OPC_RRC) ELSE
+		(OTHERS => '0');
+
+	LO_SIG <= arith_logic_LO WHEN (OPC_INTEGER = OPC_ADD) ELSE
+		arith_logic_LO WHEN (OPC_INTEGER = OPC_SUB) ELSE
+		arith_logic_LO WHEN (OPC_INTEGER = OPC_ADDC) ELSE
+		arith_logic_LO WHEN (OPC_INTEGER = OPC_MULT) ELSE
+		arith_logic_LO WHEN (OPC_INTEGER = OPC_MAC) ELSE
+		arith_logic_LO WHEN (OPC_INTEGER = OPC_MAC_RST) ELSE
+		arith_logic_LO WHEN (OPC_INTEGER = OPC_MAX) ELSE
+		arith_logic_LO WHEN (OPC_INTEGER = OPC_MIN) ELSE
+		arith_logic_LO WHEN (OPC_INTEGER = OPC_AND) ELSE
+		arith_logic_LO WHEN (OPC_INTEGER = OPC_OR) ELSE
+		arith_logic_LO WHEN (OPC_INTEGER = OPC_XOR) ELSE
+		shifter_LO WHEN (OPC_INTEGER = OPC_RLA) ELSE
+		shifter_LO WHEN (OPC_INTEGER = OPC_RLC) ELSE
+		shifter_LO WHEN (OPC_INTEGER = OPC_RRA) ELSE
+		shifter_LO WHEN (OPC_INTEGER = OPC_RRC) ELSE
+		(OTHERS => '0');
+
 	HI <= HI_SIG;
 	LO <= LO_SIG;
-	
-	STATUS<="10" WHEN ((HI_SIG = zeroSig) and (LO_SIG = zeroSig)) ELSE --RES(HI,LO) = 0...0
-			"01" WHEN (carry = '1') ELSE 	
-			"11" WHEN carry = '1' and ((HI_SIG = zeroSig) and (LO_SIG = zeroSig))ELSE
-			"00";
 
-end arc_outputSelector;
+	STATUS <= "10" WHEN ((HI_SIG = zeroSig) AND (LO_SIG = zeroSig)) ELSE --RES(HI,LO) = 0...0
+		"01" WHEN (carry = '1') ELSE
+		"11" WHEN carry = '1' AND ((HI_SIG = zeroSig) AND (LO_SIG = zeroSig))ELSE
+		"00";
 
-
-
-
-
-
-
+END arc_outputSelector;

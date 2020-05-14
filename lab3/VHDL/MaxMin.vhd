@@ -20,7 +20,7 @@ ARCHITECTURE arc_MaxMin OF MaxMin IS
 	SIGNAL arith_logic_output_LO, arith_logic_output_HI, shift_output : std_logic_vector(n - 1 DOWNTO 0);
 	SIGNAL found : STD_LOGIC;
 BEGIN
-	PROCESS(A,B,maxFlag)
+	PROCESS (A, B, maxFlag)
 	BEGIN
 		FOR ii IN n - 1 DOWNTO 0 LOOP
 			IF (A(ii) = '1' AND B(ii) = '0') THEN

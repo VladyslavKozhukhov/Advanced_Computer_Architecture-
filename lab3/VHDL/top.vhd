@@ -48,6 +48,4 @@ BEGIN
 	BEGIN
 		cin_total <= cin_SIG;
 	END PROCESS;
-
-
 END arc_sys;
