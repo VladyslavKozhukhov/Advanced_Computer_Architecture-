@@ -44,7 +44,7 @@ BEGIN
 				read(v_ILINE, v_Cin);
 			END IF;
 			file_close(file_VECTORS);
-			WAIT;
+			--WAIT;
 		END IF;
 		OPC <= v_OPC;
 		A <= v_A;
