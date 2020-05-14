@@ -41,6 +41,5 @@ BEGIN
 				result <= B;
 			END IF;
 		END LOOP;
-		WAIT;
 	END PROCESS;
 END arc_MaxMin;
