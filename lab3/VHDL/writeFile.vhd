@@ -11,6 +11,7 @@ ENTITY WriteLogic IS
 		k : POSITIVE := 2  -- STATUS length
 	);
 	PORT (
+		clk : IN std_logic;
 		STATUS : IN std_logic_vector(k - 1 DOWNTO 0);
 		HI, LO : IN std_logic_vector(n - 1 DOWNTO 0)
 	);
@@ -33,6 +34,6 @@ BEGIN
 			--WAIT;
 		END IF;
 
-	END PROCESS readProc;
+	END PROCESS writeProc;
 
 END arc_WriteLogic;
