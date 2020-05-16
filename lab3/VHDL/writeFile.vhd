@@ -7,10 +7,11 @@ USE ieee.std_logic_unsigned.ALL;
 USE work.aux_package.ALL;
 ENTITY WriteLogic IS
 	GENERIC (
-		n : POSITIVE := 8 -- A,B length
+		n : POSITIVE := 8; -- A,B length
+		k : POSITIVE := 2  -- STATUS length
 	);
 	PORT (
-		Status : IN std_logic_vector(1 DOWNTO 0);
+		STATUS : IN std_logic_vector(k - 1 DOWNTO 0);
 		HI, LO : IN std_logic_vector(n - 1 DOWNTO 0)
 	);
 END WriteLogic;
@@ -18,16 +19,20 @@ END WriteLogic;
 ARCHITECTURE arc_WriteLogic OF WriteLogic IS
 	FILE file_RESULTS : text;
 BEGIN
-	writeProc : PROCESS (HI, LO, STATUS)
+	
+	writeProc : PROCESS (clk)
 		VARIABLE v_OLINE : line;
 	BEGIN
-		file_open(file_RESULTS, "outputFile.txt", write_mode);--HI LO status		
-		write(v_OLINE, HI, right, n);
-		write(v_OLINE, LO, right, n);
-		write(v_OLINE, Status, right, n);
-		writeline(file_RESULTS, v_OLINE);
-		file_close(file_RESULTS);
-		--WAIT;
-	END PROCESS writeProc;
+		IF (rising_edge(clk)) THEN
+			file_open(file_RESULTS, "outputFile.txt", write_mode);--HI LO status
+			write(v_OLINE, HI, right, n);
+			write(v_OLINE, LO, right, n);
+			write(v_OLINE, Status, right, n);
+			writeline(file_RESULTS, v_OLINE);
+			file_close(file_RESULTS);
+			--WAIT;
+		END IF;
+
+	END PROCESS readProc;
 
 END arc_WriteLogic;

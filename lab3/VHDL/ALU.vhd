@@ -11,8 +11,8 @@ ENTITY ALU IS
 	);
 	PORT (
 		clk : IN std_logic;
-		A, B : IN std_logic_vector(n - 1 DOWNTO 0);
 		OPC : IN std_logic_vector(m - 1 DOWNTO 0);
+		A, B : IN std_logic_vector(n - 1 DOWNTO 0);
 		cin : IN std_logic;
 		----------------------------------------
 		HI, LO : OUT std_logic_vector(n - 1 DOWNTO 0);

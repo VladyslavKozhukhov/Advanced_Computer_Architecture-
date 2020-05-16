@@ -25,16 +25,17 @@ ARCHITECTURE arc_sys OF top IS
 	SIGNAL A_SIG, B_SIG : std_logic_vector(n - 1 DOWNTO 0);
 	SIGNAL cin_SIG : std_logic;
 
-	SIGNAL HI, LO : std_logic_vector(n - 1 DOWNTO 0); --FOR THE ALU OUTPUT
+	SIGNAL HI, LO, HI_SIG, LO_SIG : std_logic_vector(n - 1 DOWNTO 0); --FOR THE ALU OUTPUT
 	SIGNAL alu_status : std_logic_vector(k - 1 DOWNTO 0);
 
-	SIGNAL HI_SIG, LO_SIG : std_logic_vector(n - 1 DOWNTO 0); --FOR THE FRONT REGISTER
 	SIGNAL cin_total : std_logic;
 
 BEGIN
 
+
+	
 	backREG : BACKregister GENERIC MAP(n, m) PORT MAP(rst, ena, clk, OPC, A, B, cin_total, OPC_SIG, A_SIG, B_SIG, cin_SIG);
-	aluEntity : ALU GENERIC MAP(n, m, k) PORT MAP(clk, A_SIG, B_SIG, OPC_SIG, cin_SIG, HI, LO, alu_status);
+	aluEntity : ALU GENERIC MAP(n, m, k) PORT MAP(clk, OPC_SIG, A_SIG, B_SIG, cin_SIG, HI, LO, alu_status);
 	frontREG : FRONTregister GENERIC MAP(n, k) PORT MAP(rst, ena, clk, HI, LO, alu_status, HI_SIG, LO_SIG, STATUS);
 
 	RES(2 * n - 1 DOWNTO n) <= HI_SIG;

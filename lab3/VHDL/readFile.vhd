@@ -32,8 +32,8 @@ BEGIN
 		VARIABLE v_SPACEThree : CHARACTER;
 	BEGIN
 		IF (rising_edge(clk)) THEN
+			file_open(file_VECTORS, "inputFile.txt", read_mode); -- op A B cin
 			IF NOT endfile(file_VECTORS) THEN
-				file_open(file_VECTORS, "inputFile.txt", read_mode); -- op A B cin
 				readline(file_VECTORS, v_ILINE);
 				read(v_ILINE, v_OPC);
 				read(v_ILINE, v_SPACEOne);

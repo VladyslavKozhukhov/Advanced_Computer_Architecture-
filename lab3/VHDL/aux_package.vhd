@@ -24,6 +24,7 @@ PACKAGE aux_package IS
 			m : POSITIVE := 5 -- OPC length
 		);
 		PORT (
+			clk : IN std_logic;
 			OPC : OUT std_logic_vector(m - 1 DOWNTO 0);
 			A, B : OUT std_logic_vector(n - 1 DOWNTO 0);
 			cin : OUT std_logic
@@ -44,10 +45,11 @@ PACKAGE aux_package IS
 	-----------------------------------------------------------------  
 	COMPONENT WriteLogic IS
 		GENERIC (
-			n : POSITIVE := 8 -- A,B length
+			n : POSITIVE := 8; -- A,B length
+			k : POSITIVE := 2 -- STATUS length
 		);
 		PORT (
-			Status : IN std_logic_vector(1 DOWNTO 0);
+			STATUS : IN std_logic_vector(k - 1 DOWNTO 0);
 			HI, LO : IN std_logic_vector(n - 1 DOWNTO 0)
 		);
 	END COMPONENT;
@@ -91,7 +93,7 @@ PACKAGE aux_package IS
 			cin : IN std_logic;
 			----------------------------------------
 			HI, LO : OUT std_logic_vector(n - 1 DOWNTO 0);
-			Status : OUT std_logic_vector(k - 1 DOWNTO 0)
+			STATUS : OUT std_logic_vector(k - 1 DOWNTO 0)
 		);
 	END COMPONENT;
 	-----------------------------------------------------------------
@@ -142,7 +144,7 @@ PACKAGE aux_package IS
 			x, y : IN STD_LOGIC_VECTOR (n - 1 DOWNTO 0);
 			sel : IN STD_LOGIC_VECTOR (1 DOWNTO 0);
 			--------------------------------------------
-			s : OUT STD_LOGIC_VECTOR(2 * n - 1 DOWNTO 0)
+			s : OUT STD_LOGIC_VECTOR(n DOWNTO 0)
 		);
 	END COMPONENT;
 	-----------------------------------------------------------------
