@@ -5,6 +5,7 @@ USE ieee.std_logic_textio.ALL;
 USE ieee.std_logic_1164.ALL;
 USE ieee.std_logic_unsigned.ALL;
 USE work.aux_package.ALL;
+
 ENTITY ReadLogic IS
 	GENERIC (
 		n : POSITIVE := 8; -- A,B length
@@ -20,22 +21,19 @@ END ReadLogic;
 ------------- ReadLogic Architecture code --------------
 ARCHITECTURE arc_ReadLogic OF ReadLogic IS
 	FILE file_VECTORS : text;
-	constant filename: string := "inputFile.txt";
+	CONSTANT filename : STRING := "inputFile.txt";
 
 BEGIN
 
 	file_open(file_VECTORS, filename, read_mode); -- op A B cin
-	
+
 	readProc : PROCESS (rst, ena, clk)
 		VARIABLE v_ILINE : line;
 		VARIABLE v_A, v_B : std_logic_vector(n - 1 DOWNTO 0);
-		VARIABLE v_Cin : std_logic;
 		VARIABLE v_OPC : std_logic_vector(m - 1 DOWNTO 0);
-		VARIABLE v_SPACEOne : CHARACTER;
-		VARIABLE v_SPACETwo : CHARACTER;
-		VARIABLE v_SPACEThree : CHARACTER;
-		VARIABLE v_endSig : std_logic;
-		VARIABLE filestatus:    file_open_status;
+		VARIABLE v_Cin, v_endSig : std_logic;
+		VARIABLE v_SPACEOne, v_SPACETwo, v_SPACEThree : CHARACTER;
+		VARIABLE filestatus : file_open_status;
 	BEGIN
 		v_endSig := '0';
 		IF (rising_edge(clk)) THEN
@@ -57,12 +55,11 @@ BEGIN
 					ELSE
 						file_close(file_VECTORS);
 						v_endSig := '1';
-						--WAIT;
 					END IF;
 				END IF;
 			END IF;
 		END IF;
 		endSig <= v_endSig;
 	END PROCESS readProc;
-	
+
 END arc_ReadLogic;

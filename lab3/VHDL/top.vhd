@@ -32,8 +32,6 @@ ARCHITECTURE arc_sys OF top IS
 
 BEGIN
 
-
-	
 	backREG : BACKregister GENERIC MAP(n, m) PORT MAP(rst, ena, clk, OPC, A, B, cin_total, OPC_SIG, A_SIG, B_SIG, cin_SIG);
 	aluEntity : ALU GENERIC MAP(n, m, k) PORT MAP(clk, OPC_SIG, A_SIG, B_SIG, cin_SIG, HI, LO, alu_status);
 	frontREG : FRONTregister GENERIC MAP(n, k) PORT MAP(rst, ena, clk, HI, LO, alu_status, HI_SIG, LO_SIG, STATUS);
@@ -49,4 +47,5 @@ BEGIN
 	BEGIN
 		cin_total <= cin_SIG;
 	END PROCESS;
+	
 END arc_sys;
