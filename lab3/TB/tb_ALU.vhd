@@ -88,7 +88,7 @@ tb_x : PROCESS
 
 		
 		A<="10000000";
-		B<="00000001";
+		B<="00000010";
 		cin <= '0' ;
 		OPC <= "01100";--cin status 
 		wait for 10 us;
