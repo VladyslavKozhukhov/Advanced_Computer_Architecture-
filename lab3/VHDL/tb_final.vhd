@@ -11,16 +11,16 @@ ENTITY tb_final IS
 END tb_final;
 
 ARCHITECTURE Arc_tb_final OF tb_final IS
-	SIGNAL rst, ena, clk, cin : STD_LOGIC;
-	SIGNAL A, B, HI, LO : STD_LOGIC_VECTOR(n-1 DOWNTO 0);
+	SIGNAL rst, ena, clk, cin, endSig : STD_LOGIC;
+	SIGNAL A, B : STD_LOGIC_VECTOR(n-1 DOWNTO 0);
 	SIGNAL RES : STD_LOGIC_VECTOR(2*n-1 DOWNTO 0);
 	SIGNAL OPC : STD_LOGIC_VECTOR(m-1 DOWNTO 0);
 	SIGNAL STATUS : STD_LOGIC_VECTOR(k-1 DOWNTO 0);
 BEGIN
 
-	readEntity : ReadLogic GENERIC MAP(n, m) PORT MAP(clk, OPC, A, B, cin);
+	readEntity : ReadLogic GENERIC MAP(n, m) PORT MAP(rst, ena, clk, OPC, A, B, cin, endSig);
 	topEntity : top GENERIC MAP(n, m, k) PORT MAP(rst, ena, clk, cin, A, B, OPC, RES, STATUS);
-	writeEntity : WriteLogic GENERIC MAP(n, k) PORT MAP(STATUS, RES(2*n-1 DOWNTO n), RES(n-1 DOWNTO 0));
+	writeEntity : WriteLogic GENERIC MAP(n, k) PORT MAP(rst, ena, clk, STATUS, RES(2*n-1 DOWNTO n), RES(n-1 DOWNTO 0), endSig);
 
 	tb_ena : PROCESS
 	BEGIN

@@ -11,18 +11,22 @@ ENTITY ReadLogic IS
 		m : POSITIVE := 5 -- OPC length
 	);
 	PORT (
-		clk : IN std_logic;
+		rst, ena, clk : STD_LOGIC;
 		OPC : OUT std_logic_vector(m - 1 DOWNTO 0);
 		A, B : OUT std_logic_vector(n - 1 DOWNTO 0);
-		cin : OUT std_logic
+		cin, endSig : OUT std_logic
 	);
 END ReadLogic;
 ------------- ReadLogic Architecture code --------------
 ARCHITECTURE arc_ReadLogic OF ReadLogic IS
 	FILE file_VECTORS : text;
+	constant filename: string := "inputFile.txt";
 
 BEGIN
-	readProc : PROCESS (clk)
+
+	file_open(file_VECTORS, filename, read_mode); -- op A B cin
+	
+	readProc : PROCESS (rst, ena, clk)
 		VARIABLE v_ILINE : line;
 		VARIABLE v_A, v_B : std_logic_vector(n - 1 DOWNTO 0);
 		VARIABLE v_Cin : std_logic;
@@ -30,26 +34,35 @@ BEGIN
 		VARIABLE v_SPACEOne : CHARACTER;
 		VARIABLE v_SPACETwo : CHARACTER;
 		VARIABLE v_SPACEThree : CHARACTER;
+		VARIABLE v_endSig : std_logic;
+		VARIABLE filestatus:    file_open_status;
 	BEGIN
+		v_endSig := '0';
 		IF (rising_edge(clk)) THEN
-			file_open(file_VECTORS, "inputFile.txt", read_mode); -- op A B cin
-			IF NOT endfile(file_VECTORS) THEN
-				readline(file_VECTORS, v_ILINE);
-				read(v_ILINE, v_OPC);
-				read(v_ILINE, v_SPACEOne);
-				read(v_ILINE, v_A);
-				read(v_ILINE, v_SPACETwo);
-				read(v_ILINE, v_B);
-				read(v_ILINE, v_SPACEThree);
-				read(v_ILINE, v_Cin);
+			IF (rst = '0') THEN
+				IF (ena = '1') THEN
+					IF NOT endfile(file_VECTORS) THEN
+						readline(file_VECTORS, v_ILINE);
+						read(v_ILINE, v_OPC);
+						read(v_ILINE, v_SPACEOne);
+						read(v_ILINE, v_A);
+						read(v_ILINE, v_SPACETwo);
+						read(v_ILINE, v_B);
+						read(v_ILINE, v_SPACEThree);
+						read(v_ILINE, v_Cin);
+						OPC <= v_OPC;
+						A <= v_A;
+						B <= v_B;
+						cin <= v_Cin;
+					ELSE
+						file_close(file_VECTORS);
+						v_endSig := '1';
+						--WAIT;
+					END IF;
+				END IF;
 			END IF;
-			file_close(file_VECTORS);
-			--WAIT;
 		END IF;
-		OPC <= v_OPC;
-		A <= v_A;
-		B <= v_B;
-		cin <= v_Cin;
+		endSig <= v_endSig;
 	END PROCESS readProc;
-
+	
 END arc_ReadLogic;

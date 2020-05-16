@@ -24,10 +24,10 @@ PACKAGE aux_package IS
 			m : POSITIVE := 5 -- OPC length
 		);
 		PORT (
-			clk : IN std_logic;
+			rst, ena, clk : IN std_logic;
 			OPC : OUT std_logic_vector(m - 1 DOWNTO 0);
 			A, B : OUT std_logic_vector(n - 1 DOWNTO 0);
-			cin : OUT std_logic
+			cin,endSig : OUT std_logic
 		);
 	END COMPONENT;
 	-----------------------------------------------------------------  
@@ -49,8 +49,10 @@ PACKAGE aux_package IS
 			k : POSITIVE := 2 -- STATUS length
 		);
 		PORT (
+			rst, ena, clk : IN std_logic;
 			STATUS : IN std_logic_vector(k - 1 DOWNTO 0);
-			HI, LO : IN std_logic_vector(n - 1 DOWNTO 0)
+			HI, LO : IN std_logic_vector(n - 1 DOWNTO 0);
+			endSig : IN std_logic
 		);
 	END COMPONENT;
 	-----------------------------------------------------------------
