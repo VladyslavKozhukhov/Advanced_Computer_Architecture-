@@ -1,7 +1,25 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 PACKAGE aux_package IS
-	-----------------------------------------------------------------
+
+	---OPCODES--------------------------------------------------------
+	CONSTANT OPC_ADD : INTEGER := 1;
+	CONSTANT OPC_SUB : INTEGER := 2;
+	CONSTANT OPC_ADDC : INTEGER := 3;
+	CONSTANT OPC_MULT : INTEGER := 4;
+	CONSTANT OPC_MAC : INTEGER := 5;
+	CONSTANT OPC_MAC_RST : INTEGER := 6;
+	CONSTANT OPC_MAX : INTEGER := 7;
+	CONSTANT OPC_MIN : INTEGER := 8;
+	CONSTANT OPC_AND : INTEGER := 9;
+	CONSTANT OPC_OR : INTEGER := 10;
+	CONSTANT OPC_XOR : INTEGER := 11;
+	CONSTANT OPC_RLA : INTEGER := 12;
+	CONSTANT OPC_RLC : INTEGER := 13;
+	CONSTANT OPC_RRA : INTEGER := 14;
+	CONSTANT OPC_RRC : INTEGER := 15;
+
+	---COMPONENTS-----------------------------------------------------
 	COMPONENT top IS
 		GENERIC (
 			n : POSITIVE := 8; -- A,B length
@@ -31,7 +49,7 @@ PACKAGE aux_package IS
 			rst, ena, clk : IN std_logic;
 			OPC : OUT std_logic_vector(m - 1 DOWNTO 0);
 			A, B : OUT std_logic_vector(n - 1 DOWNTO 0);
-			cin,endSig : OUT std_logic
+			cin, endSig : OUT std_logic
 		);
 	END COMPONENT;
 	-----------------------------------------------------------------  

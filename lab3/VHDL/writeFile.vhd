@@ -38,7 +38,6 @@ BEGIN
 						writeline(file_RESULTS, v_OLINE);
 					ELSE
 						file_close(file_RESULTS);
-						--WAIT;
 					END IF;
 				END IF;
 			END IF;
