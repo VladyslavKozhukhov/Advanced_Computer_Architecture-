@@ -49,11 +49,8 @@ PACKAGE aux_package IS
 			k : POSITIVE := 2 -- STATUS length
 		);
 		PORT (
-<<<<<<< HEAD
-			clk : IN std_logic;
-=======
+
 			rst, ena, clk : IN std_logic;
->>>>>>> d7b0494033056e3860d74083699bbb538f3f527b
 			STATUS : IN std_logic_vector(k - 1 DOWNTO 0);
 			HI, LO : IN std_logic_vector(n - 1 DOWNTO 0);
 			endSig : IN std_logic

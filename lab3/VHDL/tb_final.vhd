@@ -18,91 +18,10 @@ ARCHITECTURE Arc_tb_final OF tb_final IS
 	SIGNAL STATUS : STD_LOGIC_VECTOR(k-1 DOWNTO 0);
 BEGIN
 
-<<<<<<< HEAD
-	--readEntity : ReadLogic GENERIC MAP(n, m) PORT MAP(clk, OPC, A, B, cin);
-	topEntity : top GENERIC MAP(n, m, k) PORT MAP(rst, ena, clk, cin, A, B, OPC, RES, STATUS);
---	writeEntity : WriteLogic GENERIC MAP(n, k) PORT MAP(STATUS, RES(2*n-1 DOWNTO n), RES(n-1 DOWNTO 0));
 
-tb_x : PROCESS
-	BEGIN
-		A<="00001000";
-		B<="00000100";
-		cin <= '0' ;
-		OPC <= (others=>'0');
-		wait for 10 us;		
-		OPC<="00001";   --sum
-		wait for 10 us;
-		OPC<="00010";   --minus
-		wait for 10 us;	
-			cin<='1';
-		OPC<="00011";   --addc
-		wait for 10 us;
-		OPC<="00100";   --mult
-		--wait for 10 us;
-		--OPC<="00101";
-		--wait for 10 us;		
-		--OPC<="00100";
-		--wait for 10 us;
-		--OPC<="00101";
-		--wait for 10 us;
-		--OPC<="00100";
-		--wait for 10 us;
-		--OPC<="00101";
-		--wait for 10 us;
-		--OPC<="00100";
-	--	wait for 10 us;		
-	--	OPC<="00101";
-	--	wait for 10 us;
-		--wait for 10 us;
-	--	OPC<="00100";
---		wait for 10 us;		
---		OPC<="00101";
---		wait for 10 us;
---		wait for 10 us;
---		OPC<="00100";
---		wait for 10 us;		
---		OPC<="00101";
---		wait for 10 us;
-		
-		-- cin <= '1' ;
-		-- OPC <= (others=>'0');
-		-- wait for 100 ns;
-		-- OPC<="00101";
-		-- wait for 100 ns;
-		-- OPC<="00101";
-		-- wait for 100 ns;
-		-- OPC<="00101";
-		-- wait for 100 ns;
-		-- OPC<="00101";
-		-- wait for 100 ns;
-		-- OPC<="00101";
-		-- wait for 100 ns;
-		-- OPC<="00101";
-		-- wait for 100 ns;
-		-- OPC<="00101";
-		-- wait for 100 ns;		
-		-- OPC<="00101";
-		-- wait for 100 ns;
-		
-		-- FOR i IN 0 TO 10 LOOP
-			-- OPC <= OPC +'1';
-			-- wait for 100 ns;
-		-- END LOOP;
-		
-		-- cin <= '1';
-		
-		-- OPC <= (others=>'0');
-		-- FOR i IN 0 TO 10 LOOP
-			-- OPC <= OPC +'1';
-			-- wait for 100 ns;
-		-- END LOOP;
-		WAIT;
-	END PROCESS tb_x;
-=======
 	readEntity : ReadLogic GENERIC MAP(n, m) PORT MAP(rst, ena, clk, OPC, A, B, cin, endSig);
 	topEntity : top GENERIC MAP(n, m, k) PORT MAP(rst, ena, clk, cin, A, B, OPC, RES, STATUS);
 	writeEntity : WriteLogic GENERIC MAP(n, k) PORT MAP(rst, ena, clk, STATUS, RES(2*n-1 DOWNTO n), RES(n-1 DOWNTO 0), endSig);
->>>>>>> d7b0494033056e3860d74083699bbb538f3f527b
 
 	tb_ena : PROCESS
 	BEGIN
