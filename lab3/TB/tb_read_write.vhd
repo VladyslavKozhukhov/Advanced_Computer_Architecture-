@@ -69,7 +69,7 @@ begin
 		next when not good;
 
 
-		wait until (gen'event and gen=true);
+		wait until (gen'event and gen=false);
 		clk<='1';
 		--if(rst_off='1') then
 	--		rst_off<= '0';
@@ -82,7 +82,7 @@ begin
 		cin<=to_stdulogic(in_cin);
 
 		--------------------------------
-		wait until (gen'event and gen=false);
+		wait until (gen'event and gen=true);
 		clk<='0';
 		
 		if(write_first='1') then
