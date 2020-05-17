@@ -24,7 +24,7 @@ ARCHITECTURE arc_backRegister OF backRegister IS
 
 BEGIN
 
-	syncProcessBACK : PROCESS (rst, clk)
+	syncProcessBACK : PROCESS (rst, ena, clk)
 	BEGIN
 		IF (rst = '1') THEN
 			OPC_out <= (OTHERS => '0');

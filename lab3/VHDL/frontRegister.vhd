@@ -22,7 +22,7 @@ ARCHITECTURE arc_frontRegister OF frontRegister IS
 
 BEGIN
 
-	syncProcessFRONT : PROCESS (rst,clk)
+	syncProcessFRONT : PROCESS (rst, ena, clk)
 	BEGIN
 		IF (rst = '1') THEN
 			HI_out <= (OTHERS => '0');
