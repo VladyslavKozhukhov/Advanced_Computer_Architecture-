@@ -40,8 +40,8 @@ BEGIN
 	backREG : BACKregister GENERIC MAP(n, m) PORT MAP(rst, ena, clk, OPC, A, B, cin, OPC_SIG, A_SIG, B_SIG, cin_SIG);
 	aluEntity : ALU GENERIC MAP(n, m, k) PORT MAP(clk, OPC_SIG, A_SIG, B_SIG, cin_SIG, HI, LO, alu_status);
 	frontREG : FRONTregister GENERIC MAP(n, k) PORT MAP(rst, ena, clk, HI, LO, alu_status, HI_SIG, LO_SIG, STATUS);	
-	HIO<=A_SIG;
-	LOI<=B_SIG;
+	HIO<=HI;
+	LOI<=LO;
 	OPCOUT<=OPC;
 	cin_SIGG<=cin_SIG;
 	RES(2 * n - 1 DOWNTO n) <= HI_SIG;

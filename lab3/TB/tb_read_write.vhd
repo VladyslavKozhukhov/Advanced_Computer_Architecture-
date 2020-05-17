@@ -48,6 +48,8 @@ begin
 	file infile : text open read_mode is file_read_loc;
 	file outfile : text open write_mode is file_write_loc;
 	variable L:Line;
+		variable L1:Line;
+
 	variable in_OPC:bit_vector(m-1 downto 0);
 	variable in_A:bit_vector(n-1 downto 0);
 	variable in_B:bit_vector(n-1 downto 0);
@@ -72,11 +74,6 @@ begin
 
 		wait until (gen'event and gen=false);
 		clk<='1';
-		--if(rst_off='1') then
-	--		rst_off<= '0';
-	--		rst<='0';
-	--		ena<='1';
-		--end if;
 		OPC<=to_stdlogicvector(in_OPC);
 		A<=to_stdlogicvector(in_A);
 		B<=to_stdlogicvector(in_B);
@@ -89,13 +86,21 @@ begin
 		if(write_first='1') then
 			write_first<= '0';
 		else
-			write(L,to_bitvector(RES(2*n-1 downto n)),left,10);
-			write(L,to_bitvector(RES(n-1 downto 0)),left,10);
-			write(L,to_bitvector(STATUS));
-			writeline(outfile,L);
+			write(L1,to_bitvector(RES(2*n-1 downto n)),left,10);
+			write(L1,to_bitvector(RES(n-1 downto 0)),left,10);
+			write(L1,to_bitvector(STATUS));
+			writeline(outfile,L1);
 		end if;
 	end loop;
-	
+			wait until (gen'event and gen=false);
+			clk<='1';
+		wait until (gen'event and gen=true);
+			clk<='0';
+			write(L1,to_bitvector(RES(2*n-1 downto n)),left,10);
+			write(L1,to_bitvector(RES(n-1 downto 0)),left,10);
+			write(L1,to_bitvector(STATUS));
+			writeline(outfile,L1);
+
 	done<= true;
 	file_close(infile);
 	file_close(outfile);
