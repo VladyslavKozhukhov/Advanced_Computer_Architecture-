@@ -28,6 +28,22 @@ ARCHITECTURE arc_outputSelector OF outputSelector IS
 	SIGNAL HI_SIG, LO_SIG : std_logic_vector(n - 1 DOWNTO 0);
 	SIGNAL zeroSig : std_logic_vector(n - 1 DOWNTO 0);
 	SIGNAL OPC_INTEGER : INTEGER;
+	---OPCODES--------
+	SIGNAL OPC_ADD : INTEGER := 1;
+	SIGNAL OPC_SUB : INTEGER := 2;
+	SIGNAL OPC_ADDC : INTEGER := 3;
+	SIGNAL OPC_MULT : INTEGER := 4;
+	SIGNAL OPC_MAC : INTEGER := 5;
+	SIGNAL OPC_MAC_RST : INTEGER := 6;
+	SIGNAL OPC_MAX : INTEGER := 7;
+	SIGNAL OPC_MIN : INTEGER := 8;
+	SIGNAL OPC_AND : INTEGER := 9;
+	SIGNAL OPC_OR : INTEGER := 10;
+	SIGNAL OPC_XOR : INTEGER := 11;
+	SIGNAL OPC_RLA : INTEGER := 12;
+	SIGNAL OPC_RLC : INTEGER := 13;
+	SIGNAL OPC_RRA : INTEGER := 14;
+	SIGNAL OPC_RRC : INTEGER := 15;
 	-----------------------------------
 BEGIN
 
@@ -90,9 +106,9 @@ BEGIN
 	LO <= LO_SIG;
 
 	STATUS <= "11" WHEN carry = '1' AND ((HI_SIG = zeroSig) AND (LO_SIG = zeroSig))ELSE
-		"10" WHEN ((HI_SIG = zeroSig) AND (LO_SIG = zeroSig)) ELSE --RES(HI,LO) = 0...0
-
-		"01" WHEN (carry = '1') ELSE
+			"10" WHEN ((HI_SIG = zeroSig) AND (LO_SIG = zeroSig)) ELSE --RES(HI,LO) = 0...0
+			
+			"01" WHEN (carry = '1') ELSE
 		"00";
 
 END arc_outputSelector;

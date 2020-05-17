@@ -22,7 +22,7 @@ ARCHITECTURE Arc_tb_tb_final_noIO OF tb_final_noIO IS
 BEGIN
 
 	--readEntity : ReadLogic GENERIC MAP(n, m) PORT MAP(clk, OPC, A, B, cin);
-	topEntity : top GENERIC MAP(n, m, k) PORT MAP(rst, ena, clk, cin, A, B, OPC, RES, STATUS,HI,LO,cin_SIGG);
+	topEntity : top GENERIC MAP(n, m, k) PORT MAP(rst, ena, clk, cin, A, B, OPC, RES, STATUS);
 --	writeEntity : WriteLogic GENERIC MAP(n, k) PORT MAP(STATUS, RES(2*n-1 DOWNTO n), RES(n-1 DOWNTO 0));
 tb_ena : PROCESS
 	BEGIN
@@ -53,8 +53,8 @@ tb_ena : PROCESS
 	
 tb_x : PROCESS
 	BEGIN
-		A<="00001000";
-		B<="00000100";
+		A<="00000000";
+		B<="10000000";
 		cin <= '0' ;
 		OPC <= (others=>'0');
 		wait for 20 us;		
