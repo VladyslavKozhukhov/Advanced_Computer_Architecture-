@@ -39,6 +39,19 @@ PACKAGE aux_package IS
 
 		);
 	END COMPONENT;
+	
+	-----------------------------------------------------------------
+
+	COMPONENT MuxInput IS
+
+
+	PORT (
+		 cin_user: in STD_LOGIC;
+		 cin_system: std_logic_vector(1 DOWNTO 0);
+
+		cin_out : OUT std_logic
+	);
+END COMPONENT;
 	-----------------------------------------------------------------
 	COMPONENT ReadLogic IS
 		GENERIC (

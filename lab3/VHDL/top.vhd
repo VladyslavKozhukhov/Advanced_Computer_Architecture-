@@ -27,16 +27,17 @@ ARCHITECTURE arc_sys OF top IS
 
 	SIGNAL OPC_SIG : std_logic_vector(m - 1 DOWNTO 0); --FOR THE BACK REGISTER
 	SIGNAL A_SIG, B_SIG : std_logic_vector(n - 1 DOWNTO 0);
-	SIGNAL cin_SIG : std_logic;
+	SIGNAL cin_SIG,cin_SIGGG : std_logic;
 
 	SIGNAL HI, LO, HI_SIG, LO_SIG : std_logic_vector(n - 1 DOWNTO 0); --FOR THE ALU OUTPUT
 	SIGNAL alu_status : std_logic_vector(k - 1 DOWNTO 0):= (OTHERS => '0');
 	SIGNAL sel : std_logic;
 	SIGNAL cin_total : std_logic;
+	SIGNAL selector : std_logic_vector(1 DOWNTO 0):= (OTHERS => '0');
 
 BEGIN
-
-	backREG : BACKregister GENERIC MAP(n, m) PORT MAP(rst, ena, clk, OPC, A, B, cin_total, OPC_SIG, A_SIG, B_SIG, cin_SIG);
+	--mx:	MuxInput PORT MAP(cin,alu_status(1 downto 0),cin_total);
+	backREG : BACKregister GENERIC MAP(n, m) PORT MAP(rst, ena, clk, OPC, A, B, cin, OPC_SIG, A_SIG, B_SIG, cin_SIG);
 	aluEntity : ALU GENERIC MAP(n, m, k) PORT MAP(clk, OPC_SIG, A_SIG, B_SIG, cin_SIG, HI, LO, alu_status);
 	frontREG : FRONTregister GENERIC MAP(n, k) PORT MAP(rst, ena, clk, HI, LO, alu_status, HI_SIG, LO_SIG, STATUS);	
 	HIO<=A_SIG;
@@ -45,21 +46,8 @@ BEGIN
 	RES(n - 1 DOWNTO 0) <= LO_SIG;
 
 
-cin_SIGG<=cin_total;
 
 
-process(cin,alu_status)
-begin
-    if (cin'event) then
-            cin_total <= cin;
-    elsif (alu_status'event) then
-		if(alu_status = "01" or alu_status="11" )then
-           cin_total<='1';
-		   else
-		   cin_total<='0';
-		 end if;
-	end if;
-end process;
 
 
 END arc_sys;

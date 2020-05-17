@@ -60,11 +60,10 @@ tb_x : PROCESS
 		wait for 20 us;		
 		OPC<="00001";   --sum
 		wait for 15 us;
-				cin<='0';
-
 		OPC<="00011";   --addc
-
 		wait for 10 us;	
+				cin <= '0' ;
+
 		A<="00001000";
 		B<="00000100";
 
