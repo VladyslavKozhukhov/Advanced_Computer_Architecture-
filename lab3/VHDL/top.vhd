@@ -17,7 +17,8 @@ ENTITY top IS
 		RES : OUT std_logic_vector(2 * n - 1 DOWNTO 0); -- RES(HI,LO)
 		STATUS : OUT std_logic_vector(k - 1 DOWNTO 0);
 				HIO,LOI : OUT std_logic_vector(n - 1 DOWNTO 0);
-					 cin_SIGG : out std_logic
+					 cin_SIGG : out std_logic;
+		OPCOUT : out std_logic_vector(m - 1 DOWNTO 0)
 
 
 	);
@@ -41,6 +42,8 @@ BEGIN
 	frontREG : FRONTregister GENERIC MAP(n, k) PORT MAP(rst, ena, clk, HI, LO, alu_status, HI_SIG, LO_SIG, STATUS);	
 	HIO<=A_SIG;
 	LOI<=B_SIG;
+	OPCOUT<=OPC;
+	cin_SIGG<=cin_SIG;
 	RES(2 * n - 1 DOWNTO n) <= HI_SIG;
 	RES(n - 1 DOWNTO 0) <= LO_SIG;
 	

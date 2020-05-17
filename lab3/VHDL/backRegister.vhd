@@ -31,7 +31,7 @@ BEGIN
 			A_out <= (OTHERS => '0');
 			B_out <= (OTHERS => '0');
 			cin_out <= '0';
-		ELSIF (rising_edge(clk)) THEN
+		ELSIF (clk'event and clk ='1') THEN
 			IF (ena = '1') THEN
 				OPC_out <= OPC_in;
 				A_out <= A_in;
