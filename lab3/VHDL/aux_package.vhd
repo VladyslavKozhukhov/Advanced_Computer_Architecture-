@@ -14,12 +14,7 @@ PACKAGE aux_package IS
 			OPC : IN std_logic_vector(m - 1 DOWNTO 0);
 			----------------------------------------
 			RES : OUT std_logic_vector(2 * n - 1 DOWNTO 0); -- RES(HI,LO)
-			STATUS : OUT std_logic_vector(k - 1 DOWNTO 0);
-							HIO,LOI : OUT std_logic_vector(n-1 DOWNTO 0);
-												 cin_SIGG : out std_logic;
-		OPCOUT : out std_logic_vector(m - 1 DOWNTO 0)
-
-
+			STATUS : OUT std_logic_vector(k - 1 DOWNTO 0)
 		);
 	END COMPONENT;
 	-----------------------------------------------------------------
