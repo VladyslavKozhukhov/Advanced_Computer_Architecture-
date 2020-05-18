@@ -35,7 +35,7 @@ SIGNAL HIO,LOI :  std_logic_vector(n - 1 DOWNTO 0);
 begin
 
 
-	tb_top : top generic map(n, m, k) port map(rst,ena,clk,cin,A,B,OPC,RES,STATUS,HIO,LOI,cin_SIGG,OPCOUT);
+	tb_top : top generic map(n, m, k) port map(rst,ena,clk,cin,A,B,OPC,RES,STATUS);--,HIO,LOI,cin_SIGG,OPCOUT);
 
 	gen <= not gen after 10 us;
 
