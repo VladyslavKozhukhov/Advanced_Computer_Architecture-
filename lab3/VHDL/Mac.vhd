@@ -20,15 +20,16 @@ ARCHITECTURE arc_MACModule OF MACModule IS
 	SIGNAL mult_tmp : std_logic_vector (2 * n - 1 DOWNTO 0);
 	SIGNAL AdderSubResult : std_logic_vector (2 * n DOWNTO 0);
 BEGIN
+
 	multEntity : MultSub GENERIC MAP(n) PORT MAP(A, B, mult_tmp);
-	adderSubEntity : AdderSub GENERIC MAP(2 * n) PORT MAP('0', mult_tmp, ACC_tmp, "00", AdderSubResult);
-	--	adderSubEntity : AdderSub generic map(n) port map('0',A,AdderSubResultZERO,"00",AdderSubResult);--check
+	adderSubEntity : AdderSub GENERIC MAP(2 * n) PORT MAP('0', mult_tmp, ACC_tmp, "00", AdderSubResult);	
+
 
 	PROCESS (clk, rst)
 	BEGIN
 		IF (rst = '1') THEN
 			ACC_tmp <= (OTHERS => '0');
-		ELSIF (rising_edge(clk)) THEN
+		IF (rising_edge(clk)) THEN
 			ACC_tmp <= AdderSubResult(2 * n - 1 DOWNTO 0); -- adder
 		END IF;
 	END PROCESS;
