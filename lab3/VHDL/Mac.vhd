@@ -28,8 +28,7 @@ BEGIN
 	BEGIN
 		IF (rst = '1') THEN
 			ACC_tmp <= (OTHERS => '0');
-		END IF;
-		IF (rising_edge(clk)) THEN
+		ELSIF (rising_edge(clk)) THEN
 			ACC_tmp <= AdderSubResult(2 * n - 1 DOWNTO 0); -- adder
 		END IF;
 	END PROCESS;
