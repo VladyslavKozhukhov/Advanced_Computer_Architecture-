@@ -21,25 +21,28 @@ ARCHITECTURE arc_MaxMin OF MaxMin IS
 	SIGNAL found : STD_LOGIC;
 BEGIN
 	PROCESS (A, B, maxFlag)
+		VARIABLE resultVar : std_logic_vector(n - 1 DOWNTO 0);
 	BEGIN
+		resultVar := (OTHERS => '0');
 		FOR ii IN n - 1 DOWNTO 0 LOOP
 			IF (A(ii) = '1' AND B(ii) = '0') THEN
 				IF (maxFlag = '1') THEN
-					result <= A;
+					resultVar := A;
 				ELSE
-					result <= B;
+					resultVar := B;
 				END IF;
 				EXIT;
 			ELSIF (A(ii) = '0' AND B(ii) = '1') THEN
 				IF (maxFlag = '1') THEN
-					result <= B;
+					resultVar := B;
 				ELSE
-					result <= A;
+					resultVar := A;
 				END IF;
 				EXIT;
 			ELSIF (((A(ii) = '0' AND B(ii) = '0') OR (A(ii) = '1' AND B(ii) = '1')) AND ii = 0) THEN
-				result <= B;
+				resultVar := B;
 			END IF;
 		END LOOP;
+		RESULT <= resultVar;
 	END PROCESS;
 END arc_MaxMin;

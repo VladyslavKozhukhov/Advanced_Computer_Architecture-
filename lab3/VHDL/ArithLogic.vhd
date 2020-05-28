@@ -22,7 +22,7 @@ END ArithLogic;
 ------------- ArithLogic Architecture code --------------
 ARCHITECTURE arc_ArithLogic OF ArithLogic IS
 	SIGNAL MaxMinAB : std_logic_vector(n - 1 DOWNTO 0);
-	SIGNAL hiART : std_logic_vector(n - 1 DOWNTO 0) := (OTHERS => '0');
+	CONSTANT hiART : std_logic_vector(n - 1 DOWNTO 0) := (OTHERS => '0');
 	SIGNAL specART : std_logic_vector(n - 1 DOWNTO 0); -- last bit 1;
 	SIGNAL maxMinFlag, coutSig, resetMAC : std_logic;
 	SIGNAL AdderSubSEL : std_logic_vector(1 DOWNTO 0);
@@ -31,21 +31,21 @@ ARCHITECTURE arc_ArithLogic OF ArithLogic IS
 	SIGNAL multResult : std_logic_vector(2 * n - 1 DOWNTO 0);
 	SIGNAL OPC_INTEGER : INTEGER;
 	---OPCODES--------
-	SIGNAL OPC_ADD : INTEGER := 1;
-	SIGNAL OPC_SUB : INTEGER := 2;
-	SIGNAL OPC_ADDC : INTEGER := 3;
-	SIGNAL OPC_MULT : INTEGER := 4;
-	SIGNAL OPC_MAC : INTEGER := 5;
-	SIGNAL OPC_MAC_RST : INTEGER := 6;
-	SIGNAL OPC_MAX : INTEGER := 7;
-	SIGNAL OPC_MIN : INTEGER := 8;
-	SIGNAL OPC_AND : INTEGER := 9;
-	SIGNAL OPC_OR : INTEGER := 10;
-	SIGNAL OPC_XOR : INTEGER := 11;
-	--	SIGNAL OPC_RLA : INTEGER := 12;
-	--	SIGNAL OPC_RLC : INTEGER := 13;
-	--	SIGNAL OPC_RRA : INTEGER := 14;
-	--	SIGNAL OPC_RRC : INTEGER := 15;
+	CONSTANT OPC_ADD : INTEGER := 1;
+	CONSTANT OPC_SUB : INTEGER := 2;
+	CONSTANT OPC_ADDC : INTEGER := 3;
+	CONSTANT OPC_MULT : INTEGER := 4;
+	CONSTANT OPC_MAC : INTEGER := 5;
+	CONSTANT OPC_MAC_RST : INTEGER := 6;
+	CONSTANT OPC_MAX : INTEGER := 7;
+	CONSTANT OPC_MIN : INTEGER := 8;
+	CONSTANT OPC_AND : INTEGER := 9;
+	CONSTANT OPC_OR : INTEGER := 10;
+	CONSTANT OPC_XOR : INTEGER := 11;
+	--	CONSTANT OPC_RLA : INTEGER := 12;
+	--	CONSTANT OPC_RLC : INTEGER := 13;
+	--	CONSTANT OPC_RRA : INTEGER := 14;
+	--	CONSTANT OPC_RRC : INTEGER := 15;
 	-----------------------------------
 BEGIN
 
