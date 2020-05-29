@@ -1,0 +1,702 @@
+Analysis & Synthesis report for Test
+Fri May 29 20:10:37 2020
+Quartus II 64-Bit Version 12.1 Build 177 11/07/2012 SJ Web Edition
+
+
+---------------------
+; Table of Contents ;
+---------------------
+  1. Legal Notice
+  2. Analysis & Synthesis Summary
+  3. Analysis & Synthesis Settings
+  4. Parallel Compilation
+  5. Analysis & Synthesis Source Files Read
+  6. Analysis & Synthesis Resource Usage Summary
+  7. Analysis & Synthesis Resource Utilization by Entity
+  8. Analysis & Synthesis DSP Block Usage Summary
+  9. Logic Cells Representing Combinational Loops
+ 10. General Register Statistics
+ 11. Multiplexer Restructuring Statistics (Restructuring Performed)
+ 12. Parameter Settings for User Entity Instance: Top-level Entity: |top
+ 13. Parameter Settings for User Entity Instance: A_Register:AREG
+ 14. Parameter Settings for User Entity Instance: B_Register:BREG
+ 15. Parameter Settings for User Entity Instance: OP_Register:OPREG
+ 16. Parameter Settings for User Entity Instance: ALU:aluEntity
+ 17. Parameter Settings for User Entity Instance: ALU:aluEntity|ArithLogic:arithAndLogicEntity
+ 18. Parameter Settings for User Entity Instance: ALU:aluEntity|ArithLogic:arithAndLogicEntity|MaxMin:maxMinEntity
+ 19. Parameter Settings for User Entity Instance: ALU:aluEntity|ArithLogic:arithAndLogicEntity|MACModule:macEntity
+ 20. Parameter Settings for User Entity Instance: ALU:aluEntity|ArithLogic:arithAndLogicEntity|MACModule:macEntity|MultSub:multEntity
+ 21. Parameter Settings for User Entity Instance: ALU:aluEntity|ArithLogic:arithAndLogicEntity|MACModule:macEntity|AdderSub:adderSubEntity
+ 22. Parameter Settings for User Entity Instance: ALU:aluEntity|ArithLogic:arithAndLogicEntity|AdderSub:adderSubEntity
+ 23. Parameter Settings for User Entity Instance: ALU:aluEntity|ArithLogic:arithAndLogicEntity|MultSub:multEntity
+ 24. Parameter Settings for User Entity Instance: ALU:aluEntity|shifter:shiftEntity
+ 25. Parameter Settings for User Entity Instance: ALU:aluEntity|outputSelector:selectorEntity
+ 26. Parameter Settings for Inferred Entity Instance: ALU:aluEntity|ArithLogic:arithAndLogicEntity|MultSub:multEntity|lpm_mult:Mult0
+ 27. lpm_mult Parameter Settings by Entity Instance
+ 28. Port Connectivity Checks: "ALU:aluEntity|ArithLogic:arithAndLogicEntity|AdderSub:adderSubEntity|FA:last"
+ 29. Port Connectivity Checks: "ALU:aluEntity|ArithLogic:arithAndLogicEntity|MACModule:macEntity|AdderSub:adderSubEntity|FA:last"
+ 30. Port Connectivity Checks: "ALU:aluEntity|ArithLogic:arithAndLogicEntity|MACModule:macEntity|AdderSub:adderSubEntity"
+ 31. Elapsed Time Per Partition
+ 32. Analysis & Synthesis Messages
+
+
+
+----------------
+; Legal Notice ;
+----------------
+Copyright (C) 1991-2012 Altera Corporation
+Your use of Altera Corporation's design tools, logic functions 
+and other software and tools, and its AMPP partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Altera Program License 
+Subscription Agreement, Altera MegaCore Function License 
+Agreement, or other applicable license agreement, including, 
+without limitation, that your use is for the sole purpose of 
+programming logic devices manufactured by Altera and sold by 
+Altera or its authorized distributors.  Please refer to the 
+applicable agreement for further details.
+
+
+
++-------------------------------------------------------------------------------+
+; Analysis & Synthesis Summary                                                  ;
++------------------------------------+------------------------------------------+
+; Analysis & Synthesis Status        ; Successful - Fri May 29 20:10:36 2020    ;
+; Quartus II 64-Bit Version          ; 12.1 Build 177 11/07/2012 SJ Web Edition ;
+; Revision Name                      ; Test                                     ;
+; Top-level Entity Name              ; top                                      ;
+; Family                             ; Cyclone II                               ;
+; Total logic elements               ; 267                                      ;
+;     Total combinational functions  ; 246                                      ;
+;     Dedicated logic registers      ; 37                                       ;
+; Total registers                    ; 37                                       ;
+; Total pins                         ; 30                                       ;
+; Total virtual pins                 ; 0                                        ;
+; Total memory bits                  ; 0                                        ;
+; Embedded Multiplier 9-bit elements ; 1                                        ;
+; Total PLLs                         ; 0                                        ;
++------------------------------------+------------------------------------------+
+
+
++----------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Settings                                                                                        ;
++----------------------------------------------------------------------------+--------------------+--------------------+
+; Option                                                                     ; Setting            ; Default Value      ;
++----------------------------------------------------------------------------+--------------------+--------------------+
+; Device                                                                     ; EP2C20F484C7       ;                    ;
+; Top-level entity name                                                      ; top                ; Test               ;
+; Family name                                                                ; Cyclone II         ; Cyclone IV GX      ;
+; Use smart compilation                                                      ; Off                ; Off                ;
+; Enable parallel Assembler and TimeQuest Timing Analyzer during compilation ; On                 ; On                 ;
+; Enable compact report table                                                ; Off                ; Off                ;
+; Restructure Multiplexers                                                   ; Auto               ; Auto               ;
+; Create Debugging Nodes for IP Cores                                        ; Off                ; Off                ;
+; Preserve fewer node names                                                  ; On                 ; On                 ;
+; Disable OpenCore Plus hardware evaluation                                  ; Off                ; Off                ;
+; Verilog Version                                                            ; Verilog_2001       ; Verilog_2001       ;
+; VHDL Version                                                               ; VHDL_1993          ; VHDL_1993          ;
+; State Machine Processing                                                   ; Auto               ; Auto               ;
+; Safe State Machine                                                         ; Off                ; Off                ;
+; Extract Verilog State Machines                                             ; On                 ; On                 ;
+; Extract VHDL State Machines                                                ; On                 ; On                 ;
+; Ignore Verilog initial constructs                                          ; Off                ; Off                ;
+; Iteration limit for constant Verilog loops                                 ; 5000               ; 5000               ;
+; Iteration limit for non-constant Verilog loops                             ; 250                ; 250                ;
+; Add Pass-Through Logic to Inferred RAMs                                    ; On                 ; On                 ;
+; Infer RAMs from Raw Logic                                                  ; On                 ; On                 ;
+; Parallel Synthesis                                                         ; On                 ; On                 ;
+; DSP Block Balancing                                                        ; Auto               ; Auto               ;
+; NOT Gate Push-Back                                                         ; On                 ; On                 ;
+; Power-Up Don't Care                                                        ; On                 ; On                 ;
+; Remove Redundant Logic Cells                                               ; Off                ; Off                ;
+; Remove Duplicate Registers                                                 ; On                 ; On                 ;
+; Ignore CARRY Buffers                                                       ; Off                ; Off                ;
+; Ignore CASCADE Buffers                                                     ; Off                ; Off                ;
+; Ignore GLOBAL Buffers                                                      ; Off                ; Off                ;
+; Ignore ROW GLOBAL Buffers                                                  ; Off                ; Off                ;
+; Ignore LCELL Buffers                                                       ; Off                ; Off                ;
+; Ignore SOFT Buffers                                                        ; On                 ; On                 ;
+; Limit AHDL Integers to 32 Bits                                             ; Off                ; Off                ;
+; Optimization Technique                                                     ; Balanced           ; Balanced           ;
+; Carry Chain Length                                                         ; 70                 ; 70                 ;
+; Auto Carry Chains                                                          ; On                 ; On                 ;
+; Auto Open-Drain Pins                                                       ; On                 ; On                 ;
+; Perform WYSIWYG Primitive Resynthesis                                      ; Off                ; Off                ;
+; Auto ROM Replacement                                                       ; On                 ; On                 ;
+; Auto RAM Replacement                                                       ; On                 ; On                 ;
+; Auto Shift Register Replacement                                            ; Auto               ; Auto               ;
+; Allow Shift Register Merging across Hierarchies                            ; Auto               ; Auto               ;
+; Auto Clock Enable Replacement                                              ; On                 ; On                 ;
+; Strict RAM Replacement                                                     ; Off                ; Off                ;
+; Allow Synchronous Control Signals                                          ; On                 ; On                 ;
+; Force Use of Synchronous Clear Signals                                     ; Off                ; Off                ;
+; Auto RAM to Logic Cell Conversion                                          ; Off                ; Off                ;
+; Auto Resource Sharing                                                      ; Off                ; Off                ;
+; Allow Any RAM Size For Recognition                                         ; Off                ; Off                ;
+; Allow Any ROM Size For Recognition                                         ; Off                ; Off                ;
+; Allow Any Shift Register Size For Recognition                              ; Off                ; Off                ;
+; Use LogicLock Constraints during Resource Balancing                        ; On                 ; On                 ;
+; Ignore translate_off and synthesis_off directives                          ; Off                ; Off                ;
+; Timing-Driven Synthesis                                                    ; Off                ; Off                ;
+; Report Parameter Settings                                                  ; On                 ; On                 ;
+; Report Source Assignments                                                  ; On                 ; On                 ;
+; Report Connectivity Checks                                                 ; On                 ; On                 ;
+; Ignore Maximum Fan-Out Assignments                                         ; Off                ; Off                ;
+; Synchronization Register Chain Length                                      ; 2                  ; 2                  ;
+; PowerPlay Power Optimization                                               ; Normal compilation ; Normal compilation ;
+; HDL message level                                                          ; Level2             ; Level2             ;
+; Suppress Register Optimization Related Messages                            ; Off                ; Off                ;
+; Number of Removed Registers Reported in Synthesis Report                   ; 5000               ; 5000               ;
+; Number of Swept Nodes Reported in Synthesis Report                         ; 5000               ; 5000               ;
+; Number of Inverted Registers Reported in Synthesis Report                  ; 100                ; 100                ;
+; Clock MUX Protection                                                       ; On                 ; On                 ;
+; Auto Gated Clock Conversion                                                ; Off                ; Off                ;
+; Block Design Naming                                                        ; Auto               ; Auto               ;
+; SDC constraint protection                                                  ; Off                ; Off                ;
+; Synthesis Effort                                                           ; Auto               ; Auto               ;
+; Shift Register Replacement - Allow Asynchronous Clear Signal               ; On                 ; On                 ;
+; Pre-Mapping Resynthesis Optimization                                       ; Off                ; Off                ;
+; Analysis & Synthesis Message Level                                         ; Medium             ; Medium             ;
+; Disable Register Merging Across Hierarchies                                ; Auto               ; Auto               ;
+; Resource Aware Inference For Block RAM                                     ; On                 ; On                 ;
+; Synthesis Seed                                                             ; 1                  ; 1                  ;
++----------------------------------------------------------------------------+--------------------+--------------------+
+
+
+Parallel compilation was disabled, but you have multiple processors available. Enable parallel compilation to reduce compilation time.
++-------------------------------------+
+; Parallel Compilation                ;
++----------------------------+--------+
+; Processors                 ; Number ;
++----------------------------+--------+
+; Number detected on machine ; 8      ;
+; Maximum allowed            ; 1      ;
++----------------------------+--------+
+
+
++------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Source Files Read                                                                                                                                                                                                   ;
++---------------------------------------------------------------+-----------------+------------------------------+---------------------------------------------------------------------------------------------------------------+---------+
+; File Name with User-Entered Path                              ; Used in Netlist ; File Type                    ; File Name with Absolute Path                                                                                  ; Library ;
++---------------------------------------------------------------+-----------------+------------------------------+---------------------------------------------------------------------------------------------------------------+---------+
+; Advanced_Computer_Architecture-/task2/VHDL/AdderSub.vhd       ; yes             ; User VHDL File               ; C:/Users/VladKo/Documents/MSc/BGU/CPU/TASK2_all/Advanced_Computer_Architecture-/task2/VHDL/AdderSub.vhd       ;         ;
+; Advanced_Computer_Architecture-/task2/VHDL/ALU.vhd            ; yes             ; User VHDL File               ; C:/Users/VladKo/Documents/MSc/BGU/CPU/TASK2_all/Advanced_Computer_Architecture-/task2/VHDL/ALU.vhd            ;         ;
+; Advanced_Computer_Architecture-/task2/VHDL/ArithLogic.vhd     ; yes             ; User VHDL File               ; C:/Users/VladKo/Documents/MSc/BGU/CPU/TASK2_all/Advanced_Computer_Architecture-/task2/VHDL/ArithLogic.vhd     ;         ;
+; Advanced_Computer_Architecture-/task2/VHDL/aux_package.vhd    ; yes             ; User VHDL File               ; C:/Users/VladKo/Documents/MSc/BGU/CPU/TASK2_all/Advanced_Computer_Architecture-/task2/VHDL/aux_package.vhd    ;         ;
+; Advanced_Computer_Architecture-/task2/VHDL/FA.vhd             ; yes             ; User VHDL File               ; C:/Users/VladKo/Documents/MSc/BGU/CPU/TASK2_all/Advanced_Computer_Architecture-/task2/VHDL/FA.vhd             ;         ;
+; Advanced_Computer_Architecture-/task2/VHDL/Mac.vhd            ; yes             ; User VHDL File               ; C:/Users/VladKo/Documents/MSc/BGU/CPU/TASK2_all/Advanced_Computer_Architecture-/task2/VHDL/Mac.vhd            ;         ;
+; Advanced_Computer_Architecture-/task2/VHDL/MaxMin.vhd         ; yes             ; User VHDL File               ; C:/Users/VladKo/Documents/MSc/BGU/CPU/TASK2_all/Advanced_Computer_Architecture-/task2/VHDL/MaxMin.vhd         ;         ;
+; Advanced_Computer_Architecture-/task2/VHDL/Mult.vhd           ; yes             ; User VHDL File               ; C:/Users/VladKo/Documents/MSc/BGU/CPU/TASK2_all/Advanced_Computer_Architecture-/task2/VHDL/Mult.vhd           ;         ;
+; Advanced_Computer_Architecture-/task2/VHDL/outputSelector.vhd ; yes             ; User VHDL File               ; C:/Users/VladKo/Documents/MSc/BGU/CPU/TASK2_all/Advanced_Computer_Architecture-/task2/VHDL/outputSelector.vhd ;         ;
+; Advanced_Computer_Architecture-/task2/VHDL/registerA.vhd      ; yes             ; User VHDL File               ; C:/Users/VladKo/Documents/MSc/BGU/CPU/TASK2_all/Advanced_Computer_Architecture-/task2/VHDL/registerA.vhd      ;         ;
+; Advanced_Computer_Architecture-/task2/VHDL/registerB.vhd      ; yes             ; User VHDL File               ; C:/Users/VladKo/Documents/MSc/BGU/CPU/TASK2_all/Advanced_Computer_Architecture-/task2/VHDL/registerB.vhd      ;         ;
+; Advanced_Computer_Architecture-/task2/VHDL/registerOP.vhd     ; yes             ; User VHDL File               ; C:/Users/VladKo/Documents/MSc/BGU/CPU/TASK2_all/Advanced_Computer_Architecture-/task2/VHDL/registerOP.vhd     ;         ;
+; Advanced_Computer_Architecture-/task2/VHDL/shifter.vhd        ; yes             ; User VHDL File               ; C:/Users/VladKo/Documents/MSc/BGU/CPU/TASK2_all/Advanced_Computer_Architecture-/task2/VHDL/shifter.vhd        ;         ;
+; Advanced_Computer_Architecture-/task2/VHDL/top.vhd            ; yes             ; User VHDL File               ; C:/Users/VladKo/Documents/MSc/BGU/CPU/TASK2_all/Advanced_Computer_Architecture-/task2/VHDL/top.vhd            ;         ;
+; lpm_mult.tdf                                                  ; yes             ; Megafunction                 ; c:/altera/12.1/quartus/libraries/megafunctions/lpm_mult.tdf                                                   ;         ;
+; aglobal121.inc                                                ; yes             ; Megafunction                 ; c:/altera/12.1/quartus/libraries/megafunctions/aglobal121.inc                                                 ;         ;
+; lpm_add_sub.inc                                               ; yes             ; Megafunction                 ; c:/altera/12.1/quartus/libraries/megafunctions/lpm_add_sub.inc                                                ;         ;
+; multcore.inc                                                  ; yes             ; Megafunction                 ; c:/altera/12.1/quartus/libraries/megafunctions/multcore.inc                                                   ;         ;
+; bypassff.inc                                                  ; yes             ; Megafunction                 ; c:/altera/12.1/quartus/libraries/megafunctions/bypassff.inc                                                   ;         ;
+; altshift.inc                                                  ; yes             ; Megafunction                 ; c:/altera/12.1/quartus/libraries/megafunctions/altshift.inc                                                   ;         ;
+; db/mult_o5t.tdf                                               ; yes             ; Auto-Generated Megafunction  ; C:/Users/VladKo/Documents/MSc/BGU/CPU/TASK2_all/db/mult_o5t.tdf                                               ;         ;
++---------------------------------------------------------------+-----------------+------------------------------+---------------------------------------------------------------------------------------------------------------+---------+
+
+
++-----------------------------------------------------+
+; Analysis & Synthesis Resource Usage Summary         ;
++---------------------------------------------+-------+
+; Resource                                    ; Usage ;
++---------------------------------------------+-------+
+; Estimated Total logic elements              ; 267   ;
+;                                             ;       ;
+; Total combinational functions               ; 246   ;
+; Logic element usage by number of LUT inputs ;       ;
+;     -- 4 input functions                    ; 149   ;
+;     -- 3 input functions                    ; 70    ;
+;     -- <=2 input functions                  ; 27    ;
+;                                             ;       ;
+; Logic elements by mode                      ;       ;
+;     -- normal mode                          ; 246   ;
+;     -- arithmetic mode                      ; 0     ;
+;                                             ;       ;
+; Total registers                             ; 37    ;
+;     -- Dedicated logic registers            ; 37    ;
+;     -- I/O registers                        ; 0     ;
+;                                             ;       ;
+; I/O pins                                    ; 30    ;
+; Embedded Multiplier 9-bit elements          ; 1     ;
+; Maximum fan-out                             ; 51    ;
+; Total fan-out                               ; 982   ;
+; Average fan-out                             ; 3.12  ;
++---------------------------------------------+-------+
+
+
++---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Resource Utilization by Entity                                                                                                                                                                                                                                   ;
++------------------------------------------+-------------------+--------------+-------------+--------------+---------+-----------+------+--------------+-----------------------------------------------------------------------------------------------------------------+--------------+
+; Compilation Hierarchy Node               ; LC Combinationals ; LC Registers ; Memory Bits ; DSP Elements ; DSP 9x9 ; DSP 18x18 ; Pins ; Virtual Pins ; Full Hierarchy Name                                                                                             ; Library Name ;
++------------------------------------------+-------------------+--------------+-------------+--------------+---------+-----------+------+--------------+-----------------------------------------------------------------------------------------------------------------+--------------+
+; |top                                     ; 246 (1)           ; 37 (0)       ; 0           ; 1            ; 1       ; 0         ; 30   ; 0            ; |top                                                                                                            ;              ;
+;    |ALU:aluEntity|                       ; 245 (0)           ; 16 (0)       ; 0           ; 1            ; 1       ; 0         ; 0    ; 0            ; |top|ALU:aluEntity                                                                                              ;              ;
+;       |ArithLogic:arithAndLogicEntity|   ; 57 (5)            ; 16 (0)       ; 0           ; 1            ; 1       ; 0         ; 0    ; 0            ; |top|ALU:aluEntity|ArithLogic:arithAndLogicEntity                                                               ;              ;
+;          |AdderSub:adderSubEntity|       ; 13 (2)            ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|ALU:aluEntity|ArithLogic:arithAndLogicEntity|AdderSub:adderSubEntity                                       ;              ;
+;             |FA:\rest:1:chain|           ; 2 (2)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|ALU:aluEntity|ArithLogic:arithAndLogicEntity|AdderSub:adderSubEntity|FA:\rest:1:chain                      ;              ;
+;             |FA:\rest:2:chain|           ; 1 (1)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|ALU:aluEntity|ArithLogic:arithAndLogicEntity|AdderSub:adderSubEntity|FA:\rest:2:chain                      ;              ;
+;             |FA:\rest:3:chain|           ; 1 (1)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|ALU:aluEntity|ArithLogic:arithAndLogicEntity|AdderSub:adderSubEntity|FA:\rest:3:chain                      ;              ;
+;             |FA:\rest:4:chain|           ; 1 (1)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|ALU:aluEntity|ArithLogic:arithAndLogicEntity|AdderSub:adderSubEntity|FA:\rest:4:chain                      ;              ;
+;             |FA:\rest:5:chain|           ; 1 (1)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|ALU:aluEntity|ArithLogic:arithAndLogicEntity|AdderSub:adderSubEntity|FA:\rest:5:chain                      ;              ;
+;             |FA:\rest:6:chain|           ; 1 (1)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|ALU:aluEntity|ArithLogic:arithAndLogicEntity|AdderSub:adderSubEntity|FA:\rest:6:chain                      ;              ;
+;             |FA:\rest:7:chain|           ; 1 (1)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|ALU:aluEntity|ArithLogic:arithAndLogicEntity|AdderSub:adderSubEntity|FA:\rest:7:chain                      ;              ;
+;             |FA:first|                   ; 3 (3)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|ALU:aluEntity|ArithLogic:arithAndLogicEntity|AdderSub:adderSubEntity|FA:first                              ;              ;
+;          |MACModule:macEntity|           ; 34 (1)            ; 16 (16)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|ALU:aluEntity|ArithLogic:arithAndLogicEntity|MACModule:macEntity                                           ;              ;
+;             |AdderSub:adderSubEntity|    ; 33 (0)            ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|ALU:aluEntity|ArithLogic:arithAndLogicEntity|MACModule:macEntity|AdderSub:adderSubEntity                   ;              ;
+;                |FA:\rest:10:chain|       ; 2 (2)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|ALU:aluEntity|ArithLogic:arithAndLogicEntity|MACModule:macEntity|AdderSub:adderSubEntity|FA:\rest:10:chain ;              ;
+;                |FA:\rest:11:chain|       ; 1 (1)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|ALU:aluEntity|ArithLogic:arithAndLogicEntity|MACModule:macEntity|AdderSub:adderSubEntity|FA:\rest:11:chain ;              ;
+;                |FA:\rest:12:chain|       ; 5 (5)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|ALU:aluEntity|ArithLogic:arithAndLogicEntity|MACModule:macEntity|AdderSub:adderSubEntity|FA:\rest:12:chain ;              ;
+;                |FA:\rest:13:chain|       ; 2 (2)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|ALU:aluEntity|ArithLogic:arithAndLogicEntity|MACModule:macEntity|AdderSub:adderSubEntity|FA:\rest:13:chain ;              ;
+;                |FA:\rest:14:chain|       ; 1 (1)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|ALU:aluEntity|ArithLogic:arithAndLogicEntity|MACModule:macEntity|AdderSub:adderSubEntity|FA:\rest:14:chain ;              ;
+;                |FA:\rest:15:chain|       ; 2 (2)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|ALU:aluEntity|ArithLogic:arithAndLogicEntity|MACModule:macEntity|AdderSub:adderSubEntity|FA:\rest:15:chain ;              ;
+;                |FA:\rest:1:chain|        ; 2 (2)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|ALU:aluEntity|ArithLogic:arithAndLogicEntity|MACModule:macEntity|AdderSub:adderSubEntity|FA:\rest:1:chain  ;              ;
+;                |FA:\rest:2:chain|        ; 1 (1)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|ALU:aluEntity|ArithLogic:arithAndLogicEntity|MACModule:macEntity|AdderSub:adderSubEntity|FA:\rest:2:chain  ;              ;
+;                |FA:\rest:3:chain|        ; 5 (5)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|ALU:aluEntity|ArithLogic:arithAndLogicEntity|MACModule:macEntity|AdderSub:adderSubEntity|FA:\rest:3:chain  ;              ;
+;                |FA:\rest:4:chain|        ; 2 (2)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|ALU:aluEntity|ArithLogic:arithAndLogicEntity|MACModule:macEntity|AdderSub:adderSubEntity|FA:\rest:4:chain  ;              ;
+;                |FA:\rest:5:chain|        ; 2 (2)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|ALU:aluEntity|ArithLogic:arithAndLogicEntity|MACModule:macEntity|AdderSub:adderSubEntity|FA:\rest:5:chain  ;              ;
+;                |FA:\rest:6:chain|        ; 2 (2)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|ALU:aluEntity|ArithLogic:arithAndLogicEntity|MACModule:macEntity|AdderSub:adderSubEntity|FA:\rest:6:chain  ;              ;
+;                |FA:\rest:7:chain|        ; 2 (2)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|ALU:aluEntity|ArithLogic:arithAndLogicEntity|MACModule:macEntity|AdderSub:adderSubEntity|FA:\rest:7:chain  ;              ;
+;                |FA:\rest:8:chain|        ; 2 (2)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|ALU:aluEntity|ArithLogic:arithAndLogicEntity|MACModule:macEntity|AdderSub:adderSubEntity|FA:\rest:8:chain  ;              ;
+;                |FA:\rest:9:chain|        ; 2 (2)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|ALU:aluEntity|ArithLogic:arithAndLogicEntity|MACModule:macEntity|AdderSub:adderSubEntity|FA:\rest:9:chain  ;              ;
+;          |MaxMin:maxMinEntity|           ; 5 (5)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|ALU:aluEntity|ArithLogic:arithAndLogicEntity|MaxMin:maxMinEntity                                           ;              ;
+;          |MultSub:multEntity|            ; 0 (0)             ; 0 (0)        ; 0           ; 1            ; 1       ; 0         ; 0    ; 0            ; |top|ALU:aluEntity|ArithLogic:arithAndLogicEntity|MultSub:multEntity                                            ;              ;
+;             |lpm_mult:Mult0|             ; 0 (0)             ; 0 (0)        ; 0           ; 1            ; 1       ; 0         ; 0    ; 0            ; |top|ALU:aluEntity|ArithLogic:arithAndLogicEntity|MultSub:multEntity|lpm_mult:Mult0                             ;              ;
+;                |mult_o5t:auto_generated| ; 0 (0)             ; 0 (0)        ; 0           ; 1            ; 1       ; 0         ; 0    ; 0            ; |top|ALU:aluEntity|ArithLogic:arithAndLogicEntity|MultSub:multEntity|lpm_mult:Mult0|mult_o5t:auto_generated     ;              ;
+;       |outputSelector:selectorEntity|    ; 147 (147)         ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|ALU:aluEntity|outputSelector:selectorEntity                                                                ;              ;
+;       |shifter:shiftEntity|              ; 41 (41)           ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|ALU:aluEntity|shifter:shiftEntity                                                                          ;              ;
+;    |A_Register:AREG|                     ; 0 (0)             ; 8 (8)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|A_Register:AREG                                                                                            ;              ;
+;    |B_Register:BREG|                     ; 0 (0)             ; 8 (8)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|B_Register:BREG                                                                                            ;              ;
+;    |OP_Register:OPREG|                   ; 0 (0)             ; 5 (5)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|OP_Register:OPREG                                                                                          ;              ;
++------------------------------------------+-------------------+--------------+-------------+--------------+---------+-----------+------+--------------+-----------------------------------------------------------------------------------------------------------------+--------------+
+Note: For table entries with two numbers listed, the numbers in parentheses indicate the number of resources of the given type used by the specific entity alone. The numbers listed outside of parentheses indicate the total resources of the given type used by the specific entity and all of its sub-entities in the hierarchy.
+
+
++-----------------------------------------------------+
+; Analysis & Synthesis DSP Block Usage Summary        ;
++---------------------------------------+-------------+
+; Statistic                             ; Number Used ;
++---------------------------------------+-------------+
+; Simple Multipliers (9-bit)            ; 1           ;
+; Simple Multipliers (18-bit)           ; 0           ;
+; Embedded Multiplier Blocks            ; --          ;
+; Embedded Multiplier 9-bit elements    ; 1           ;
+; Signed Embedded Multipliers           ; 0           ;
+; Unsigned Embedded Multipliers         ; 1           ;
+; Mixed Sign Embedded Multipliers       ; 0           ;
+; Variable Sign Embedded Multipliers    ; 0           ;
+; Dedicated Input Shift Register Chains ; 0           ;
++---------------------------------------+-------------+
+Note: number of Embedded Multiplier Blocks used is only available after a successful fit.
+
+
++-------------------------------------------------------------+
+; Logic Cells Representing Combinational Loops                ;
++---------------------------------------------------------+---+
+; Logic Cell Name                                         ;   ;
++---------------------------------------------------------+---+
+; ALU:aluEntity|outputSelector:selectorEntity|STATUS[0]~2 ;   ;
+; ALU:aluEntity|outputSelector:selectorEntity|STATUS~0    ;   ;
+; ALU:aluEntity|outputSelector:selectorEntity|carry~0     ;   ;
+; ALU:aluEntity|shifter:shiftEntity|cout                  ;   ;
+; Number of logic cells representing combinational loops  ; 4 ;
++---------------------------------------------------------+---+
+Note: All cells listed above may not be present at the end of synthesis due to various synthesis optimizations.
+
+
++------------------------------------------------------+
+; General Register Statistics                          ;
++----------------------------------------------+-------+
+; Statistic                                    ; Value ;
++----------------------------------------------+-------+
+; Total registers                              ; 37    ;
+; Number of registers using Synchronous Clear  ; 0     ;
+; Number of registers using Synchronous Load   ; 0     ;
+; Number of registers using Asynchronous Clear ; 16    ;
+; Number of registers using Asynchronous Load  ; 0     ;
+; Number of registers using Clock Enable       ; 0     ;
+; Number of registers using Preset             ; 0     ;
++----------------------------------------------+-------+
+
+
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Multiplexer Restructuring Statistics (Restructuring Performed)                                                                                                       ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+--------------------------------------------------------+
+; Multiplexer Inputs ; Bus Width ; Baseline Area ; Area if Restructured ; Saving if Restructured ; Registered ; Example Multiplexer Output                             ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+--------------------------------------------------------+
+; 5:1                ; 8 bits    ; 24 LEs        ; 16 LEs               ; 8 LEs                  ; No         ; |top|ALU:aluEntity|ArithLogic:arithAndLogicEntity|HI   ;
+; 29:1               ; 8 bits    ; 152 LEs       ; 88 LEs               ; 64 LEs                 ; No         ; |top|ALU:aluEntity|outputSelector:selectorEntity|LO[7] ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+--------------------------------------------------------+
+
+
++---------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: Top-level Entity: |top ;
++----------------+-------+--------------------------------------------+
+; Parameter Name ; Value ; Type                                       ;
++----------------+-------+--------------------------------------------+
+; n              ; 8     ; Signed Integer                             ;
+; m              ; 5     ; Signed Integer                             ;
+; k              ; 2     ; Signed Integer                             ;
++----------------+-------+--------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++--------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: A_Register:AREG ;
++----------------+-------+-------------------------------------+
+; Parameter Name ; Value ; Type                                ;
++----------------+-------+-------------------------------------+
+; n              ; 8     ; Signed Integer                      ;
++----------------+-------+-------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++--------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: B_Register:BREG ;
++----------------+-------+-------------------------------------+
+; Parameter Name ; Value ; Type                                ;
++----------------+-------+-------------------------------------+
+; n              ; 8     ; Signed Integer                      ;
++----------------+-------+-------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++----------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: OP_Register:OPREG ;
++----------------+-------+---------------------------------------+
+; Parameter Name ; Value ; Type                                  ;
++----------------+-------+---------------------------------------+
+; n              ; 8     ; Signed Integer                        ;
+; m              ; 5     ; Signed Integer                        ;
++----------------+-------+---------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: ALU:aluEntity ;
++----------------+-------+-----------------------------------+
+; Parameter Name ; Value ; Type                              ;
++----------------+-------+-----------------------------------+
+; n              ; 8     ; Signed Integer                    ;
+; m              ; 5     ; Signed Integer                    ;
+; k              ; 2     ; Signed Integer                    ;
++----------------+-------+-----------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: ALU:aluEntity|ArithLogic:arithAndLogicEntity ;
++----------------+-------+------------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                             ;
++----------------+-------+------------------------------------------------------------------+
+; n              ; 8     ; Signed Integer                                                   ;
+; m              ; 5     ; Signed Integer                                                   ;
++----------------+-------+------------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++---------------------------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: ALU:aluEntity|ArithLogic:arithAndLogicEntity|MaxMin:maxMinEntity ;
++----------------+-------+--------------------------------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                                                 ;
++----------------+-------+--------------------------------------------------------------------------------------+
+; n              ; 8     ; Signed Integer                                                                       ;
++----------------+-------+--------------------------------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++---------------------------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: ALU:aluEntity|ArithLogic:arithAndLogicEntity|MACModule:macEntity ;
++----------------+-------+--------------------------------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                                                 ;
++----------------+-------+--------------------------------------------------------------------------------------+
+; n              ; 8     ; Signed Integer                                                                       ;
++----------------+-------+--------------------------------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++----------------------------------------------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: ALU:aluEntity|ArithLogic:arithAndLogicEntity|MACModule:macEntity|MultSub:multEntity ;
++----------------+-------+---------------------------------------------------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                                                                    ;
++----------------+-------+---------------------------------------------------------------------------------------------------------+
+; n              ; 8     ; Signed Integer                                                                                          ;
++----------------+-------+---------------------------------------------------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++---------------------------------------------------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: ALU:aluEntity|ArithLogic:arithAndLogicEntity|MACModule:macEntity|AdderSub:adderSubEntity ;
++----------------+-------+--------------------------------------------------------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                                                                         ;
++----------------+-------+--------------------------------------------------------------------------------------------------------------+
+; n              ; 16    ; Signed Integer                                                                                               ;
++----------------+-------+--------------------------------------------------------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-------------------------------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: ALU:aluEntity|ArithLogic:arithAndLogicEntity|AdderSub:adderSubEntity ;
++----------------+-------+------------------------------------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                                                     ;
++----------------+-------+------------------------------------------------------------------------------------------+
+; n              ; 8     ; Signed Integer                                                                           ;
++----------------+-------+------------------------------------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++--------------------------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: ALU:aluEntity|ArithLogic:arithAndLogicEntity|MultSub:multEntity ;
++----------------+-------+-------------------------------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                                                ;
++----------------+-------+-------------------------------------------------------------------------------------+
+; n              ; 8     ; Signed Integer                                                                      ;
++----------------+-------+-------------------------------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++--------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: ALU:aluEntity|shifter:shiftEntity ;
++----------------+-------+-------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                  ;
++----------------+-------+-------------------------------------------------------+
+; n              ; 8     ; Signed Integer                                        ;
++----------------+-------+-------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: ALU:aluEntity|outputSelector:selectorEntity ;
++----------------+-------+-----------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                            ;
++----------------+-------+-----------------------------------------------------------------+
+; n              ; 8     ; Signed Integer                                                  ;
+; m              ; 5     ; Signed Integer                                                  ;
+; k              ; 2     ; Signed Integer                                                  ;
++----------------+-------+-----------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++---------------------------------------------------------------------------------------------------------------------------------+
+; Parameter Settings for Inferred Entity Instance: ALU:aluEntity|ArithLogic:arithAndLogicEntity|MultSub:multEntity|lpm_mult:Mult0 ;
++------------------------------------------------+------------+-------------------------------------------------------------------+
+; Parameter Name                                 ; Value      ; Type                                                              ;
++------------------------------------------------+------------+-------------------------------------------------------------------+
+; AUTO_CARRY_CHAINS                              ; ON         ; AUTO_CARRY                                                        ;
+; IGNORE_CARRY_BUFFERS                           ; OFF        ; IGNORE_CARRY                                                      ;
+; AUTO_CASCADE_CHAINS                            ; ON         ; AUTO_CASCADE                                                      ;
+; IGNORE_CASCADE_BUFFERS                         ; OFF        ; IGNORE_CASCADE                                                    ;
+; LPM_WIDTHA                                     ; 8          ; Untyped                                                           ;
+; LPM_WIDTHB                                     ; 8          ; Untyped                                                           ;
+; LPM_WIDTHP                                     ; 16         ; Untyped                                                           ;
+; LPM_WIDTHR                                     ; 16         ; Untyped                                                           ;
+; LPM_WIDTHS                                     ; 1          ; Untyped                                                           ;
+; LPM_REPRESENTATION                             ; UNSIGNED   ; Untyped                                                           ;
+; LPM_PIPELINE                                   ; 0          ; Untyped                                                           ;
+; LATENCY                                        ; 0          ; Untyped                                                           ;
+; INPUT_A_IS_CONSTANT                            ; NO         ; Untyped                                                           ;
+; INPUT_B_IS_CONSTANT                            ; NO         ; Untyped                                                           ;
+; USE_EAB                                        ; OFF        ; Untyped                                                           ;
+; MAXIMIZE_SPEED                                 ; 5          ; Untyped                                                           ;
+; DEVICE_FAMILY                                  ; Cyclone II ; Untyped                                                           ;
+; CARRY_CHAIN                                    ; MANUAL     ; Untyped                                                           ;
+; APEX20K_TECHNOLOGY_MAPPER                      ; LUT        ; TECH_MAPPER_APEX20K                                               ;
+; DEDICATED_MULTIPLIER_CIRCUITRY                 ; AUTO       ; Untyped                                                           ;
+; DEDICATED_MULTIPLIER_MIN_INPUT_WIDTH_FOR_AUTO  ; 0          ; Untyped                                                           ;
+; DEDICATED_MULTIPLIER_MIN_OUTPUT_WIDTH_FOR_AUTO ; 0          ; Untyped                                                           ;
+; CBXI_PARAMETER                                 ; mult_o5t   ; Untyped                                                           ;
+; INPUT_A_FIXED_VALUE                            ; Bx         ; Untyped                                                           ;
+; INPUT_B_FIXED_VALUE                            ; Bx         ; Untyped                                                           ;
+; USE_AHDL_IMPLEMENTATION                        ; OFF        ; Untyped                                                           ;
++------------------------------------------------+------------+-------------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++------------------------------------------------------------------------------------------------------------------------+
+; lpm_mult Parameter Settings by Entity Instance                                                                         ;
++---------------------------------------+--------------------------------------------------------------------------------+
+; Name                                  ; Value                                                                          ;
++---------------------------------------+--------------------------------------------------------------------------------+
+; Number of entity instances            ; 1                                                                              ;
+; Entity Instance                       ; ALU:aluEntity|ArithLogic:arithAndLogicEntity|MultSub:multEntity|lpm_mult:Mult0 ;
+;     -- LPM_WIDTHA                     ; 8                                                                              ;
+;     -- LPM_WIDTHB                     ; 8                                                                              ;
+;     -- LPM_WIDTHP                     ; 16                                                                             ;
+;     -- LPM_REPRESENTATION             ; UNSIGNED                                                                       ;
+;     -- INPUT_A_IS_CONSTANT            ; NO                                                                             ;
+;     -- INPUT_B_IS_CONSTANT            ; NO                                                                             ;
+;     -- USE_EAB                        ; OFF                                                                            ;
+;     -- DEDICATED_MULTIPLIER_CIRCUITRY ; AUTO                                                                           ;
+;     -- INPUT_A_FIXED_VALUE            ; Bx                                                                             ;
+;     -- INPUT_B_FIXED_VALUE            ; Bx                                                                             ;
++---------------------------------------+--------------------------------------------------------------------------------+
+
+
++----------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "ALU:aluEntity|ArithLogic:arithAndLogicEntity|AdderSub:adderSubEntity|FA:last"       ;
++------+--------+----------+-------------------------------------------------------------------------------------+
+; Port ; Type   ; Severity ; Details                                                                             ;
++------+--------+----------+-------------------------------------------------------------------------------------+
+; xi   ; Input  ; Info     ; Stuck at GND                                                                        ;
+; yi   ; Input  ; Info     ; Stuck at GND                                                                        ;
+; cout ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
++------+--------+----------+-------------------------------------------------------------------------------------+
+
+
++------------------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "ALU:aluEntity|ArithLogic:arithAndLogicEntity|MACModule:macEntity|AdderSub:adderSubEntity|FA:last" ;
++------+--------+----------+---------------------------------------------------------------------------------------------------+
+; Port ; Type   ; Severity ; Details                                                                                           ;
++------+--------+----------+---------------------------------------------------------------------------------------------------+
+; xi   ; Input  ; Info     ; Stuck at GND                                                                                      ;
+; yi   ; Input  ; Info     ; Stuck at GND                                                                                      ;
+; cout ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed.               ;
++------+--------+----------+---------------------------------------------------------------------------------------------------+
+
+
++----------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "ALU:aluEntity|ArithLogic:arithAndLogicEntity|MACModule:macEntity|AdderSub:adderSubEntity" ;
++-------+--------+----------+------------------------------------------------------------------------------------------+
+; Port  ; Type   ; Severity ; Details                                                                                  ;
++-------+--------+----------+------------------------------------------------------------------------------------------+
+; cin   ; Input  ; Info     ; Stuck at GND                                                                             ;
+; sel   ; Input  ; Info     ; Stuck at GND                                                                             ;
+; s[16] ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed.      ;
++-------+--------+----------+------------------------------------------------------------------------------------------+
+
+
++-------------------------------+
+; Elapsed Time Per Partition    ;
++----------------+--------------+
+; Partition Name ; Elapsed Time ;
++----------------+--------------+
+; Top            ; 00:00:05     ;
++----------------+--------------+
+
+
++-------------------------------+
+; Analysis & Synthesis Messages ;
++-------------------------------+
+Info: *******************************************************************
+Info: Running Quartus II 64-Bit Analysis & Synthesis
+    Info: Version 12.1 Build 177 11/07/2012 SJ Web Edition
+    Info: Processing started: Fri May 29 20:10:26 2020
+Info: Command: quartus_map --read_settings_files=on --write_settings_files=off Test -c Test
+Warning (20028): Parallel compilation is not licensed and has been disabled
+Info (12021): Found 2 design units, including 1 entities, in source file advanced_computer_architecture-/task2/vhdl/addersub.vhd
+    Info (12022): Found design unit 1: AdderSub-AdderSub_Architecture
+    Info (12023): Found entity 1: AdderSub
+Info (12021): Found 2 design units, including 1 entities, in source file advanced_computer_architecture-/task2/vhdl/alu.vhd
+    Info (12022): Found design unit 1: ALU-arc_ALU
+    Info (12023): Found entity 1: ALU
+Info (12021): Found 2 design units, including 1 entities, in source file advanced_computer_architecture-/task2/vhdl/arithlogic.vhd
+    Info (12022): Found design unit 1: ArithLogic-arc_ArithLogic
+    Info (12023): Found entity 1: ArithLogic
+Info (12021): Found 1 design units, including 0 entities, in source file advanced_computer_architecture-/task2/vhdl/aux_package.vhd
+    Info (12022): Found design unit 1: aux_package
+Info (12021): Found 2 design units, including 1 entities, in source file advanced_computer_architecture-/task2/vhdl/fa.vhd
+    Info (12022): Found design unit 1: FA-FA_Architecture
+    Info (12023): Found entity 1: FA
+Info (12021): Found 2 design units, including 1 entities, in source file advanced_computer_architecture-/task2/vhdl/mac.vhd
+    Info (12022): Found design unit 1: MACModule-arc_MACModule
+    Info (12023): Found entity 1: MACModule
+Info (12021): Found 2 design units, including 1 entities, in source file advanced_computer_architecture-/task2/vhdl/maxmin.vhd
+    Info (12022): Found design unit 1: MaxMin-arc_MaxMin
+    Info (12023): Found entity 1: MaxMin
+Info (12021): Found 2 design units, including 1 entities, in source file advanced_computer_architecture-/task2/vhdl/mult.vhd
+    Info (12022): Found design unit 1: MultSub-arc_MultSub
+    Info (12023): Found entity 1: MultSub
+Info (12021): Found 2 design units, including 1 entities, in source file advanced_computer_architecture-/task2/vhdl/outputselector.vhd
+    Info (12022): Found design unit 1: outputSelector-arc_outputSelector
+    Info (12023): Found entity 1: outputSelector
+Info (12021): Found 2 design units, including 1 entities, in source file advanced_computer_architecture-/task2/vhdl/registera.vhd
+    Info (12022): Found design unit 1: A_Register-arc_A_Register
+    Info (12023): Found entity 1: A_Register
+Info (12021): Found 2 design units, including 1 entities, in source file advanced_computer_architecture-/task2/vhdl/registerb.vhd
+    Info (12022): Found design unit 1: B_Register-arc_B_Register
+    Info (12023): Found entity 1: B_Register
+Info (12021): Found 2 design units, including 1 entities, in source file advanced_computer_architecture-/task2/vhdl/registerop.vhd
+    Info (12022): Found design unit 1: OP_Register-arc_OP_Register
+    Info (12023): Found entity 1: OP_Register
+Info (12021): Found 2 design units, including 1 entities, in source file advanced_computer_architecture-/task2/vhdl/shifter.vhd
+    Info (12022): Found design unit 1: shifter-arc_shifter
+    Info (12023): Found entity 1: shifter
+Info (12021): Found 2 design units, including 1 entities, in source file advanced_computer_architecture-/task2/vhdl/top.vhd
+    Info (12022): Found design unit 1: top-arc_sys
+    Info (12023): Found entity 1: top
+Info (12127): Elaborating entity "top" for the top level hierarchy
+Info (12128): Elaborating entity "A_Register" for hierarchy "A_Register:AREG"
+Info (12128): Elaborating entity "B_Register" for hierarchy "B_Register:BREG"
+Info (12128): Elaborating entity "OP_Register" for hierarchy "OP_Register:OPREG"
+Info (12128): Elaborating entity "ALU" for hierarchy "ALU:aluEntity"
+Info (12128): Elaborating entity "ArithLogic" for hierarchy "ALU:aluEntity|ArithLogic:arithAndLogicEntity"
+Info (12128): Elaborating entity "MaxMin" for hierarchy "ALU:aluEntity|ArithLogic:arithAndLogicEntity|MaxMin:maxMinEntity"
+Info (12128): Elaborating entity "MACModule" for hierarchy "ALU:aluEntity|ArithLogic:arithAndLogicEntity|MACModule:macEntity"
+Info (12128): Elaborating entity "MultSub" for hierarchy "ALU:aluEntity|ArithLogic:arithAndLogicEntity|MACModule:macEntity|MultSub:multEntity"
+Info (12128): Elaborating entity "AdderSub" for hierarchy "ALU:aluEntity|ArithLogic:arithAndLogicEntity|MACModule:macEntity|AdderSub:adderSubEntity"
+Info (12128): Elaborating entity "FA" for hierarchy "ALU:aluEntity|ArithLogic:arithAndLogicEntity|MACModule:macEntity|AdderSub:adderSubEntity|FA:first"
+Info (12128): Elaborating entity "AdderSub" for hierarchy "ALU:aluEntity|ArithLogic:arithAndLogicEntity|AdderSub:adderSubEntity"
+Info (12128): Elaborating entity "shifter" for hierarchy "ALU:aluEntity|shifter:shiftEntity"
+Warning (10492): VHDL Process Statement warning at shifter.vhd(37): signal "cin" is read inside the Process Statement but isn't in the Process Statement's sensitivity list
+Warning (11792): VHDL warning at shifter.vhd(39): right bound of range must be a constant
+Warning (11792): VHDL warning at shifter.vhd(47): right bound of range must be a constant
+Warning (10492): VHDL Process Statement warning at shifter.vhd(55): signal "cin" is read inside the Process Statement but isn't in the Process Statement's sensitivity list
+Warning (10492): VHDL Process Statement warning at shifter.vhd(61): signal "cin" is read inside the Process Statement but isn't in the Process Statement's sensitivity list
+Warning (10631): VHDL Process Statement warning at shifter.vhd(28): inferring latch(es) for signal or variable "totalRes", which holds its previous value in one or more paths through the process
+Info (12128): Elaborating entity "outputSelector" for hierarchy "ALU:aluEntity|outputSelector:selectorEntity"
+Warning (13046): Tri-state node(s) do not directly drive top-level pin(s)
+    Warning (13049): Converted tri-state buffer "ALU:aluEntity|ArithLogic:arithAndLogicEntity|LO[1]" feeding internal logic into a wire
+    Warning (13049): Converted tri-state buffer "ALU:aluEntity|ArithLogic:arithAndLogicEntity|LO[0]" feeding internal logic into a wire
+    Warning (13049): Converted tri-state buffer "ALU:aluEntity|ArithLogic:arithAndLogicEntity|HI[0]" feeding internal logic into a wire
+    Warning (13049): Converted tri-state buffer "ALU:aluEntity|ArithLogic:arithAndLogicEntity|HI[1]" feeding internal logic into a wire
+    Warning (13049): Converted tri-state buffer "ALU:aluEntity|ArithLogic:arithAndLogicEntity|cout" feeding internal logic into a wire
+    Warning (13049): Converted tri-state buffer "ALU:aluEntity|ArithLogic:arithAndLogicEntity|HI[2]" feeding internal logic into a wire
+    Warning (13049): Converted tri-state buffer "ALU:aluEntity|ArithLogic:arithAndLogicEntity|LO[2]" feeding internal logic into a wire
+    Warning (13049): Converted tri-state buffer "ALU:aluEntity|ArithLogic:arithAndLogicEntity|LO[3]" feeding internal logic into a wire
+    Warning (13049): Converted tri-state buffer "ALU:aluEntity|ArithLogic:arithAndLogicEntity|LO[4]" feeding internal logic into a wire
+    Warning (13049): Converted tri-state buffer "ALU:aluEntity|ArithLogic:arithAndLogicEntity|LO[5]" feeding internal logic into a wire
+    Warning (13049): Converted tri-state buffer "ALU:aluEntity|ArithLogic:arithAndLogicEntity|LO[6]" feeding internal logic into a wire
+    Warning (13049): Converted tri-state buffer "ALU:aluEntity|ArithLogic:arithAndLogicEntity|LO[7]" feeding internal logic into a wire
+    Warning (13049): Converted tri-state buffer "ALU:aluEntity|ArithLogic:arithAndLogicEntity|HI[3]" feeding internal logic into a wire
+    Warning (13049): Converted tri-state buffer "ALU:aluEntity|ArithLogic:arithAndLogicEntity|HI[4]" feeding internal logic into a wire
+    Warning (13049): Converted tri-state buffer "ALU:aluEntity|ArithLogic:arithAndLogicEntity|HI[5]" feeding internal logic into a wire
+    Warning (13049): Converted tri-state buffer "ALU:aluEntity|ArithLogic:arithAndLogicEntity|HI[6]" feeding internal logic into a wire
+    Warning (13049): Converted tri-state buffer "ALU:aluEntity|ArithLogic:arithAndLogicEntity|HI[7]" feeding internal logic into a wire
+Info (278001): Inferred 1 megafunctions from design logic
+    Info (278003): Inferred multiplier megafunction ("lpm_mult") from the following logic: "ALU:aluEntity|ArithLogic:arithAndLogicEntity|MultSub:multEntity|Mult0"
+Info (12130): Elaborated megafunction instantiation "ALU:aluEntity|ArithLogic:arithAndLogicEntity|MultSub:multEntity|lpm_mult:Mult0"
+Info (12133): Instantiated megafunction "ALU:aluEntity|ArithLogic:arithAndLogicEntity|MultSub:multEntity|lpm_mult:Mult0" with the following parameter:
+    Info (12134): Parameter "LPM_WIDTHA" = "8"
+    Info (12134): Parameter "LPM_WIDTHB" = "8"
+    Info (12134): Parameter "LPM_WIDTHP" = "16"
+    Info (12134): Parameter "LPM_WIDTHR" = "16"
+    Info (12134): Parameter "LPM_WIDTHS" = "1"
+    Info (12134): Parameter "LPM_REPRESENTATION" = "UNSIGNED"
+    Info (12134): Parameter "INPUT_A_IS_CONSTANT" = "NO"
+    Info (12134): Parameter "INPUT_B_IS_CONSTANT" = "NO"
+    Info (12134): Parameter "MAXIMIZE_SPEED" = "5"
+Info (12021): Found 1 design units, including 1 entities, in source file db/mult_o5t.tdf
+    Info (12023): Found entity 1: mult_o5t
+Info (16010): Generating hard_block partition "hard_block:auto_generated_inst"
+    Info (16011): Adding 0 node(s), including 0 DDIO, 0 PLL, 0 transceiver and 0 LCELL
+Info (21057): Implemented 298 device resources after synthesis - the final resource count might be different
+    Info (21058): Implemented 12 input pins
+    Info (21059): Implemented 18 output pins
+    Info (21061): Implemented 267 logic cells
+    Info (21062): Implemented 1 DSP elements
+Info: Quartus II 64-Bit Analysis & Synthesis was successful. 0 errors, 25 warnings
+    Info: Peak virtual memory: 4659 megabytes
+    Info: Processing ended: Fri May 29 20:10:37 2020
+    Info: Elapsed time: 00:00:11
+    Info: Total CPU time (on all processors): 00:00:10
+
+

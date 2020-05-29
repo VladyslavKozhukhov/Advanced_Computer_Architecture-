@@ -1,35 +1,24 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 PACKAGE aux_package IS
-	-----------------------------------------------------------------
-	COMPONENT top IS
-		GENERIC (
-			n : POSITIVE := 8; -- A,B length
-			m : POSITIVE := 5; -- OPC length
-			k : POSITIVE := 2 -- STATUS length
-		);
-		PORT (
-			rst, ena, clk, cin : IN std_logic;
-			A, B : IN std_logic_vector(n - 1 DOWNTO 0);
-			OPC : IN std_logic_vector(m - 1 DOWNTO 0);
-			----------------------------------------
-			RES : OUT std_logic_vector(2 * n - 1 DOWNTO 0); -- RES(HI,LO)
-			STATUS : OUT std_logic_vector(k - 1 DOWNTO 0)
-		);
-	END COMPONENT;
-	-----------------------------------------------------------------
-	COMPONENT ReadLogic IS
-		GENERIC (
-			n : POSITIVE := 8; -- A,B length
-			m : POSITIVE := 5 -- OPC length
-		);
-		PORT (
-			rst, ena, clk : IN std_logic;
-			OPC : OUT std_logic_vector(m - 1 DOWNTO 0);
-			A, B : OUT std_logic_vector(n - 1 DOWNTO 0);
-			cin,endSig : OUT std_logic
-		);
-	END COMPONENT;
+	-----------------------------------------------------------------	
+COMPONENT top IS
+	GENERIC (
+		n : POSITIVE := 8; -- A,B length
+		m : POSITIVE := 5; -- OPC length
+		k : POSITIVE := 2 -- STATUS length
+	);
+	PORT (
+		key_0,key_1,key_2,key_3 : IN std_logic;
+		sw_0_7 : IN std_logic_vector(n - 1 DOWNTO 0);
+		----------------------------------------
+		STATUS : OUT std_logic_vector(k - 1 DOWNTO 0);
+		HI_OUT: OUT std_logic_vector(n - 1 DOWNTO 0);
+		LO_OUT: OUT std_logic_vector(n - 1 DOWNTO 0)
+
+	);
+END COMPONENT;
+
 	-----------------------------------------------------------------  
 	COMPONENT MACModule IS
 		GENERIC (
@@ -42,37 +31,44 @@ PACKAGE aux_package IS
 			ACC : OUT std_logic_vector(2 * n - 1 DOWNTO 0)
 		);
 	END COMPONENT;
-	-----------------------------------------------------------------  
-	COMPONENT WriteLogic IS
-		GENERIC (
-			n : POSITIVE := 8; -- A,B length
-			k : POSITIVE := 2 -- STATUS length
-		);
-		PORT (
 
-			rst, ena, clk : IN std_logic;
-			STATUS : IN std_logic_vector(k - 1 DOWNTO 0);
-			HI, LO : IN std_logic_vector(n - 1 DOWNTO 0);
-			endSig : IN std_logic
-		);
-	END COMPONENT;
 	-----------------------------------------------------------------
-	COMPONENT backRegister IS
-		GENERIC (
-			n : POSITIVE := 8; -- A,B length
-			m : POSITIVE := 5 -- OPC length
-		);
-		PORT (
-			rst, ena, clk : IN std_logic;
-			OPC_in : IN std_logic_vector(m - 1 DOWNTO 0);
-			A_in, B_in : IN std_logic_vector(n - 1 DOWNTO 0);
-			cin_in : IN std_logic;
-			----------------------------------------
-			OPC_out : OUT std_logic_vector(m - 1 DOWNTO 0);
-			A_out, B_out : OUT std_logic_vector(n - 1 DOWNTO 0);
-			cin_out : OUT std_logic
-		);
-	END COMPONENT;
+COMPONENT A_Register IS
+	GENERIC (
+		n : POSITIVE := 8 -- A,B length
+	);
+	PORT (
+		ena : IN std_logic;
+		A_in: IN std_logic_vector(n - 1 DOWNTO 0);
+		----------------------------------------
+		A_out: OUT std_logic_vector(n - 1 DOWNTO 0)
+	);
+END COMPONENT;
+-----------------------------------------------------------------
+COMPONENT OP_Register IS
+	GENERIC (
+		n : POSITIVE := 8; -- A,B length
+		m : POSITIVE := 5 -- OPC length
+	);
+	PORT (
+		ena : IN std_logic;
+		OP_in: IN std_logic_vector(n - 1 DOWNTO 0);
+		----------------------------------------
+		OP_out: OUT std_logic_vector(m - 1 DOWNTO 0)
+	);
+END COMPONENT;
+	-----------------------------------------------------------------
+COMPONENT B_Register IS
+	GENERIC (
+		n : POSITIVE := 8 -- A,B length
+	);
+	PORT (
+		ena : IN std_logic;
+		B_in: IN std_logic_vector(n - 1 DOWNTO 0);
+		----------------------------------------
+		B_out: OUT std_logic_vector(n - 1 DOWNTO 0)
+	);
+END COMPONENT;
 
 	-----------------------------------------------------------------
 	COMPONENT MultSub IS
@@ -99,21 +95,7 @@ PACKAGE aux_package IS
 			STATUS : OUT std_logic_vector(k - 1 DOWNTO 0)
 		);
 	END COMPONENT;
-	-----------------------------------------------------------------
-	COMPONENT frontRegister IS
-		GENERIC (
-			n : POSITIVE := 8; -- A,B length
-			k : POSITIVE := 2 -- STATUS length
-		);
-		PORT (
-			rst, ena, clk : IN std_logic;
-			HI_in, LO_in : IN std_logic_vector(n - 1 DOWNTO 0);
-			Status_in : IN std_logic_vector(k - 1 DOWNTO 0);
-			----------------------------------------
-			HI_out, LO_out : OUT std_logic_vector(n - 1 DOWNTO 0);
-			Status_out : OUT std_logic_vector(k - 1 DOWNTO 0)
-		);
-	END COMPONENT;
+
 	-----------------------------------------------------------------
 	COMPONENT shifter IS
 		GENERIC (
