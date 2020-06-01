@@ -15,7 +15,8 @@ ENTITY top IS
 		OPC : IN std_logic_vector(m - 1 DOWNTO 0);
 		----------------------------------------
 		RES : OUT std_logic_vector(2 * n - 1 DOWNTO 0); -- RES(HI,LO)
-		STATUS : OUT std_logic_vector(k - 1 DOWNTO 0)
+		STATUS : OUT std_logic_vector(k - 1 DOWNTO 0);
+		sinGGG : OUT std_logic
 	);
 END top;
 ------------- complete the top Architecture code --------------
@@ -29,10 +30,11 @@ ARCHITECTURE arc_sys OF top IS
 	SIGNAL alu_status : std_logic_vector(k - 1 DOWNTO 0):= (OTHERS => '0');
 	SIGNAL sel : std_logic;
 	SIGNAL cin_total : std_logic:='0';
+	SIGNAL cin_totalR : std_logic:='0';
 
 BEGIN
 	
-	backREG : BACKregister GENERIC MAP(n, m) PORT MAP(rst, ena, clk, OPC, A, B, cin_total, OPC_SIG, A_SIG, B_SIG, cin_SIG);
+	backREG : BACKregister GENERIC MAP(n, m) PORT MAP(rst, ena, clk, OPC, A, B,cin, cin_total, OPC_SIG, A_SIG, B_SIG, cin_SIG);
 	aluEntity : ALU GENERIC MAP(n, m, k) PORT MAP(clk, OPC_SIG, A_SIG, B_SIG, cin_SIG, HI, LO, alu_status);
 	frontREG : FRONTregister GENERIC MAP(n, k) PORT MAP(rst, ena, clk, HI, LO, alu_status, HI_SIG, LO_SIG, STATUS);	
 	RES(2 * n - 1 DOWNTO n) <= HI_SIG;
@@ -41,25 +43,24 @@ BEGIN
 	
 
 
-updateCin : PROCESS (clk)
+
+updateCwin : PROCESS (clk)
+VARIABLE resultVar : std_logic;
 BEGIN
---if(clk'event and clk ='1' and cin = 'X') then	
-	--			cin_total<=cin;	
-	if(clk'event and clk ='0') THEN
-			iF(alu_status = "11" or alu_status="01")then
-				cin_total<='1';
+if(clk'event and clk ='0') THEN
+		iF(alu_status = "11" or alu_status="01")then
+			resultVar:='1';
 			else
-				cin_total<='0';
-			end if;
-			
-					
+				resultVar:='0';
+		end if;
 	End if;
-	END PROCESS updateCin;
+	cin_total<=resultVar;
+	sinGGG<=resultVar;
+END PROCESS updateCwin;
 
 
+	--cin_total<=cin_totalR when cin = 'X' else cin;
 
-
-
-
+					
 
 END arc_sys;

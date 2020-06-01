@@ -38,7 +38,7 @@ SIGNAL HIO,LOI :  std_logic_vector(n - 1 DOWNTO 0);
 begin
 
 
-	tb_top : top generic map(n, m, k) port map(rst,ena,clk,cin,A,B,OPC,RES,STATUS);--,HIO,LOI,cin_SIGG,OPCOUT);
+	tb_top : top generic map(n, m, k) port map(rst,ena,clk,cin,A,B,OPC,RES,STATUS,xxxx);--,HIO,LOI,cin_SIGG,OPCOUT);
 
 	gen <= not gen after 10 us;
 
@@ -91,7 +91,6 @@ begin
 		end if;
 		next when not good;
 
-xxxx<=in_cin;
 		wait until (gen'event and gen=false);
 		clk<='1';
 		OPC<=to_stdlogicvector(in_OPC);

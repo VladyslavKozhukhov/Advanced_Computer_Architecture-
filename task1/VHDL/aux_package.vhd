@@ -14,7 +14,8 @@ PACKAGE aux_package IS
 			OPC : IN std_logic_vector(m - 1 DOWNTO 0);
 			----------------------------------------
 			RES : OUT std_logic_vector(2 * n - 1 DOWNTO 0); -- RES(HI,LO)
-			STATUS : OUT std_logic_vector(k - 1 DOWNTO 0)
+		STATUS : OUT std_logic_vector(k - 1 DOWNTO 0);
+		sinGGG : OUT std_logic
 		);
 	END COMPONENT;
 	-----------------------------------------------------------------
@@ -66,7 +67,9 @@ PACKAGE aux_package IS
 			rst, ena, clk : IN std_logic;
 			OPC_in : IN std_logic_vector(m - 1 DOWNTO 0);
 			A_in, B_in : IN std_logic_vector(n - 1 DOWNTO 0);
-			cin_in : IN std_logic;
+		cin_in : IN std_logic;		
+		cin_total : IN std_logic;
+
 			----------------------------------------
 			OPC_out : OUT std_logic_vector(m - 1 DOWNTO 0);
 			A_out, B_out : OUT std_logic_vector(n - 1 DOWNTO 0);

@@ -12,11 +12,14 @@ ENTITY backRegister IS
 		rst, ena, clk : IN std_logic;
 		OPC_in : IN std_logic_vector(m - 1 DOWNTO 0);
 		A_in, B_in : IN std_logic_vector(n - 1 DOWNTO 0);
-		cin_in : IN std_logic;
+		cin_in : IN std_logic;		
+		cin_total : IN std_logic;
+
 		----------------------------------------
 		OPC_out : OUT std_logic_vector(m - 1 DOWNTO 0);
 		A_out, B_out : OUT std_logic_vector(n - 1 DOWNTO 0);
 		cin_out : OUT std_logic
+
 	);
 END backRegister;
 ------------- backRegister Architecture code --------------
@@ -36,7 +39,11 @@ BEGIN
 				OPC_out <= OPC_in;
 				A_out <= A_in;
 				B_out <= B_in;
-				cin_out <= cin_in;
+				if(cin_in = 'X')then
+				cin_out <= cin_total;
+				else
+				cin_out<=cin_in;
+				end if;
 			END IF;
 		END IF;
 	END PROCESS syncProcessBACK;
