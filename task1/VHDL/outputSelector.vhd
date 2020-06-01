@@ -105,8 +105,8 @@ BEGIN
 	HI <= HI_SIG;
 	LO <= LO_SIG;
 
-	STATUS <= "11" WHEN carry = '1' AND ((HI_SIG = zeroSig) AND (LO_SIG = zeroSig))ELSE
-			"10" WHEN ((HI_SIG = zeroSig) AND (LO_SIG = zeroSig)) ELSE --RES(HI,LO) = 0...0
+	STATUS <= "11" WHEN carry = '1' AND ( (LO_SIG = zeroSig))ELSE
+			"10" WHEN ( (LO_SIG = zeroSig)) ELSE --RES(HI,LO) = 0...0
 			
 			"01" WHEN (carry = '1') ELSE
 		"00";
