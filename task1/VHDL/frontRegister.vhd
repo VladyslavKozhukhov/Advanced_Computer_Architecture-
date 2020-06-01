@@ -28,6 +28,7 @@ ARCHITECTURE arc_frontRegister OF frontRegister IS
 	CONSTANT OPC_MAC : INTEGER := 5;
 	SIGNAL OPC_INTEGER : INTEGER;
 	SIGNAL HI_inS, LO_inS :std_logic_vector(n - 1 DOWNTO 0);
+	SIGNAL	Status_inS :  std_logic_vector(k - 1 DOWNTO 0);
 
 
 BEGIN
@@ -45,9 +46,11 @@ OPC_INTEGER <= to_integer(unsigned(OPC));
 				Status_out <= Status_in;
 				HI_inS<=HI_in;
 				LO_inS<=LO_in;
+				Status_inS<=Status_in;
 			elsif(ena = '1'  and HI_in(0)='Z') then
 				HI_out <= HI_ins;
 				LO_out <= LO_inS;
+				Status_out<=Status_inS;
 			END IF;
 		END IF;
 	END PROCESS syncProcessFRONT;

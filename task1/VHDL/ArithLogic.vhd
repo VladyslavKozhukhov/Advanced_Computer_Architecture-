@@ -100,7 +100,7 @@ BEGIN
 		--'0' WHEN (OPC_INTEGER = "01001") ELSE -- AND
 		--'0' WHEN (OPC_INTEGER = "01010") ELSE -- OR
 		--'0' WHEN (OPC_INTEGER = "01011") ELSE -- XOR
-		--'1'	WHEN (OPC = "00101" AND ACC(2*n) = '1') ELSE -- MAC
+		'1'	WHEN (OPC_INTEGER = OPC_MAC AND ACC((2 * n - 1) DOWNTO n) > mlt) ELSE -- MAC
 		--'0' WHEN (OPC_INTEGER = OPC_ADD AND AdderSubResult(n)='0') ELSE -- ADD	
 		--'0' WHEN (OPC_INTEGER = "00011" AND AdderSubResult(n)='0') ELSE -- ADDC			
 		--'0' WHEN (OPC_INTEGER = "00010" AND AdderSubResult(n)='0') ELSE -- SUB

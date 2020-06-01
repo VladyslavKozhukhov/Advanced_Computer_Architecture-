@@ -2,7 +2,6 @@ LIBRARY IEEE;
 USE ieee.std_logic_1164.ALL;
 use ieee.std_logic_arith.all;
 USE ieee.std_logic_unsigned.ALL;
-
 use ieee.numeric_std.ALL;
 USE work.aux_package.ALL;
 use std.textio.all;
@@ -23,10 +22,13 @@ ARCHITECTURE Arc_tb_read_write OF tb_read_write  IS
 			SIGNAL write_first:STD_LOGIC:='1';
 			SIGNAL	ena:STD_LOGIC:='1';
 			SIGNAL	xxxx:STD_LOGIC;
-
+	CONSTANT OPC_MAC : INTEGER := 5;
+	SIGNAL OPC_INTEGER : INTEGER;
+	
 SIGNAL HIO,LOI :  std_logic_vector(n - 1 DOWNTO 0);
 				SIGNAL	 cin_SIGG :  std_logic;
 	SIGNAL	OPCOUT :  std_logic_vector(m - 1 DOWNTO 0);
+	SIGNAL OPCCCC : STD_LOGIC_VECTOR(m-1 DOWNTO 0);
 
 		----------------------------------------
 			signal gen: boolean:=true;
@@ -65,6 +67,7 @@ begin
 	variable HI,LO,TOO:std_logic_vector(n-1 downto 0);
 	variable good:boolean;
 		variable goodd:boolean;
+		variable can_read:boolean := true;
 
 	BEGIN
 
@@ -73,6 +76,7 @@ begin
 
 
 	while not endfile(infile) loop
+	if( can_read) then
 		readline (infile,L);
 		read(L,in_OPC,good);
 		--next when not good;		
@@ -99,6 +103,12 @@ begin
 		elsif(not goodd) then
 		cin<='X';
 		end if;
+		OPCCCC <= to_stdlogicvector(in_OPC);
+		
+		--if(OPCCCC(4 DOWNTO 0) = "00101") then
+	--		can_read := false;
+	--	end if;
+ 
 
 		--------------------------------
 		wait until (gen'event and gen=true);
@@ -106,12 +116,33 @@ begin
 		
 		if(write_first='1') then
 			write_first<= '0';
-		else
+		elsif ( can_read) then
 			write(L1,to_bitvector(RES(2*n-1 downto n)),left,10);
 			write(L1,to_bitvector(RES(n-1 downto 0)),left,10);
 			write(L1,to_bitvector(STATUS));
 			writeline(outfile,L1);
 		end if;
+	else
+
+	wait until (gen'event and gen=false);
+			clk<='1';
+		OPC<=to_stdlogicvector(in_OPC);
+
+		wait until (gen'event and gen=true);
+			clk<='0';
+				wait until (gen'event and gen=false);
+			clk<='1';
+
+		wait until (gen'event and gen=true);
+			clk<='0';
+		can_read := true;
+		write(L1,to_bitvector(RES(2*n-1 downto n)),left,10);
+			write(L1,to_bitvector(RES(n-1 downto 0)),left,10);
+			write(L1,to_bitvector(STATUS));
+			writeline(outfile,L1);
+
+	end if;
+	
 	end loop;
 			wait until (gen'event and gen=false);
 			clk<='1';
