@@ -2,6 +2,8 @@ LIBRARY IEEE;
 USE ieee.std_logic_1164.ALL;
 use ieee.std_logic_arith.all;
 USE ieee.std_logic_unsigned.ALL;
+
+use ieee.numeric_std.ALL;
 USE work.aux_package.ALL;
 use std.textio.all;
 -------------------------------------------------------------
@@ -18,8 +20,9 @@ ARCHITECTURE Arc_tb_read_write OF tb_read_write  IS
 	SIGNAL OPC : STD_LOGIC_VECTOR(m-1 DOWNTO 0);
 	SIGNAL STATUS : STD_LOGIC_VECTOR(k-1 DOWNTO 0);
 		SIGNAL rst : STD_LOGIC :='0';
-			SIGNAL write_first,rst_off :STD_LOGIC:='1';
+			SIGNAL write_first:STD_LOGIC:='1';
 			SIGNAL	ena:STD_LOGIC:='1';
+			SIGNAL	xxxx:STD_LOGIC;
 
 SIGNAL HIO,LOI :  std_logic_vector(n - 1 DOWNTO 0);
 				SIGNAL	 cin_SIGG :  std_logic;
@@ -50,34 +53,55 @@ begin
 	variable L:Line;
 		variable L1:Line;
 
-	variable in_OPC:bit_vector(m-1 downto 0);
+	variable in_OPC_tmp:bit_vector(m-1 downto 0);
+		variable in_OPC:bit_vector(m-1 downto 0);
+
 	variable in_A:bit_vector(n-1 downto 0);
 	variable in_B:bit_vector(n-1 downto 0);
-	variable in_cin:bit;
-	variable HI,LO:std_logic_vector(n-1 downto 0);
+	variable in_cin:std_logic;
+	 variable in_cinx : bit;
+
+
+	variable HI,LO,TOO:std_logic_vector(n-1 downto 0);
 	variable good:boolean;
+		variable goodd:boolean;
+
 	BEGIN
 
 	wait until (gen=true);
 
+
+
 	while not endfile(infile) loop
 		readline (infile,L);
 		read(L,in_OPC,good);
-		next when not good;		
+		--next when not good;		
 		read(L,in_A,good);
-		next when not good;		
+		--next when not good;		
 		read(L,in_B,good);
-		next when not good;
-		read(L,in_cin,good);
+		--next when not good;
+		read(L,in_cinx,good);
+		if(good) then
+		goodd :=good;
+		elsif(NOT good) then
+
+		goodd :=good;
+
+		good:=not good;
+		end if;
 		next when not good;
 
-
+xxxx<=in_cin;
 		wait until (gen'event and gen=false);
 		clk<='1';
 		OPC<=to_stdlogicvector(in_OPC);
 		A<=to_stdlogicvector(in_A);
 		B<=to_stdlogicvector(in_B);
-		cin<=to_stdulogic(in_cin);
+		if(goodd) then
+		cin<=to_stdulogic(in_cinx);
+		elsif(not goodd) then
+		cin<='X';
+		end if;
 
 		--------------------------------
 		wait until (gen'event and gen=true);
