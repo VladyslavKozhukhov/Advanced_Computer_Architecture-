@@ -25,7 +25,7 @@ ARCHITECTURE arc_shifter OF shifter IS
 BEGIN
 	HI <= (OTHERS => '0');
 	shiftAmount <= to_integer(unsigned(B));
-shiftProcess : PROCESS (A, shiftAmount, sel)
+shiftProcess : PROCESS (A, shiftAmount, sel,cin)
 	variable tmpVector: UNSIGNED(n DOWNTO 0);
 	variable totalRes: std_logic_vector(n DOWNTO 0);
 	BEGIN

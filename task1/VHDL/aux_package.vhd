@@ -106,12 +106,16 @@ PACKAGE aux_package IS
 	COMPONENT frontRegister IS
 		GENERIC (
 			n : POSITIVE := 8; -- A,B length
+						m : POSITIVE := 5; -- OPC length
+
 			k : POSITIVE := 2 -- STATUS length
 		);
 		PORT (
 			rst, ena, clk : IN std_logic;
 			HI_in, LO_in : IN std_logic_vector(n - 1 DOWNTO 0);
 			Status_in : IN std_logic_vector(k - 1 DOWNTO 0);
+					OPC : IN std_logic_vector(m - 1 DOWNTO 0);
+
 			----------------------------------------
 			HI_out, LO_out : OUT std_logic_vector(n - 1 DOWNTO 0);
 			Status_out : OUT std_logic_vector(k - 1 DOWNTO 0)

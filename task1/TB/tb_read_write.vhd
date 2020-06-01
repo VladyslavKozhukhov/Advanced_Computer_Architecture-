@@ -84,9 +84,7 @@ begin
 		if(good) then
 		goodd :=good;
 		elsif(NOT good) then
-
 		goodd :=good;
-
 		good:=not good;
 		end if;
 		next when not good;

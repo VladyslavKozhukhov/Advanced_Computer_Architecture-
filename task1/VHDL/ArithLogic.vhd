@@ -30,6 +30,8 @@ ARCHITECTURE arc_ArithLogic OF ArithLogic IS
 	SIGNAL ACC : std_logic_vector(2 * n - 1 DOWNTO 0);
 	SIGNAL multResult : std_logic_vector(2 * n - 1 DOWNTO 0);
 	SIGNAL OPC_INTEGER : INTEGER;
+		CONSTANT mlt : std_logic_vector(n - 1 DOWNTO 0) := (OTHERS => '0');
+
 	---OPCODES--------
 	CONSTANT OPC_ADD : INTEGER := 1;
 	CONSTANT OPC_SUB : INTEGER := 2;
@@ -74,6 +76,7 @@ BEGIN
 		specART WHEN (OPC_INTEGER = OPC_ADDC AND AdderSubResult(n) = '1') ELSE -- ADDC if carry 1
 		ACC(2 * n - 1 DOWNTO n) WHEN(OPC_INTEGER = OPC_MAC) ELSE -- HI=ACC 2n-1 to n :MAC
 		multResult((2 * n - 1) DOWNTO n) WHEN (OPC = OPC_MULT) ELSE --MULT
+		(OTHERS => '1' ) WHEN (OPC_INTEGER = OPC_SUB and AdderSubResult(n) = '1' ) ELSE
 		(OTHERS => '0');
 	--	(others => '0')  WHEN (OPC_INTEGER = OPC_SUB) ELSE  					-- SUB
 	--(others => '0') WHEN (OPC_INTEGER(m-1 downto m-2) = "01") ELSE -- HI=0 : MIN,AND,OR,XOR,MAX,
@@ -105,7 +108,7 @@ BEGIN
 		'1' WHEN (OPC_INTEGER = OPC_ADD AND AdderSubResult(n) = '1') ELSE -- ADD					
 		'1' WHEN (OPC_INTEGER = OPC_ADDC AND AdderSubResult(n) = '1') ELSE -- ADDC
 		'1' WHEN (OPC_INTEGER = OPC_SUB AND AdderSubResult(n) = '1') ELSE -- SUB
-		'1' WHEN (OPC_INTEGER = OPC_MULT AND multResult(n) = '1') ELSE --MULT
+		'1' WHEN (OPC_INTEGER = OPC_MULT AND multResult > mlt) ELSE --MULT
 		'Z' WHEN (OPC_INTEGER = OPC_MAC_RST) ELSE -- MAC_RST			
 		'0'; --CONTINUE 
 END arc_ArithLogic;
