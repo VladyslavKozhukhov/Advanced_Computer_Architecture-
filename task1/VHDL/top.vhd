@@ -15,8 +15,7 @@ ENTITY top IS
 		OPC : IN std_logic_vector(m - 1 DOWNTO 0);
 		----------------------------------------
 		RES : OUT std_logic_vector(2 * n - 1 DOWNTO 0); -- RES(HI,LO)
-		STATUS : OUT std_logic_vector(k - 1 DOWNTO 0);
-		sinGGG : OUT std_logic
+		STATUS : OUT std_logic_vector(k - 1 DOWNTO 0)
 	);
 END top;
 ------------- complete the top Architecture code --------------
@@ -55,7 +54,6 @@ if(clk'event and clk ='0') THEN
 		end if;
 	End if;
 	cin_total<=resultVar;
-	sinGGG<=resultVar;
 END PROCESS updateCwin;
 
 

@@ -25,9 +25,6 @@ ARCHITECTURE Arc_tb_read_write OF tb_read_write  IS
 	CONSTANT OPC_MAC : INTEGER := 5;
 	SIGNAL OPC_INTEGER : INTEGER;
 	
-SIGNAL HIO,LOI :  std_logic_vector(n - 1 DOWNTO 0);
-				SIGNAL	 cin_SIGG :  std_logic;
-	SIGNAL	OPCOUT :  std_logic_vector(m - 1 DOWNTO 0);
 	SIGNAL OPCCCC : STD_LOGIC_VECTOR(m-1 DOWNTO 0);
 
 		----------------------------------------
@@ -40,7 +37,7 @@ SIGNAL HIO,LOI :  std_logic_vector(n - 1 DOWNTO 0);
 begin
 
 
-	tb_top : top generic map(n, m, k) port map(rst,ena,clk,cin,A,B,OPC,RES,STATUS,xxxx);--,HIO,LOI,cin_SIGG,OPCOUT);
+	tb_top : top generic map(n, m, k) port map(rst,ena,clk,cin,A,B,OPC,RES,STATUS);--,HIO,LOI,cin_SIGG,OPCOUT);
 
 	gen <= not gen after 10 us;
 
