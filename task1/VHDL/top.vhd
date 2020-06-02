@@ -39,7 +39,8 @@ BEGIN
 	RES(2 * n - 1 DOWNTO n) <= HI_SIG;
 
 	RES(n - 1 DOWNTO 0) <= LO_SIG;
-	updateCwin : PROCESS (clk)
+	
+	updateCwin : PROCESS (clk, alu_status)
 		VARIABLE resultVar : std_logic;
 	BEGIN
 		IF (clk'event AND clk = '0') THEN
