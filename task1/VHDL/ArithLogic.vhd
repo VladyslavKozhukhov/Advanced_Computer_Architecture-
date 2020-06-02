@@ -21,8 +21,8 @@ ENTITY ArithLogic IS
 END ArithLogic;
 ------------- ArithLogic Architecture code --------------
 ARCHITECTURE arc_ArithLogic OF ArithLogic IS
+
 	SIGNAL MaxMinAB : std_logic_vector(n - 1 DOWNTO 0);
-	CONSTANT hiART : std_logic_vector(n - 1 DOWNTO 0) := (OTHERS => '0');
 	SIGNAL specART : std_logic_vector(n - 1 DOWNTO 0); -- last bit 1;
 	SIGNAL maxMinFlag, coutSig, resetMAC : std_logic;
 	SIGNAL AdderSubSEL : std_logic_vector(1 DOWNTO 0);
@@ -30,7 +30,9 @@ ARCHITECTURE arc_ArithLogic OF ArithLogic IS
 	SIGNAL ACC : std_logic_vector(2 * n - 1 DOWNTO 0);
 	SIGNAL multResult : std_logic_vector(2 * n - 1 DOWNTO 0);
 	SIGNAL OPC_INTEGER : INTEGER;
-		CONSTANT mlt : std_logic_vector(n - 1 DOWNTO 0) := (OTHERS => '0');
+
+	CONSTANT mlt : std_logic_vector(n - 1 DOWNTO 0) := (OTHERS => '0');
+	CONSTANT hiART : std_logic_vector(n - 1 DOWNTO 0) := (OTHERS => '0');
 
 	---OPCODES--------
 	CONSTANT OPC_ADD : INTEGER := 1;
@@ -76,7 +78,7 @@ BEGIN
 		specART WHEN (OPC_INTEGER = OPC_ADDC AND AdderSubResult(n) = '1') ELSE -- ADDC if carry 1
 		ACC(2 * n - 1 DOWNTO n) WHEN(OPC_INTEGER = OPC_MAC) ELSE -- HI=ACC 2n-1 to n :MAC
 		multResult((2 * n - 1) DOWNTO n) WHEN (OPC = OPC_MULT) ELSE --MULT
-		(OTHERS => '1' ) WHEN (OPC_INTEGER = OPC_SUB and AdderSubResult(n) = '1' ) ELSE
+		(OTHERS => '1') WHEN (OPC_INTEGER = OPC_SUB AND AdderSubResult(n) = '1') ELSE
 		(OTHERS => '0');
 	--	(others => '0')  WHEN (OPC_INTEGER = OPC_SUB) ELSE  					-- SUB
 	--(others => '0') WHEN (OPC_INTEGER(m-1 downto m-2) = "01") ELSE -- HI=0 : MIN,AND,OR,XOR,MAX,
@@ -100,11 +102,10 @@ BEGIN
 		--'0' WHEN (OPC_INTEGER = "01001") ELSE -- AND
 		--'0' WHEN (OPC_INTEGER = "01010") ELSE -- OR
 		--'0' WHEN (OPC_INTEGER = "01011") ELSE -- XOR
-		'1'	WHEN (OPC_INTEGER = OPC_MAC AND ACC((2 * n - 1) DOWNTO n) > mlt) ELSE -- MAC
+		'1' WHEN (OPC_INTEGER = OPC_MAC AND ACC((2 * n - 1) DOWNTO n) > mlt) ELSE -- MAC
 		--'0' WHEN (OPC_INTEGER = OPC_ADD AND AdderSubResult(n)='0') ELSE -- ADD	
 		--'0' WHEN (OPC_INTEGER = "00011" AND AdderSubResult(n)='0') ELSE -- ADDC			
 		--'0' WHEN (OPC_INTEGER = "00010" AND AdderSubResult(n)='0') ELSE -- SUB
-
 		'1' WHEN (OPC_INTEGER = OPC_ADD AND AdderSubResult(n) = '1') ELSE -- ADD					
 		'1' WHEN (OPC_INTEGER = OPC_ADDC AND AdderSubResult(n) = '1') ELSE -- ADDC
 		'1' WHEN (OPC_INTEGER = OPC_SUB AND AdderSubResult(n) = '1') ELSE -- SUB
