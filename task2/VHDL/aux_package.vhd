@@ -13,25 +13,36 @@ COMPONENT top IS
 		sw_0_7 : IN std_logic_vector(n - 1 DOWNTO 0);
 		----------------------------------------
 		STATUS : OUT std_logic_vector(k - 1 DOWNTO 0);
-		HI_OUT: OUT std_logic_vector(n - 1 DOWNTO 0);
-		LO_OUT: OUT std_logic_vector(n - 1 DOWNTO 0)
+		HI_OUT, LO_OUT: OUT std_logic_vector(n - 1 DOWNTO 0);
+		SEG0_OUT, SEG1_OUT: OUT std_logic_vector(6 DOWNTO 0);
+		SEG2_OUT, SEG3_OUT: OUT std_logic_vector(6 DOWNTO 0)
 
 	);
 END COMPONENT;
-
+	-----------------------------------------------------------------
+COMPONENT sevenSegment IS
+	GENERIC (
+		n : POSITIVE := 8 -- A,B length
+	);
+	PORT (
+		HI, LO : IN std_logic_vector(n - 1 DOWNTO 0);
+		----------------------------------------
+		SEG0_OUT, SEG1_OUT: OUT std_logic_vector(6 DOWNTO 0);
+		SEG2_OUT, SEG3_OUT: OUT std_logic_vector(6 DOWNTO 0)
+	);
+END COMPONENT;
 	-----------------------------------------------------------------  
-	COMPONENT MACModule IS
-		GENERIC (
-			n : POSITIVE := 8 -- A,B length
-		);
-		PORT (
-			rst, clk : IN std_logic;
-			A, B : IN std_logic_vector(n - 1 DOWNTO 0);
-			----------------------------------------
-			ACC : OUT std_logic_vector(2 * n - 1 DOWNTO 0)
-		);
-	END COMPONENT;
-
+COMPONENT MACModule IS
+	GENERIC (
+		n : POSITIVE := 8 -- A,B length
+	);
+	PORT (
+		rst, clk : IN std_logic;
+		A, B : IN std_logic_vector(n - 1 DOWNTO 0);
+		----------------------------------------
+		ACC : OUT std_logic_vector(2 * n - 1 DOWNTO 0)
+	);
+END COMPONENT;
 	-----------------------------------------------------------------
 COMPONENT A_Register IS
 	GENERIC (

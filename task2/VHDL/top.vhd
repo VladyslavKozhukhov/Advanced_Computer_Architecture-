@@ -14,8 +14,9 @@ ENTITY top IS
 		sw_0_7 : IN std_logic_vector(n - 1 DOWNTO 0);
 		----------------------------------------
 		STATUS : OUT std_logic_vector(k - 1 DOWNTO 0);
-		HI_OUT: OUT std_logic_vector(n - 1 DOWNTO 0);
-		LO_OUT: OUT std_logic_vector(n - 1 DOWNTO 0)
+		HI_OUT, LO_OUT: OUT std_logic_vector(n - 1 DOWNTO 0);
+		SEG0_OUT, SEG1_OUT: OUT std_logic_vector(6 DOWNTO 0);
+		SEG2_OUT, SEG3_OUT: OUT std_logic_vector(6 DOWNTO 0)
 
 	);
 END top;
@@ -42,11 +43,13 @@ BEGIN
 	key_0_delay <= key_0 after 20 ns;
 	key_1_delay<=key_1 after 20 ns;
 	key_2_delay<=key_2 after 20 ns;
-	key_3_delay<= key_3 after 20 ns;
+	key_3_delay<=key_3 after 20 ns;
 	cin_SIG<='1' when (alu_status = "01" or alu_status = "11") else  '0' after 20 ns;
 	STATUS<=alu_status;
 	HI_OUT<=HI;
 	LO_OUT<=LO;
+	
+	sevenSEG : sevenSegment GENERIC MAP(n) PORT MAP(HI, LO, SEG0_OUT, SEG1_OUT, SEG2_OUT, SEG3_OUT);
 
 
 END arc_sys;
