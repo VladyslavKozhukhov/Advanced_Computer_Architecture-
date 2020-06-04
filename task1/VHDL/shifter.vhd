@@ -34,17 +34,19 @@ BEGIN
 				totalRes(n - 1 DOWNTO 0) := A;
 				totalRes(n) := cin;
 				tmpVector := unsigned(totalRes);
-				FOR i IN 1 TO shiftAmount LOOP
+				FOR i IN 1 TO 7 LOOP
 					tmpVector := tmpVector ROL 1;
 					tmpVector(0) := '0';
+					EXIT WHEN (i = shiftAmount);
 				END LOOP;
 				totalRes := std_logic_vector(tmpVector);
 			WHEN "10" => --RRA--
 				totalRes(n - 1 DOWNTO 0) := A;
 				tmpVector := unsigned(totalRes);
-				FOR i IN 1 TO shiftAmount LOOP
+				FOR i IN 1 TO 7 LOOP
 					tmpVector (n) := tmpVector (n - 1);
 					tmpVector := tmpVector ROR 1;
+					EXIT WHEN (i = shiftAmount);
 				END LOOP;
 				totalRes := std_logic_vector(tmpVector);
 			WHEN "01" => --RLC--
