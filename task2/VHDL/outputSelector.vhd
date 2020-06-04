@@ -17,7 +17,7 @@ ENTITY outputSelector IS
 		shifter_LO, shifter_HI : IN std_logic_vector(n - 1 DOWNTO 0);
 		cout_shifter : IN std_logic;
 		----------------------------------------
-		HI, LO : OUT std_logic_vector(n - 1 DOWNTO 0);
+		HI, LO : BUFFER std_logic_vector(n - 1 DOWNTO 0);
 		STATUS : OUT std_logic_vector(k - 1 DOWNTO 0)
 	);
 END outputSelector;
@@ -73,7 +73,7 @@ BEGIN
 		arith_logic_HI WHEN (OPC_INTEGER = OPC_ADDC) ELSE
 		arith_logic_HI WHEN (OPC_INTEGER = OPC_MULT) ELSE
 		arith_logic_HI WHEN (OPC_INTEGER = OPC_MAC) ELSE
-		arith_logic_HI WHEN (OPC_INTEGER = OPC_MAC_RST) ELSE
+		HI WHEN (OPC_INTEGER = OPC_MAC_RST) ELSE  -- MAC_RST Keeps the same HI, LO values
 		arith_logic_HI WHEN (OPC_INTEGER = OPC_MAX) ELSE
 		arith_logic_HI WHEN (OPC_INTEGER = OPC_MIN) ELSE
 		arith_logic_HI WHEN (OPC_INTEGER = OPC_AND) ELSE
@@ -83,14 +83,14 @@ BEGIN
 		shifter_HI WHEN (OPC_INTEGER = OPC_RLC) ELSE
 		shifter_HI WHEN (OPC_INTEGER = OPC_RRA) ELSE
 		shifter_HI WHEN (OPC_INTEGER = OPC_RRC) ELSE
-		(OTHERS => '0');
+		HI;  -- Invalid OPC Keeps the same HI, LO values
 
 	LO_SIG <= arith_logic_LO WHEN (OPC_INTEGER = OPC_ADD) ELSE
 		arith_logic_LO WHEN (OPC_INTEGER = OPC_SUB) ELSE
 		arith_logic_LO WHEN (OPC_INTEGER = OPC_ADDC) ELSE
 		arith_logic_LO WHEN (OPC_INTEGER = OPC_MULT) ELSE
 		arith_logic_LO WHEN (OPC_INTEGER = OPC_MAC) ELSE
-		arith_logic_LO WHEN (OPC_INTEGER = OPC_MAC_RST) ELSE
+		LO WHEN (OPC_INTEGER = OPC_MAC_RST) ELSE  -- MAC_RST Keeps the same HI, LO values
 		arith_logic_LO WHEN (OPC_INTEGER = OPC_MAX) ELSE
 		arith_logic_LO WHEN (OPC_INTEGER = OPC_MIN) ELSE
 		arith_logic_LO WHEN (OPC_INTEGER = OPC_AND) ELSE
@@ -100,7 +100,7 @@ BEGIN
 		shifter_LO WHEN (OPC_INTEGER = OPC_RLC) ELSE
 		shifter_LO WHEN (OPC_INTEGER = OPC_RRA) ELSE
 		shifter_LO WHEN (OPC_INTEGER = OPC_RRC) ELSE
-		(OTHERS => '0');
+		LO;  -- Invalid OPC Keeps the same HI, LO values
 
 	HI <= HI_SIG;
 	LO <= LO_SIG;

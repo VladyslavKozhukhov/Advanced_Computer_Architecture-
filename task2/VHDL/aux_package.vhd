@@ -185,7 +185,7 @@ END COMPONENT;
 			shifter_LO, shifter_HI : IN std_logic_vector(n - 1 DOWNTO 0);
 			cout_shifter : IN std_logic;
 			----------------------------------------
-			HI, LO : OUT std_logic_vector(n - 1 DOWNTO 0);
+			HI, LO : BUFFER std_logic_vector(n - 1 DOWNTO 0);
 			STATUS : OUT std_logic_vector(k - 1 DOWNTO 0)
 		);
 	END COMPONENT;

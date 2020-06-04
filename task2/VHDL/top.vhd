@@ -38,7 +38,7 @@ BEGIN
 	AREG : A_Register GENERIC MAP(n) PORT MAP(key_0_delay, sw_0_7, A_SIG);
 	BREG: B_Register GENERIC MAP(n) PORT MAP(key_2_delay, sw_0_7, B_SIG);
 	OPREG: OP_Register GENERIC MAP(n) PORT MAP(key_1_delay, sw_0_7, OPC_SIG);
-
+	
 	aluEntity : ALU GENERIC MAP(n, m, k) PORT MAP(key_3_delay, OPC_SIG, A_SIG, B_SIG, cin_SIG, HI, LO, alu_status);
 	key_0_delay <= key_0 after 20 ns;
 	key_1_delay<=key_1 after 20 ns;
