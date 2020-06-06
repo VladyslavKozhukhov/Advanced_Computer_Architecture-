@@ -165,6 +165,7 @@ PACKAGE aux_package IS
 			k : POSITIVE := 2 -- STATUS length
 		);
 		PORT (
+			clk : IN std_logic;
 			OPC : IN std_logic_vector(m - 1 DOWNTO 0);
 			arith_logic_LO, arith_logic_HI : IN std_logic_vector(n - 1 DOWNTO 0);
 			cout_arith_logic : IN std_logic;

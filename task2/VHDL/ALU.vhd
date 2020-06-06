@@ -11,6 +11,7 @@ ENTITY ALU IS
 	);
 	PORT (
 		clk : IN std_logic;
+		clkMAC : IN std_logic;
 		OPC : IN std_logic_vector(m - 1 DOWNTO 0);
 		A, B : IN std_logic_vector(n - 1 DOWNTO 0);
 		cin : IN std_logic;
@@ -29,8 +30,8 @@ ARCHITECTURE arc_ALU OF ALU IS
 
 BEGIN
 
-	arithAndLogicEntity : ArithLogic GENERIC MAP(n, m) PORT MAP(clk, OPC, A, B, cin, arith_logic_HI, arith_logic_LO, cout_arith_logic); --test
+	arithAndLogicEntity : ArithLogic GENERIC MAP(n, m) PORT MAP(clkMAC, OPC, A, B, cin, arith_logic_HI, arith_logic_LO, cout_arith_logic); --test
 	shiftEntity : shifter GENERIC MAP(n) PORT MAP(cin, A, B(2 DOWNTO 0), OPC(1 DOWNTO 0), shifter_HI, shifter_LO, cout_shifter); --TO DO: *FIXES ONLY*
-	selectorEntity : outputSelector GENERIC MAP(n, m, k) PORT MAP(OPC, arith_logic_LO, arith_logic_HI, cout_arith_logic, shifter_LO, shifter_HI, cout_shifter, HI, LO, STATUS); --DONE
+	selectorEntity : outputSelector GENERIC MAP(n, m, k) PORT MAP(clk, OPC, arith_logic_LO, arith_logic_HI, cout_arith_logic, shifter_LO, shifter_HI, cout_shifter, HI, LO, STATUS); --DONE
 	
 END arc_ALU;

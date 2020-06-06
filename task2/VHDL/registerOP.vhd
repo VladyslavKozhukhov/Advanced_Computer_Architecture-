@@ -5,12 +5,11 @@ USE work.aux_package.ALL;
 -------------------------------------------------------------
 ENTITY OP_Register IS
 	GENERIC (
-		n : POSITIVE := 8; -- A,B length
 		m : POSITIVE := 5 -- OPC length
 	);
 	PORT (
 		ena: IN std_logic;
-		OP_in: IN std_logic_vector(n - 1 DOWNTO 0);
+		OP_in: IN std_logic_vector(m - 1 DOWNTO 0);
 		----------------------------------------
 		OP_out: OUT std_logic_vector(m - 1 DOWNTO 0)
 	);
@@ -23,7 +22,7 @@ BEGIN
 	syncProcessBACK : PROCESS (ena)
 	BEGIN
 			IF (ena = '1') THEN
-				OP_out <= OP_in(m-1 DOWNTO 0);
+				OP_out <= OP_in;
 			END IF;
 	END PROCESS syncProcessBACK;
 

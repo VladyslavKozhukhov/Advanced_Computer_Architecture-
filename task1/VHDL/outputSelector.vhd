@@ -11,20 +11,21 @@ ENTITY outputSelector IS
 		k : POSITIVE := 2 -- STATUS length
 	);
 	PORT (
+		clk : IN std_logic;
 		OPC : IN std_logic_vector(m - 1 DOWNTO 0);
 		arith_logic_LO, arith_logic_HI : IN std_logic_vector(n - 1 DOWNTO 0);
 		cout_arith_logic : IN std_logic;
 		shifter_LO, shifter_HI : IN std_logic_vector(n - 1 DOWNTO 0);
 		cout_shifter : IN std_logic;
 		----------------------------------------
-		HI, LO : BUFFER std_logic_vector(n - 1 DOWNTO 0);
+		HI, LO : OUT std_logic_vector(n - 1 DOWNTO 0);
 		STATUS : OUT std_logic_vector(k - 1 DOWNTO 0)
 	);
 END outputSelector;
 ------------- outputSelector Architecture code --------------
 ARCHITECTURE arc_outputSelector OF outputSelector IS
 
-	SIGNAL carry : std_logic;
+	SIGNAL carry, validOP, shiftFlag : std_logic;
 	SIGNAL HI_SIG, LO_SIG : std_logic_vector(n - 1 DOWNTO 0);
 	SIGNAL zeroSig : std_logic_vector(n - 1 DOWNTO 0);
 	SIGNAL OPC_INTEGER : INTEGER;
@@ -50,64 +51,58 @@ BEGIN
 	zeroSig <= (OTHERS => '0');
 
 	OPC_INTEGER <= to_integer(unsigned(OPC));
+	
+	validOP<= '1' WHEN ((OPC_INTEGER = OPC_ADD) OR (OPC_INTEGER = OPC_SUB) OR (OPC_INTEGER = OPC_ADDC) OR (OPC_INTEGER = OPC_MULT) OR (OPC_INTEGER = OPC_MAC) OR (OPC_INTEGER = OPC_MAX) OR (OPC_INTEGER = OPC_MIN) OR (OPC_INTEGER = OPC_AND) OR (OPC_INTEGER = OPC_OR) OR (OPC_INTEGER = OPC_XOR)) ELSE
+			'1' WHEN ((OPC_INTEGER = OPC_RLA) OR (OPC_INTEGER = OPC_RLC) OR (OPC_INTEGER = OPC_RRA) OR (OPC_INTEGER = OPC_RRC)) ELSE
+			'0';
+			
+	shiftFlag<= '1' WHEN ((OPC_INTEGER = OPC_RLA) OR (OPC_INTEGER = OPC_RLC) OR (OPC_INTEGER = OPC_RRA) OR (OPC_INTEGER = OPC_RRC)) ELSE
+			'0';
+	
+	carryProc : Process (clk, validOP,OPC_INTEGER, cout_arith_logic, cout_shifter)
+	BEGIN
+		if (validOP = '1') THEN
+			if (clk'event and clk='1') THEN
+				if (shiftFlag='1') THEN
+					carry <= cout_shifter;
+				ELSE
+					carry <= cout_arith_logic;
+				END IF;
+			END IF;
+		END IF;
+	END PROCESS;
 
-	carry <= cout_arith_logic WHEN (OPC_INTEGER = OPC_ADD) ELSE
-		cout_arith_logic WHEN (OPC_INTEGER = OPC_SUB) ELSE
-		cout_arith_logic WHEN (OPC_INTEGER = OPC_ADDC) ELSE
-		cout_arith_logic WHEN (OPC_INTEGER = OPC_MULT) ELSE
-		cout_arith_logic WHEN (OPC_INTEGER = OPC_MAC) ELSE
-		cout_arith_logic WHEN (OPC_INTEGER = OPC_MAC_RST) ELSE
-		cout_arith_logic WHEN (OPC_INTEGER = OPC_MAX) ELSE
-		cout_arith_logic WHEN (OPC_INTEGER = OPC_MIN) ELSE
-		cout_arith_logic WHEN (OPC_INTEGER = OPC_AND) ELSE
-		cout_arith_logic WHEN (OPC_INTEGER = OPC_OR) ELSE
-		cout_arith_logic WHEN (OPC_INTEGER = OPC_XOR) ELSE
-		cout_shifter WHEN (OPC_INTEGER = OPC_RLA) ELSE
-		cout_shifter WHEN (OPC_INTEGER = OPC_RLC) ELSE
-		cout_shifter WHEN (OPC_INTEGER = OPC_RRA) ELSE
-		cout_shifter WHEN (OPC_INTEGER = OPC_RRC) ELSE
-		'0';
-
-	HI_SIG <= arith_logic_HI WHEN (OPC_INTEGER = OPC_ADD) ELSE
-		arith_logic_HI WHEN (OPC_INTEGER = OPC_SUB) ELSE
-		arith_logic_HI WHEN (OPC_INTEGER = OPC_ADDC) ELSE
-		arith_logic_HI WHEN (OPC_INTEGER = OPC_MULT) ELSE
-		arith_logic_HI WHEN (OPC_INTEGER = OPC_MAC) ELSE
-		HI WHEN (OPC_INTEGER = OPC_MAC_RST) ELSE  -- MAC_RST Keeps the same HI, LO values
-		arith_logic_HI WHEN (OPC_INTEGER = OPC_MAX) ELSE
-		arith_logic_HI WHEN (OPC_INTEGER = OPC_MIN) ELSE
-		arith_logic_HI WHEN (OPC_INTEGER = OPC_AND) ELSE
-		arith_logic_HI WHEN (OPC_INTEGER = OPC_OR) ELSE
-		arith_logic_HI WHEN (OPC_INTEGER = OPC_XOR) ELSE
-		shifter_HI WHEN (OPC_INTEGER = OPC_RLA) ELSE
-		shifter_HI WHEN (OPC_INTEGER = OPC_RLC) ELSE
-		shifter_HI WHEN (OPC_INTEGER = OPC_RRA) ELSE
-		shifter_HI WHEN (OPC_INTEGER = OPC_RRC) ELSE
-		HI;  -- Invalid OPC Keeps the same HI, LO values
-
-	LO_SIG <= arith_logic_LO WHEN (OPC_INTEGER = OPC_ADD) ELSE
-		arith_logic_LO WHEN (OPC_INTEGER = OPC_SUB) ELSE
-		arith_logic_LO WHEN (OPC_INTEGER = OPC_ADDC) ELSE
-		arith_logic_LO WHEN (OPC_INTEGER = OPC_MULT) ELSE
-		arith_logic_LO WHEN (OPC_INTEGER = OPC_MAC) ELSE
-		LO WHEN (OPC_INTEGER = OPC_MAC_RST) ELSE  -- MAC_RST Keeps the same HI, LO values
-		arith_logic_LO WHEN (OPC_INTEGER = OPC_MAX) ELSE
-		arith_logic_LO WHEN (OPC_INTEGER = OPC_MIN) ELSE
-		arith_logic_LO WHEN (OPC_INTEGER = OPC_AND) ELSE
-		arith_logic_LO WHEN (OPC_INTEGER = OPC_OR) ELSE
-		arith_logic_LO WHEN (OPC_INTEGER = OPC_XOR) ELSE
-		shifter_LO WHEN (OPC_INTEGER = OPC_RLA) ELSE
-		shifter_LO WHEN (OPC_INTEGER = OPC_RLC) ELSE
-		shifter_LO WHEN (OPC_INTEGER = OPC_RRA) ELSE
-		shifter_LO WHEN (OPC_INTEGER = OPC_RRC) ELSE
-		LO;  -- Invalid OPC Keeps the same HI, LO values
+	HIProc : Process (clk, validOP, OPC_INTEGER, arith_logic_HI, shifter_HI)
+	BEGIN
+		if (validOP = '1') THEN
+			if (clk'event and clk='1') THEN
+				if (shiftFlag='1') THEN
+					HI_SIG <= shifter_HI;
+				ELSE
+					HI_SIG <= arith_logic_HI;
+				END IF;
+			END IF;
+		END IF;
+	END PROCESS;
+	
+	LOProc : Process (clk, validOP, OPC_INTEGER, arith_logic_LO, shifter_LO)
+	BEGIN
+		if (validOP = '1') THEN
+			if (clk'event and clk='1') THEN
+				if (shiftFlag='1') THEN
+					LO_SIG <= shifter_LO;
+				ELSE
+					LO_SIG <= arith_logic_LO;
+				END IF;
+			END IF;
+		END IF;
+	END PROCESS;
 
 	HI <= HI_SIG;
 	LO <= LO_SIG;
 
 	STATUS <= "11" WHEN carry = '1' AND ((LO_SIG = zeroSig))ELSE
 		"10" WHEN ((LO_SIG = zeroSig)) ELSE --RES(HI,LO) = 0...0
-
 		"01" WHEN (carry = '1') ELSE
 		"00";
 
