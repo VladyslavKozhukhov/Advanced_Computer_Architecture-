@@ -76,11 +76,12 @@ BEGIN
 		specART WHEN (OPC_INTEGER = OPC_ADDC AND AdderSubResult(n) = '1') ELSE -- ADDC if carry 1
 		ACC(2 * n - 1 DOWNTO n) WHEN(OPC_INTEGER = OPC_MAC) ELSE -- HI=ACC 2n-1 to n :MAC
 		multResult((2 * n - 1) DOWNTO n) WHEN (OPC = OPC_MULT) ELSE --MULT
-		(OTHERS => '1' ) WHEN (OPC_INTEGER = OPC_SUB and AdderSubResult(n) = '1' ) ELSE
-		(OTHERS => '0');
-	--	(others => '0')  WHEN (OPC_INTEGER = OPC_SUB) ELSE  					-- SUB
-	--(others => '0') WHEN (OPC_INTEGER(m-1 downto m-2) = "01") ELSE -- HI=0 : MIN,AND,OR,XOR,MAX,
-	--(others => '0') WHEN (OPC_INTEGER = OPC_MAX) ELSE 			   -- HI=0 : MAX
+		(OTHERS => '1') WHEN (OPC_INTEGER = OPC_SUB and AdderSubResult(n) = '1' ) ELSE
+		(OTHERS => '0') WHEN (OPC_INTEGER = OPC_SUB and AdderSubResult(n) = '0') ELSE  				-- SUB
+		(OTHERS => '0') WHEN (OPC(m-1 downto m-2) = "01") ELSE -- HI=0 : MIN,AND,OR,XOR,MAX,
+		(OTHERS => '0') WHEN (OPC_INTEGER = OPC_MAX) ELSE 			   -- HI=0 : MAX
+		(OTHERS => 'Z');
+
 
 	LO <= (A AND B) WHEN (OPC_INTEGER = OPC_AND) ELSE -- AND
 		(A OR B) WHEN (OPC_INTEGER = OPC_OR) ELSE -- OR
@@ -92,23 +93,23 @@ BEGIN
 		AdderSubResult(n - 1 DOWNTO 0) WHEN (OPC_INTEGER = OPC_ADDC) ELSE -- ADDC
 		AdderSubResult(n - 1 DOWNTO 0) WHEN (OPC_INTEGER = OPC_SUB) ELSE -- SUB
 		multResult((n - 1) DOWNTO 0) WHEN (OPC_INTEGER = OPC_MULT) ELSE --MULT
-		(OTHERS => 'Z') WHEN (OPC_INTEGER = OPC_MAC_RST) ELSE -- MAC_RST
-		(OTHERS => '0'); --CONTINUE FOR
+		--(OTHERS => 'Z') WHEN (OPC_INTEGER = OPC_MAC_RST) ELSE -- MAC_RST
+		(OTHERS => 'Z'); --CONTINUE FOR
 
-	cout <= --'0' WHEN (OPC_INTEGER = "00111") ELSE -- MAX
-		--'0' WHEN (OPC_INTEGER = "01000") ELSE -- MIN
-		--'0' WHEN (OPC_INTEGER = "01001") ELSE -- AND
-		--'0' WHEN (OPC_INTEGER = "01010") ELSE -- OR
-		--'0' WHEN (OPC_INTEGER = "01011") ELSE -- XOR
+	cout <= '0' WHEN (OPC_INTEGER = OPC_MAX) ELSE -- MAX
+		'0' WHEN (OPC_INTEGER = OPC_MIN) ELSE -- MIN
+		'0' WHEN (OPC_INTEGER = OPC_AND) ELSE -- AND
+		'0' WHEN (OPC_INTEGER = OPC_OR) ELSE -- OR
+		'0' WHEN (OPC_INTEGER = OPC_XOR) ELSE -- XOR
 		'1'	WHEN (OPC_INTEGER = OPC_MAC AND ACC((2 * n - 1) DOWNTO n) > mlt) ELSE -- MAC
-		--'0' WHEN (OPC_INTEGER = OPC_ADD AND AdderSubResult(n)='0') ELSE -- ADD	
-		--'0' WHEN (OPC_INTEGER = "00011" AND AdderSubResult(n)='0') ELSE -- ADDC			
-		--'0' WHEN (OPC_INTEGER = "00010" AND AdderSubResult(n)='0') ELSE -- SUB
-
+		'0' WHEN (OPC_INTEGER = OPC_ADD AND AdderSubResult(n)='0') ELSE -- ADD	
+		'0' WHEN (OPC_INTEGER = OPC_ADDC AND AdderSubResult(n)='0') ELSE -- ADDC			
+		'0' WHEN (OPC_INTEGER = OPC_SUB AND AdderSubResult(n)='0') ELSE -- SUB
 		'1' WHEN (OPC_INTEGER = OPC_ADD AND AdderSubResult(n) = '1') ELSE -- ADD					
 		'1' WHEN (OPC_INTEGER = OPC_ADDC AND AdderSubResult(n) = '1') ELSE -- ADDC
 		'1' WHEN (OPC_INTEGER = OPC_SUB AND AdderSubResult(n) = '1') ELSE -- SUB
 		'1' WHEN (OPC_INTEGER = OPC_MULT AND multResult > mlt) ELSE --MULT
-		'Z' WHEN (OPC_INTEGER = OPC_MAC_RST) ELSE -- MAC_RST			
-		'0'; --CONTINUE 
+		--'Z' WHEN (OPC_INTEGER = OPC_MAC_RST) ELSE -- MAC_RST			
+		'Z'; --CONTINUE 
+		
 END arc_ArithLogic;

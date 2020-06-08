@@ -36,17 +36,19 @@ shiftProcess : PROCESS (A, shiftAmount, sel,cin)
 						totalRes(n-1 downto 0) := A; 
 						totalRes(n) := cin;
 						tmpVector := unsigned(totalRes);
-						for i in 1 to shiftAmount loop														 
+						for i in 1 to 7 loop														 
 							tmpVector := tmpVector rol 1; 
-							tmpVector(0) := '0'; 
+							tmpVector(0) := '0';
+							EXIT WHEN (i = shiftAmount);
 						end loop;						
 						totalRes := std_logic_vector(tmpVector);			
 		  when "10" => 			--RRA--
 						totalRes(n-1 downto 0) := A;
 						tmpVector := unsigned(totalRes);
-						for i in 1 to shiftAmount loop
+						for i in 1 to 7 loop
 							tmpVector (n) := tmpVector (n-1); 
-							tmpVector := tmpVector ror 1;	
+							tmpVector := tmpVector ror 1;
+							EXIT WHEN (i = shiftAmount);
 						end loop;						
 						totalRes := std_logic_vector(tmpVector); 
   		  when "01" =>			--RLC--
