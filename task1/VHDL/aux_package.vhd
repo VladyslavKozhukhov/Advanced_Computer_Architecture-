@@ -14,7 +14,20 @@ PACKAGE aux_package IS
 			OPC : IN std_logic_vector(m - 1 DOWNTO 0);
 			----------------------------------------
 			RES : OUT std_logic_vector(2 * n - 1 DOWNTO 0); -- RES(HI,LO)
-			STATUS : OUT std_logic_vector(k - 1 DOWNTO 0)
+		STATUS : OUT std_logic_vector(k - 1 DOWNTO 0)
+		);
+	END COMPONENT;
+	-----------------------------------------------------------------
+	COMPONENT ReadLogic IS
+		GENERIC (
+			n : POSITIVE := 8; -- A,B length
+			m : POSITIVE := 5 -- OPC length
+		);
+		PORT (
+			rst, ena, clk : IN std_logic;
+			OPC : OUT std_logic_vector(m - 1 DOWNTO 0);
+			A, B : OUT std_logic_vector(n - 1 DOWNTO 0);
+			cin,endSig : OUT std_logic
 		);
 	END COMPONENT;
 	-----------------------------------------------------------------  
@@ -29,6 +42,20 @@ PACKAGE aux_package IS
 			ACC : OUT std_logic_vector(2 * n - 1 DOWNTO 0)
 		);
 	END COMPONENT;
+	-----------------------------------------------------------------  
+	COMPONENT WriteLogic IS
+		GENERIC (
+			n : POSITIVE := 8; -- A,B length
+			k : POSITIVE := 2 -- STATUS length
+		);
+		PORT (
+
+			rst, ena, clk : IN std_logic;
+			STATUS : IN std_logic_vector(k - 1 DOWNTO 0);
+			HI, LO : IN std_logic_vector(n - 1 DOWNTO 0);
+			endSig : IN std_logic
+		);
+	END COMPONENT;
 	-----------------------------------------------------------------
 	COMPONENT backRegister IS
 		GENERIC (
@@ -39,8 +66,8 @@ PACKAGE aux_package IS
 			rst, ena, clk : IN std_logic;
 			OPC_in : IN std_logic_vector(m - 1 DOWNTO 0);
 			A_in, B_in : IN std_logic_vector(n - 1 DOWNTO 0);
-			cin_in : IN std_logic;
-			cin_total : IN std_logic;
+		cin_in : IN std_logic;		
+		cin_total : IN std_logic;
 
 			----------------------------------------
 			OPC_out : OUT std_logic_vector(m - 1 DOWNTO 0);
@@ -78,7 +105,7 @@ PACKAGE aux_package IS
 	COMPONENT frontRegister IS
 		GENERIC (
 			n : POSITIVE := 8; -- A,B length
-			m : POSITIVE := 5; -- OPC length
+						m : POSITIVE := 5; -- OPC length
 
 			k : POSITIVE := 2 -- STATUS length
 		);
@@ -86,7 +113,7 @@ PACKAGE aux_package IS
 			rst, ena, clk : IN std_logic;
 			HI_in, LO_in : IN std_logic_vector(n - 1 DOWNTO 0);
 			Status_in : IN std_logic_vector(k - 1 DOWNTO 0);
-			OPC : IN std_logic_vector(m - 1 DOWNTO 0);
+					OPC : IN std_logic_vector(m - 1 DOWNTO 0);
 
 			----------------------------------------
 			HI_out, LO_out : OUT std_logic_vector(n - 1 DOWNTO 0);
@@ -165,14 +192,13 @@ PACKAGE aux_package IS
 			k : POSITIVE := 2 -- STATUS length
 		);
 		PORT (
-			clk : IN std_logic;
 			OPC : IN std_logic_vector(m - 1 DOWNTO 0);
 			arith_logic_LO, arith_logic_HI : IN std_logic_vector(n - 1 DOWNTO 0);
 			cout_arith_logic : IN std_logic;
 			shifter_LO, shifter_HI : IN std_logic_vector(n - 1 DOWNTO 0);
 			cout_shifter : IN std_logic;
 			----------------------------------------
-			HI, LO : BUFFER std_logic_vector(n - 1 DOWNTO 0);
+			HI, LO : OUT std_logic_vector(n - 1 DOWNTO 0);
 			STATUS : OUT std_logic_vector(k - 1 DOWNTO 0)
 		);
 	END COMPONENT;

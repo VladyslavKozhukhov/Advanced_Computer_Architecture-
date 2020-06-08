@@ -25,46 +25,48 @@ ARCHITECTURE arc_shifter OF shifter IS
 BEGIN
 	HI <= (OTHERS => '0');
 	shiftAmount <= to_integer(unsigned(B));
-	shiftProcess : PROCESS (A, shiftAmount, sel, cin)
-		VARIABLE tmpVector : UNSIGNED(n DOWNTO 0);
-		VARIABLE totalRes : std_logic_vector(n DOWNTO 0);
+shiftProcess : PROCESS (A, shiftAmount, sel,cin)
+	variable tmpVector: UNSIGNED(n DOWNTO 0);
+	variable totalRes: std_logic_vector(n DOWNTO 0);
 	BEGIN
-		CASE sel IS
-			WHEN "00" => -- RLA --
-				totalRes(n - 1 DOWNTO 0) := A;
-				totalRes(n) := cin;
-				tmpVector := unsigned(totalRes);
-				FOR i IN 1 TO 7 LOOP
-					tmpVector := tmpVector ROL 1;
-					tmpVector(0) := '0';
-					EXIT WHEN (i = shiftAmount);
-				END LOOP;
-				totalRes := std_logic_vector(tmpVector);
-			WHEN "10" => --RRA--
-				totalRes(n - 1 DOWNTO 0) := A;
-				tmpVector := unsigned(totalRes);
-				FOR i IN 1 TO 7 LOOP
-					tmpVector (n) := tmpVector (n - 1);
-					tmpVector := tmpVector ROR 1;
-					EXIT WHEN (i = shiftAmount);
-				END LOOP;
-				totalRes := std_logic_vector(tmpVector);
-			WHEN "01" => --RLC--
 
-				totalRes(n - 1 DOWNTO 0) := A;
-				totalRes(n) := cin;
-				tmpVector := unsigned(totalRes) ROL shiftAmount;
-				totalRes := std_logic_vector(tmpVector);
 
-			WHEN "11" => --RRC--
-				totalRes(n - 1 DOWNTO 0) := A;
-				totalRes(n) := cin;
-				tmpVector := unsigned(totalRes) ROR shiftAmount;
-				totalRes := std_logic_vector(tmpVector);
-			WHEN OTHERS => tmpVector := unsigned(totalRes);
-		END CASE;
+		case sel is
+		  when "00" =>			-- RLA --
+						totalRes(n-1 downto 0) := A; 
+						totalRes(n) := cin;
+						tmpVector := unsigned(totalRes);
+						for i in 1 to shiftAmount loop														 
+							tmpVector := tmpVector rol 1; 
+							tmpVector(0) := '0'; 
+						end loop;						
+						totalRes := std_logic_vector(tmpVector);			
+		  when "10" => 			--RRA--
+						totalRes(n-1 downto 0) := A;
+						tmpVector := unsigned(totalRes);
+						for i in 1 to shiftAmount loop
+							tmpVector (n) := tmpVector (n-1); 
+							tmpVector := tmpVector ror 1;	
+						end loop;						
+						totalRes := std_logic_vector(tmpVector); 
+  		  when "01" =>			--RLC--
 
-		LO <= totalRes (n - 1 DOWNTO 0);
+						totalRes(n-1 downto 0) := A;
+						totalRes(n) := cin;
+						tmpVector := unsigned(totalRes) rol shiftAmount;
+						totalRes := std_logic_vector(tmpVector); 
+						
+		  when "11" =>  		--RRC--
+						totalRes(n-1 downto 0) :=   A;
+						totalRes(n) := cin;
+						tmpVector := unsigned(totalRes) ror shiftAmount;
+						totalRes := std_logic_vector(tmpVector);
+		  when others => tmpVector := unsigned(totalRes);
+		  end case;
+
+		
+
+		LO <= totalRes (n-1 downto 0);
 		cout <= totalRes(n);
 	END PROCESS shiftProcess;
 
