@@ -10,7 +10,6 @@ ENTITY top IS
 		k : POSITIVE := 2 -- STATUS length
 	);
 	PORT (
-		clk : IN std_logic;
 		key_0,key_1,key_2,key_3 : IN std_logic;
 		sw_0_7 : IN std_logic_vector(n - 1 DOWNTO 0);
 		----------------------------------------
@@ -39,7 +38,7 @@ BEGIN
 	BREG: B_Register GENERIC MAP(n) PORT MAP(key_2, sw_0_7, B_SIG);
 	OPREG: OP_Register GENERIC MAP(m) PORT MAP(key_1, sw_0_7(m-1 DOWNTO 0), OPC_SIG);
 
-	aluEntity : ALU GENERIC MAP(n, m, k) PORT MAP(clk, key_3, OPC_SIG, A_SIG, B_SIG, cin_SIG, HI, LO, alu_status);
+	aluEntity : ALU GENERIC MAP(n, m, k) PORT MAP(key_3, OPC_SIG, A_SIG, B_SIG, cin_SIG, HI, LO, alu_status);
 	cin_SIG<='1' when (alu_status = "01" or alu_status = "11") else  '0';
 	STATUS<=alu_status;
 	HI_OUT<=HI;

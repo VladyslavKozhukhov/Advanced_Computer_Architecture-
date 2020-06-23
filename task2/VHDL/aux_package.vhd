@@ -9,7 +9,6 @@ COMPONENT top IS
 		k : POSITIVE := 2 -- STATUS length
 	);
 	PORT (
-		clk : IN std_logic;
 		key_0,key_1,key_2,key_3 : IN std_logic;
 		sw_0_7 : IN std_logic_vector(n - 1 DOWNTO 0);
 		----------------------------------------
@@ -97,7 +96,6 @@ END COMPONENT;
 			k : POSITIVE := 2 -- STATUS length
 		);
 		PORT (
-			clk : IN std_logic;
 			clkMAC : IN std_logic;
 			OPC : IN std_logic_vector(m - 1 DOWNTO 0);
 			A, B : IN std_logic_vector(n - 1 DOWNTO 0);
@@ -180,7 +178,6 @@ END COMPONENT;
 			k : POSITIVE := 2 -- STATUS length
 		);
 		PORT (
-			clk : IN std_logic;
 			OPC : IN std_logic_vector(m - 1 DOWNTO 0);
 			arith_logic_LO, arith_logic_HI : IN std_logic_vector(n - 1 DOWNTO 0);
 			cout_arith_logic : IN std_logic;
