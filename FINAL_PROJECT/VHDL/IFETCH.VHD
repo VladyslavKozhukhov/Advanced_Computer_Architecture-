@@ -13,13 +13,15 @@ ENTITY Ifetch IS
         	SIGNAL Add_result 		: IN 	STD_LOGIC_VECTOR( 7 DOWNTO 0 );
         	SIGNAL Branch 			: IN 	STD_LOGIC;
         	SIGNAL Zero 			: IN 	STD_LOGIC;
+			SIGNAL Jump				: IN 	STD_LOGIC;
       		SIGNAL PC_out 			: OUT	STD_LOGIC_VECTOR( 9 DOWNTO 0 );
         	SIGNAL clock, reset 	: IN 	STD_LOGIC);
 END Ifetch;
 
 ARCHITECTURE behavior OF Ifetch IS
-	SIGNAL PC, PC_plus_4 	 : STD_LOGIC_VECTOR( 9 DOWNTO 0 );
-	SIGNAL next_PC, Mem_Addr : STD_LOGIC_VECTOR( 7 DOWNTO 0 );
+	SIGNAL PC, PC_plus_4	 : STD_LOGIC_VECTOR( 9 DOWNTO 0 );
+	SIGNAL next_PC, Mem_Addr,J_PC  : STD_LOGIC_VECTOR( 7 DOWNTO 0 );
+	SIGNAL Inst		: 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
 BEGIN
 						--ROM for Instruction Memory
 inst_memory: altsyncram
@@ -36,7 +38,8 @@ inst_memory: altsyncram
 	PORT MAP (
 		clock0     => clock,
 		address_a 	=> Mem_Addr, 
-		q_a 			=> Instruction );
+		q_a 			=> Inst );
+		Instruction<=Inst;
 					-- Instructions always start on word address - not byte
 		PC(1 DOWNTO 0) <= "00";
 					-- copy output signals - allows read inside module
@@ -47,8 +50,11 @@ inst_memory: altsyncram
 						-- Adder to increment PC by 4        
       	PC_plus_4( 9 DOWNTO 2 )  <= PC( 9 DOWNTO 2 ) + 1;
        	PC_plus_4( 1 DOWNTO 0 )  <= "00";
+		J_PC(5 DOWNTO 0) <=Inst(5 DOWNTO 0);
+		J_PC(7 DOWNTO 6) <= PC_plus_4(9 DOWNTO 8 );
 						-- Mux to select Branch Address or PC + 4        
 		Next_PC  <= X"00" WHEN Reset = '1' ELSE
+			J_PC(7 DOWNTO 0) WHEN Jump = '1' ELSE
 			Add_result  WHEN ( ( Branch = '1' ) AND ( Zero = '1' ) ) 
 			ELSE   PC_plus_4( 9 DOWNTO 2 );
 	PROCESS
