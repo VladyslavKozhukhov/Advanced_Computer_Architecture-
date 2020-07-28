@@ -56,8 +56,8 @@ PROCESS ( ALU_ctl, Ainput, Binput )
      	WHEN "001" 	=>	ALU_output_mux 	<= Ainput OR Binput;
 						-- ALU performs ALUresult = A_input + B_input
 	 	WHEN "010" 	=>	ALU_output_mux 	<= Ainput + Binput;
-						-- ALU performs ?
- 	 	WHEN "011" 	=>	ALU_output_mux <= X"00000000";
+						-- ALU performs ADDU = A+B
+ 	 	WHEN "011" 	=>	ALU_output_mux <= Ainput + Binput;
 						-- ALU performs ?
  	 	WHEN "100" 	=>	ALU_output_mux 	<= X"00000000";
 						-- ALU performs ?
