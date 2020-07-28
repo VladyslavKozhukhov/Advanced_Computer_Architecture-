@@ -50,6 +50,8 @@ ARCHITECTURE structure OF MIPS IS
              	Branch 				: OUT 	STD_LOGIC;
              	ALUop 				: OUT 	STD_LOGIC_VECTOR( 1 DOWNTO 0 );
 				Jump				: OUT 	STD_LOGIC; 
+				ICommand	        : OUT 	STD_LOGIC_VECTOR( 2 DOWNTO 0 );
+				IsICommand          : OUT 	STD_LOGIC;
              	clock, reset		: IN 	STD_LOGIC );
 	END COMPONENT;
 
@@ -64,6 +66,8 @@ ARCHITECTURE structure OF MIPS IS
                	ALU_Result 			: OUT	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
                	Add_Result 			: OUT	STD_LOGIC_VECTOR( 7 DOWNTO 0 );
                	PC_plus_4 			: IN 	STD_LOGIC_VECTOR( 9 DOWNTO 0 );
+				ICommand	        : IN 	STD_LOGIC_VECTOR( 2 DOWNTO 0 );
+				IsICommand          : IN 	STD_LOGIC;
                	clock, reset		: IN 	STD_LOGIC );
 	END COMPONENT;
 
@@ -86,7 +90,9 @@ ARCHITECTURE structure OF MIPS IS
 	SIGNAL read_data 		: STD_LOGIC_VECTOR( 31 DOWNTO 0 );
 	SIGNAL ALUSrc 			: STD_LOGIC;
 	SIGNAL Branch 			: STD_LOGIC;
-	SIGNAL Jump				: STD_LOGIC;		
+	SIGNAL Jump				: STD_LOGIC;
+	SIGNAL ICommand	        : STD_LOGIC_VECTOR( 2 DOWNTO 0 );
+	SIGNAL IsICommand       : STD_LOGIC;
 	SIGNAL RegDst 			: STD_LOGIC;
 	SIGNAL Regwrite 		: STD_LOGIC;
 	SIGNAL Zero 			: STD_LOGIC;
@@ -145,7 +151,9 @@ BEGIN
 				Branch 			=> Branch,
 				ALUop 			=> ALUop,
 				Jump 			=> Jump,
-                clock 			=> clock,
+				ICommand		=>ICommand,
+				IsICommand  	=>IsICommand,
+				clock 			=> clock,
 				reset 			=> reset );
 
    EXE:  Execute
@@ -159,6 +167,8 @@ BEGIN
                 ALU_Result		=> ALU_Result,
 				Add_Result 		=> Add_Result,
 				PC_plus_4		=> PC_plus_4,
+				ICommand		=>ICommand,
+				IsICommand  	=>IsICommand,
                 Clock			=> clock,
 				Reset			=> reset );
 

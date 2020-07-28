@@ -16,6 +16,8 @@ ENTITY  Execute IS
 			ALU_Result 		: OUT	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
 			Add_Result 		: OUT	STD_LOGIC_VECTOR( 7 DOWNTO 0 );
 			PC_plus_4 		: IN 	STD_LOGIC_VECTOR( 9 DOWNTO 0 );
+			ICommand		: IN 	STD_LOGIC_VECTOR( 2 DOWNTO 0 );
+			IsICommand 	 	: IN 	STD_LOGIC;
 			clock, reset	: IN 	STD_LOGIC );
 END Execute;
 
@@ -31,9 +33,12 @@ BEGIN
 		WHEN ( ALUSrc = '0' ) 
   		ELSE  Sign_extend( 31 DOWNTO 0 );
 						-- Generate ALU control bits
-	ALU_ctl( 0 ) <= ( Function_opcode( 0 ) OR Function_opcode( 3 ) ) AND ALUOp(1 );
-	ALU_ctl( 1 ) <= ( NOT Function_opcode( 2 ) ) OR (NOT ALUOp( 1 ) );
-	ALU_ctl( 2 ) <= ( Function_opcode( 1 ) AND ALUOp( 1 )) OR ALUOp( 0 );
+	ALU_ctl( 0 ) <= (( Function_opcode( 0 ) OR Function_opcode( 3 ) ) AND ALUOp(1 )) WHEN IsICommand = '0' ELSE
+					ICommand(0);
+	ALU_ctl( 1 ) <= ( NOT Function_opcode( 2 ) ) OR (NOT ALUOp( 1 ) )WHEN IsICommand = '0' ELSE
+					ICommand(1);
+	ALU_ctl( 2 ) <= ( Function_opcode( 1 ) AND ALUOp( 1 )) OR ALUOp( 0 )WHEN IsICommand = '0' ELSE
+					ICommand(2);
 						-- Generate Zero Flag
 	Zero <= '1' 
 		WHEN ( ALU_output_mux( 31 DOWNTO 0 ) = X"00000000"  )
@@ -47,7 +52,12 @@ BEGIN
 		Add_result 	<= Branch_Add( 7 DOWNTO 0 );
 
 PROCESS ( ALU_ctl, Ainput, Binput )
+
 	BEGIN
+	--if(IsICommand = '1') THEN
+		--ALU_ctl<= ICommand ;
+	--END IF;
+
 					-- Select ALU operation
  	CASE ALU_ctl IS
 						-- ALU performs ALUresult = A_input AND B_input
@@ -58,7 +68,7 @@ PROCESS ( ALU_ctl, Ainput, Binput )
 	 	WHEN "010" 	=>	ALU_output_mux 	<= Ainput + Binput;
 						-- ALU performs ADDU = A+B
  	 	WHEN "011" 	=>	ALU_output_mux <= Ainput + Binput;
-						-- ALU performs ?
+						-- ALU performs ADDDDD XOR/XOR1 here--------------------------
  	 	WHEN "100" 	=>	ALU_output_mux 	<= X"00000000";
 						-- ALU performs ?
  	 	WHEN "101" 	=>	ALU_output_mux 	<= X"00000000";
