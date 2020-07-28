@@ -21,7 +21,7 @@ END control;
 
 ARCHITECTURE behavior OF control IS
 
-	SIGNAL  R_format, Lw, Sw, Beq 	: STD_LOGIC;
+	SIGNAL  R_format, Lw, Sw, Beq,Addi	: STD_LOGIC;
 
 BEGIN           
 				-- Code to generate control signals using opcode bits
@@ -29,10 +29,11 @@ BEGIN
 	Lw          <=  '1'  WHEN  Opcode = "100011"  ELSE '0';
  	Sw          <=  '1'  WHEN  Opcode = "101011"  ELSE '0';
    	Beq         <=  '1'  WHEN  Opcode = "000100"  ELSE '0';
-  	RegDst    	<=  R_format;
- 	ALUSrc  	<=  Lw OR Sw;
+	Addi		<=  '1'  WHEN  Opcode = "001000"  ELSE '0';
+  	RegDst    	<=  R_format OR Addi;
+ 	ALUSrc  	<=  Lw OR Sw OR Addi;
 	MemtoReg 	<=  Lw;
-  	RegWrite 	<=  R_format OR Lw;
+  	RegWrite 	<=  R_format OR Lw OR Addi;
   	MemRead 	<=  Lw;
    	MemWrite 	<=  Sw; 
  	Branch      <=  Beq;
