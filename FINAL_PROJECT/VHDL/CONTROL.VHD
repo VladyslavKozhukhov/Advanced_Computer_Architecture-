@@ -16,7 +16,7 @@ ENTITY control IS
 	Branch 		: OUT 	STD_LOGIC;
 	ALUop 		: OUT 	STD_LOGIC_VECTOR( 1 DOWNTO 0 );
 	Jump		: OUT 	STD_LOGIC; 
-	ICommand	: OUT 	STD_LOGIC_VECTOR( 2 DOWNTO 0 );
+	ICommand	: OUT 	STD_LOGIC_VECTOR( 3 DOWNTO 0 );
 	IsICommand  : OUT 	STD_LOGIC;
 	clock, reset	: IN 	STD_LOGIC );
 
@@ -44,13 +44,13 @@ BEGIN
   	RegWrite 	<=  R_format OR Lw OR Addi OR Andi OR Xori OR Ori;
   	MemRead 	<=  Lw;
    	MemWrite 	<=  Sw; 
- 	Branch      <=  Beq OR Bne;
+ 	Branch      <=  Beq OR Bne; 
 	Jump		<=  J;
-	ICommand   <="010" WHEN Addi = '1' ELSE
-						 "000" WHEN Andi = '1' ELSE
-						 "001" WHEN Ori 	= '1' ELSE
-						 "100" WHEN Xori = '1' ELSE
-						 "000";
+	ICommand   <="0010" WHEN Addi = '1' ELSE
+						 "0000" WHEN Andi = '1' ELSE
+						 "0001" WHEN Ori 	= '1' ELSE
+						 "0100" WHEN Xori = '1' ELSE
+						 "0000";
 	IsICommand <= '1' WHEN Addi= '1'  OR Andi ='1' OR Xori ='1' OR Ori='1' ELSE
 					'0';
 	ALUOp( 1 ) 	<=  R_format OR Andi OR Xori OR Ori;

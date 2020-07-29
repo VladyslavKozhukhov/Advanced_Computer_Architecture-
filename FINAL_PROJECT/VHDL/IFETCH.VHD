@@ -25,7 +25,7 @@ ARCHITECTURE behavior OF Ifetch IS
 BEGIN
 						--ROM for Instruction Memory
 inst_memory: altsyncram
-	
+	  
 	GENERIC MAP (
 		operation_mode => "ROM",
 		width_a => 32,
