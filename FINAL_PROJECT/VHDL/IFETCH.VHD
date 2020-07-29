@@ -55,8 +55,9 @@ inst_memory: altsyncram
 						-- Mux to select Branch Address or PC + 4        
 		Next_PC  <= X"00" WHEN Reset = '1' ELSE
 			J_PC(7 DOWNTO 0) WHEN Jump = '1' ELSE
-			Add_result  WHEN ( ( Branch = '1' ) AND ( Zero = '1' ) ) 
-			ELSE   PC_plus_4( 9 DOWNTO 2 );
+			Add_result  WHEN ( ( Branch = '1' ) AND ( Zero = '1' ) AND(Inst( 31 DOWNTO 26 ) = "000100") ) ELSE
+			Add_result WHEN ( ( Branch = '1' ) AND ( Zero = '0' ) AND(Inst( 31 DOWNTO 26 ) = "000101") ) ELSE
+			PC_plus_4( 9 DOWNTO 2 );
 	PROCESS
 		BEGIN
 			WAIT UNTIL ( clock'EVENT ) AND ( clock = '1' );

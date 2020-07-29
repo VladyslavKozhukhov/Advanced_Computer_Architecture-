@@ -24,7 +24,7 @@ END control;
 
 ARCHITECTURE behavior OF control IS
 
-	SIGNAL  R_format, Lw, Sw, Beq,Addi,Ori,Andi,Xori,J	: STD_LOGIC;
+	SIGNAL  R_format, Lw, Sw, Bne,Beq,Addi,Ori,Andi,Xori,J	: STD_LOGIC;
 	signal tempValue : STD_LOGIC_VECTOR( 5 DOWNTO 0 );
 BEGIN           
 				-- Code to generate control signals using opcode bits
@@ -32,6 +32,7 @@ BEGIN
 	Lw          <=  '1'  WHEN  Opcode = "100011"  ELSE '0';
  	Sw          <=  '1'  WHEN  Opcode = "101011"  ELSE '0';
    	Beq         <=  '1'  WHEN  Opcode = "000100"  ELSE '0';
+	Bne         <=  '1'  WHEN  Opcode = "000101"  ELSE '0';
 	Addi		<=  '1'  WHEN  Opcode = "001000"  ELSE '0';
 	Ori		    <=  '1'  WHEN  Opcode = "001101"  ELSE '0';
 	Andi		<=  '1'  WHEN  Opcode = "001100"  ELSE '0';
@@ -43,7 +44,7 @@ BEGIN
   	RegWrite 	<=  R_format OR Lw OR Addi OR Andi OR Xori OR Ori;
   	MemRead 	<=  Lw;
    	MemWrite 	<=  Sw; 
- 	Branch      <=  Beq;
+ 	Branch      <=  Beq OR Bne;
 	Jump		<=  J;
 	ICommand   <="010" WHEN Addi = '1' ELSE
 						 "000" WHEN Andi = '1' ELSE
@@ -53,7 +54,7 @@ BEGIN
 	IsICommand <= '1' WHEN Addi= '1'  OR Andi ='1' OR Xori ='1' OR Ori='1' ELSE
 					'0';
 	ALUOp( 1 ) 	<=  R_format OR Andi OR Xori OR Ori;
-	ALUOp( 0 ) 	<=  Beq;
+	ALUOp( 0 ) 	<=  Beq OR Bne;
 
    END behavior;
 
