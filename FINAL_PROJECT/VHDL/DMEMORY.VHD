@@ -13,13 +13,25 @@ ENTITY dmemory IS
         	address 			: IN 	STD_LOGIC_VECTOR( 7 DOWNTO 0 );
         	write_data 			: IN 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
 	   		MemRead, Memwrite 	: IN 	STD_LOGIC;
+			SpecialAddr         : IN 	STD_LOGIC;
+			SpecialData         : IN    std_logic_vector(7 DOWNTO 0);
+			IsSpecialAddr		: IN    std_logic;
+			SEG0_OUT, SEG1_OUT: OUT std_logic_vector(6 DOWNTO 0); -- for IO
+		SEG2_OUT, SEG3_OUT: OUT std_logic_vector(6 DOWNTO 0); -- for IO
             clock,reset			: IN 	STD_LOGIC );
 END dmemory;
 
 ARCHITECTURE behavior OF dmemory IS
 SIGNAL write_clock : STD_LOGIC;
+SIGNAL read_data_mem		: STD_LOGIC_VECTOR( 31 DOWNTO 0 );
+SIGNAL read_data_tmp		: STD_LOGIC_VECTOR( 31 DOWNTO 0 );
+SIGNAL read_extend_tmp		: STD_LOGIC_VECTOR( 31 DOWNTO 0 ):= (others => '0');
+SIGNAL write_data_tmp		: STD_LOGIC_VECTOR( 31 DOWNTO 0 );
+SIGNAL write_data_mem		: STD_LOGIC_VECTOR( 31 DOWNTO 0 );
+
+
 BEGIN
-	data_memory : altsyncram
+data_memory : altsyncram
 	GENERIC MAP  (
 		operation_mode => "SINGLE_PORT",
 		width_a => 32,
@@ -34,8 +46,23 @@ BEGIN
 		clock0 => write_clock,
 		address_a => address,
 		data_a => write_data,
-		q_a => read_data	);
+		q_a => read_data_mem);
+PROCESS( IsSpecialAddr,address,MemRead,Memwrite,SpecialAddr,SpecialData)
+		BEGIN
+		if(IsSpecialAddr = '1' and MemRead = '1' ) then
+			read_extend_tmp(7 DOWNTO 0)<= SpecialData;
+			read_data_tmp<=read_extend_tmp;
+		elsif ( IsSpecialAddr = '0' and MemRead = '1') then
+			read_data_tmp<=read_data_mem;
+		elsif (IsSpecialAddr ='1' and Memwrite='1') then
+			SEG0_OUT<="1111001";
+			SEG1_OUT<="0100100";
+			SEG2_OUT<="0110000";
+			SEG3_OUT<="0011001";
+		end if;
+END PROCESS;
 -- Load memory address register with write clock
+		read_data<=read_data_tmp;
 		write_clock <= NOT clock;
 END behavior;
 

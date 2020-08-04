@@ -14,6 +14,7 @@ ENTITY Ifetch IS
         	SIGNAL Branch 			: IN 	STD_LOGIC;
         	SIGNAL Zero 			: IN 	STD_LOGIC;
 			SIGNAL Jump				: IN 	STD_LOGIC;
+			SIGNAL sw_8_run			: IN 	std_logic;
       		SIGNAL PC_out 			: OUT	STD_LOGIC_VECTOR( 9 DOWNTO 0 );
         	SIGNAL clock, reset 	: IN 	STD_LOGIC);
 END Ifetch;

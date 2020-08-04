@@ -5,7 +5,15 @@ USE IEEE.STD_LOGIC_ARITH.ALL;
 
 ENTITY MIPS IS
 
-	PORT( reset, clock					: IN 	STD_LOGIC; 
+	PORT( reset, clock					: IN 	STD_LOGIC;
+	-----------------------------------------------------------
+		sw_8_run: IN std_logic; -- for IO
+		sw_0_7 : IN std_logic_vector(7 DOWNTO 0); --for IO
+		HI_OUT: OUT std_logic_vector(7 DOWNTO 0); -- for IO
+		LO_OUT: OUT std_logic_vector(7 DOWNTO 0); -- for IO
+		SEG0_OUT, SEG1_OUT: OUT std_logic_vector(6 DOWNTO 0); -- for IO
+		SEG2_OUT, SEG3_OUT: OUT std_logic_vector(6 DOWNTO 0); -- for IO
+	-----------------------------------------------------------
 		-- Output important signals to pins for easy display in Simulator
 		PC								: OUT  STD_LOGIC_VECTOR( 9 DOWNTO 0 );
 		ALU_result_out, read_data_1_out, read_data_2_out, write_data_out,	
@@ -23,6 +31,7 @@ ARCHITECTURE structure OF MIPS IS
         		Branch 				: IN 	STD_LOGIC;
         		Zero 				: IN 	STD_LOGIC;
         		Jump 				: IN 	STD_LOGIC;
+				sw_8_run			: IN 	std_logic;
         		PC_out 				: OUT 	STD_LOGIC_VECTOR( 9 DOWNTO 0 );
         		clock,reset 		: IN 	STD_LOGIC );
 	END COMPONENT; 
@@ -36,6 +45,7 @@ ARCHITECTURE structure OF MIPS IS
         		RegWrite, MemtoReg 	: IN 	STD_LOGIC;
         		RegDst 				: IN 	STD_LOGIC;
         		Sign_extend 		: OUT 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
+				IsSpecialAddr		: OUT    std_logic;
         		clock, reset		: IN 	STD_LOGIC );
 	END COMPONENT;
 
@@ -78,8 +88,22 @@ ARCHITECTURE structure OF MIPS IS
         		address 			: IN 	STD_LOGIC_VECTOR( 7 DOWNTO 0 );
         		write_data 			: IN 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
         		MemRead, Memwrite 	: IN 	STD_LOGIC;
+				SpecialAddr         : IN 	STD_LOGIC;
+				SpecialData         : IN    std_logic_vector(7 DOWNTO 0);
+				IsSpecialAddr		: IN    std_logic;
+				SEG0_OUT, SEG1_OUT: OUT std_logic_vector(6 DOWNTO 0); -- for IO
+				SEG2_OUT, SEG3_OUT: OUT std_logic_vector(6 DOWNTO 0); -- for IO
         		Clock,reset			: IN 	STD_LOGIC );
 	END COMPONENT;
+		-----------------------------------------------------------------
+COMPONENT sevenSegment IS
+	PORT (
+		HI, LO : IN std_logic_vector(7 DOWNTO 0);
+		----------------------------------------
+		SEG0_OUT, SEG1_OUT: OUT std_logic_vector(6 DOWNTO 0);
+		SEG2_OUT, SEG3_OUT: OUT std_logic_vector(6 DOWNTO 0)
+	);
+END COMPONENT;
 
 					-- declare signals used to connect VHDL components
 	SIGNAL PC_plus_4 		: STD_LOGIC_VECTOR( 9 DOWNTO 0 );
@@ -92,6 +116,8 @@ ARCHITECTURE structure OF MIPS IS
 	SIGNAL ALUSrc 			: STD_LOGIC;
 	SIGNAL Branch 			: STD_LOGIC;
 	SIGNAL Jump				: STD_LOGIC;
+	SIGNAL SpecialAddr      : STD_LOGIC;
+	SIGNAL IsSpecialAddr    : STD_LOGIC;
 	SIGNAL ICommand	        : STD_LOGIC_VECTOR( 3 DOWNTO 0 );
 	SIGNAL shiftValue		: STD_LOGIC_VECTOR( 4 DOWNTO 0 );
 	SIGNAL IsICommand       : STD_LOGIC;
@@ -124,6 +150,7 @@ BEGIN
 				Branch 			=> Branch,
 				Zero 			=> Zero,
 				Jump 			=> Jump, 
+				sw_8_run	    => sw_8_run,
 				PC_out 			=> PC,        		
 				clock 			=> clock,  
 				reset 			=> reset );
@@ -138,6 +165,7 @@ BEGIN
 				MemtoReg 		=> MemtoReg,
 				RegDst 			=> RegDst,
 				Sign_extend 	=> Sign_extend,
+				IsSpecialAddr   => IsSpecialAddr,
         		clock 			=> clock,  
 				reset 			=> reset );
 
@@ -181,7 +209,16 @@ BEGIN
 				write_data 		=> read_data_2,
 				MemRead 		=> MemRead, 
 				Memwrite 		=> MemWrite, 
+				SpecialAddr     => SpecialAddr,
+				SpecialData     => sw_0_7,
+				IsSpecialAddr   =>IsSpecialAddr,
+				SEG0_OUT =>SEG0_OUT,
+				 SEG1_OUT =>SEG1_OUT,
+				SEG2_OUT=> SEG2_OUT,
+				SEG3_OUT=> SEG3_OUT,
                 clock 			=> clock,  
 				reset 			=> reset );
+				
+				
 END structure;
 
