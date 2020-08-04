@@ -55,10 +55,17 @@ PROCESS( IsSpecialAddr,address,MemRead,Memwrite,SpecialAddr,SpecialData)
 		elsif ( IsSpecialAddr = '0' and MemRead = '1') then
 			read_data_tmp<=read_data_mem;
 		elsif (IsSpecialAddr ='1' and Memwrite='1') then
-			SEG0_OUT<="1111001";
-			SEG1_OUT<="0100100";
-			SEG2_OUT<="0110000";
-			SEG3_OUT<="0011001";
+			if(write_data(7 DOWNTO 0) = "00000011") then
+				SEG0_OUT<="1111001";
+				SEG1_OUT<="0100100";
+				SEG2_OUT<="0110000";
+				SEG3_OUT<="0011001";
+			else 
+				SEG0_OUT<="1111001";
+				SEG1_OUT<="1111001";
+				SEG2_OUT<="1111001";
+				SEG3_OUT<="1111001";
+			end if;
 		end if;
 END PROCESS;
 -- Load memory address register with write clock

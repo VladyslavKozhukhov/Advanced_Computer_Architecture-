@@ -15,6 +15,8 @@ ENTITY Idecode IS
 			RegDst 		: IN 	STD_LOGIC;
 			Sign_extend : OUT 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
 			IsSpecialAddr : OUT    std_logic;
+								IsTEST: OUT std_logic;
+
 			clock,reset	: IN 	STD_LOGIC );
 END Idecode;
 
@@ -53,9 +55,10 @@ BEGIN
     	Sign_extend <= X"0000" & Instruction_immediate_value
 		WHEN Instruction_immediate_value(15) = '0'
 		ELSE	X"FFFF" & Instruction_immediate_value;
-		IsSpecialAddr <='1' WHEN Instruction(11 downto 0) = "100000000000" ELSE
+		IsSpecialAddr <='1' WHEN Instruction(11 downto 0) = "100000000000" OR Instruction(11 downto 0) = "100000000100" ELSE
 						'0';
-	
+	IsTEST<='1' WHEN Instruction(11 downto 0) = "100000000000" OR Instruction(11 downto 0) = "100000000100" ELSE
+						'0';
 PROCESS
 	BEGIN
 		WAIT UNTIL clock'EVENT AND clock = '1';

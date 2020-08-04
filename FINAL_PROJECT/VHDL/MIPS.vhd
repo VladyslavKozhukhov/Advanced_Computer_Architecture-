@@ -7,6 +7,7 @@ ENTITY MIPS IS
 
 	PORT( reset, clock					: IN 	STD_LOGIC;
 	-----------------------------------------------------------
+		IsTEST: OUT std_logic;
 		sw_8_run: IN std_logic; -- for IO
 		sw_0_7 : IN std_logic_vector(7 DOWNTO 0); --for IO
 		HI_OUT: OUT std_logic_vector(7 DOWNTO 0); -- for IO
@@ -46,6 +47,7 @@ ARCHITECTURE structure OF MIPS IS
         		RegDst 				: IN 	STD_LOGIC;
         		Sign_extend 		: OUT 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
 				IsSpecialAddr		: OUT    std_logic;
+						IsTEST: OUT std_logic;
         		clock, reset		: IN 	STD_LOGIC );
 	END COMPONENT;
 
@@ -166,6 +168,7 @@ BEGIN
 				RegDst 			=> RegDst,
 				Sign_extend 	=> Sign_extend,
 				IsSpecialAddr   => IsSpecialAddr,
+				IsTEST=>IsTEST,
         		clock 			=> clock,  
 				reset 			=> reset );
 
@@ -219,6 +222,6 @@ BEGIN
                 clock 			=> clock,  
 				reset 			=> reset );
 				
-				
+
 END structure;
 
