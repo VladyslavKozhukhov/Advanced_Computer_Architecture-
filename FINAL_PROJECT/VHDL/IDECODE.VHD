@@ -15,8 +15,8 @@ ENTITY Idecode IS
 			RegDst 		: IN 	STD_LOGIC;
 			Sign_extend : OUT 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
 			IsSpecialAddr : OUT    std_logic;
-								IsTEST: OUT std_logic;
-
+			IsTEST		: OUT std_logic;
+			addrOfIO    :OUT STD_LOGIC_VECTOR(11 downto 0);--addr of IO
 			clock,reset	: IN 	STD_LOGIC );
 END Idecode;
 
@@ -55,10 +55,24 @@ BEGIN
     	Sign_extend <= X"0000" & Instruction_immediate_value
 		WHEN Instruction_immediate_value(15) = '0'
 		ELSE	X"FFFF" & Instruction_immediate_value;
-		IsSpecialAddr <='1' WHEN Instruction(11 downto 0) = "100000000000" OR Instruction(11 downto 0) = "100000000100" ELSE
+		IsSpecialAddr <='1' WHEN Instruction(11 downto 0) = "100000000000" ELSE --PORT_LEDG[7-0] 0x800
+						'1' WHEN Instruction(11 downto 0) = "100000000100" ELSE --PORT_LEDR[7-0] 0x804
+						'1' WHEN Instruction(11 downto 0) = "100000001000" ELSE --PORT_LEDR[7-0] 0x808
+						'1' WHEN Instruction(11 downto 0) = "100000001100" ELSE --PORT_LEDR[7-0] 0x80c
+						'1' WHEN Instruction(11 downto 0) = "100000010000" ELSE --PORT_LEDR[7-0] 0x810
+						'1' WHEN Instruction(11 downto 0) = "100000010100" ELSE --PORT_LEDR[7-0] 0x814
+						'1' WHEN Instruction(11 downto 0) = "100000011000" ELSE --PORT_LEDR[7-0] 0x818
 						'0';
-	IsTEST<='1' WHEN Instruction(11 downto 0) = "100000000000" OR Instruction(11 downto 0) = "100000000100" ELSE
-						'0';
+		addrOfIO<=	Instruction(11 downto 0);
+		
+	IsTEST<='1' WHEN Instruction(11 downto 0) = "100000000000" ELSE --PORT_LEDG[7-0] 0x800
+			'1' WHEN Instruction(11 downto 0) = "100000000100" ELSE --PORT_LEDR[7-0] 0x804
+			'1' WHEN Instruction(11 downto 0) = "100000001000" ELSE --PORT_LEDR[7-0] 0x808
+			'1' WHEN Instruction(11 downto 0) = "100000001100" ELSE --PORT_LEDR[7-0] 0x80c
+			'1' WHEN Instruction(11 downto 0) = "100000010000" ELSE --PORT_LEDR[7-0] 0x810
+			'1' WHEN Instruction(11 downto 0) = "100000010100" ELSE --PORT_LEDR[7-0] 0x814
+			'1' WHEN Instruction(11 downto 0) = "100000011000" ELSE --PORT_LEDR[7-0] 0x818
+			'0';
 PROCESS
 	BEGIN
 		WAIT UNTIL clock'EVENT AND clock = '1';

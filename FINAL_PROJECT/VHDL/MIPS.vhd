@@ -14,6 +14,9 @@ ENTITY MIPS IS
 		LO_OUT: OUT std_logic_vector(7 DOWNTO 0); -- for IO
 		SEG0_OUT, SEG1_OUT: OUT std_logic_vector(6 DOWNTO 0); -- for IO
 		SEG2_OUT, SEG3_OUT: OUT std_logic_vector(6 DOWNTO 0); -- for IO
+		PORT_LEDG: OUT std_logic_vector(7 DOWNTO 0);-- for IO
+		PORT_LEDR: OUT std_logic_vector(7 DOWNTO 0);-- for IO
+
 	-----------------------------------------------------------
 		-- Output important signals to pins for easy display in Simulator
 		PC								: OUT  STD_LOGIC_VECTOR( 9 DOWNTO 0 );
@@ -47,7 +50,8 @@ ARCHITECTURE structure OF MIPS IS
         		RegDst 				: IN 	STD_LOGIC;
         		Sign_extend 		: OUT 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
 				IsSpecialAddr		: OUT    std_logic;
-						IsTEST: OUT std_logic;
+				IsTEST: OUT std_logic;
+				addrOfIO    :OUT STD_LOGIC_VECTOR(11 downto 0);--addr of IO
         		clock, reset		: IN 	STD_LOGIC );
 	END COMPONENT;
 
@@ -95,6 +99,10 @@ ARCHITECTURE structure OF MIPS IS
 				IsSpecialAddr		: IN    std_logic;
 				SEG0_OUT, SEG1_OUT: OUT std_logic_vector(6 DOWNTO 0); -- for IO
 				SEG2_OUT, SEG3_OUT: OUT std_logic_vector(6 DOWNTO 0); -- for IO
+				PORT_LEDG: OUT std_logic_vector(7 DOWNTO 0);-- for IO
+				PORT_LEDR: OUT std_logic_vector(7 DOWNTO 0);-- for IO
+				addrOfIO    :IN STD_LOGIC_VECTOR(11 downto 0);--addr of IO
+
         		Clock,reset			: IN 	STD_LOGIC );
 	END COMPONENT;
 		-----------------------------------------------------------------
@@ -131,6 +139,7 @@ END COMPONENT;
 	SIGNAL MemRead 			: STD_LOGIC;
 	SIGNAL ALUop 			: STD_LOGIC_VECTOR(  1 DOWNTO 0 );
 	SIGNAL Instruction		: STD_LOGIC_VECTOR( 31 DOWNTO 0 );
+	SIGNAL 			addrOfIO    : STD_LOGIC_VECTOR(11 downto 0);--addr of IO
 
 BEGIN
 					-- copy important signals to output pins for easy 
@@ -169,6 +178,8 @@ BEGIN
 				Sign_extend 	=> Sign_extend,
 				IsSpecialAddr   => IsSpecialAddr,
 				IsTEST=>IsTEST,
+				addrOfIO=>addrOfIO,
+
         		clock 			=> clock,  
 				reset 			=> reset );
 
@@ -219,6 +230,10 @@ BEGIN
 				 SEG1_OUT =>SEG1_OUT,
 				SEG2_OUT=> SEG2_OUT,
 				SEG3_OUT=> SEG3_OUT,
+				PORT_LEDG=>PORT_LEDG,
+				PORT_LEDR=>PORT_LEDR,
+				addrOfIO=>addrOfIO,
+
                 clock 			=> clock,  
 				reset 			=> reset );
 				
