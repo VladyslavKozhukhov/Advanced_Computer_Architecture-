@@ -94,26 +94,28 @@ ARCHITECTURE structure OF MIPS IS
         		address 			: IN 	STD_LOGIC_VECTOR( 7 DOWNTO 0 );
         		write_data 			: IN 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
         		MemRead, Memwrite 	: IN 	STD_LOGIC;
-				SpecialAddr         : IN 	STD_LOGIC;
 				SpecialData         : IN    std_logic_vector(7 DOWNTO 0);
 				IsSpecialAddr		: IN    std_logic;
-				SEG0_OUT, SEG1_OUT: OUT std_logic_vector(6 DOWNTO 0); -- for IO
-				SEG2_OUT, SEG3_OUT: OUT std_logic_vector(6 DOWNTO 0); -- for IO
-				PORT_LEDG: OUT std_logic_vector(7 DOWNTO 0);-- for IO
-				PORT_LEDR: OUT std_logic_vector(7 DOWNTO 0);-- for IO
-				addrOfIO    :IN STD_LOGIC_VECTOR(11 downto 0);--addr of IO
-
+				addrOfIO    		: IN 	STD_LOGIC_VECTOR(11 downto 0);--addr of IO
         		Clock,reset			: IN 	STD_LOGIC );
 	END COMPONENT;
+	COMPONENT IO_Module 
+		port (
+		clock 		: IN 	STD_LOGIC;
+		Memwrite 	: IN 	STD_LOGIC;
+		write_data 	: IN 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
+		addrOfIO    : IN 	STD_LOGIC_VECTOR(11 downto 0);--addr of IO
+		IsspecialAddr  : IN    STD_LOGIC;
+		seven_seg0 	: out std_logic_vector(6 downto 0);
+		seven_seg1 	: out std_logic_vector(6 downto 0);
+		seven_seg2 	: out std_logic_vector(6 downto 0);
+		seven_seg3 	: out std_logic_vector(6 downto 0);
+		port_ledg   : OUT std_logic_vector(7 DOWNTO 0);-- for IO
+		port_ledr   : OUT std_logic_vector(7 DOWNTO 0)-- for IO
+		);
+	END COMPONENT;
 		-----------------------------------------------------------------
-COMPONENT sevenSegment IS
-	PORT (
-		HI, LO : IN std_logic_vector(7 DOWNTO 0);
-		----------------------------------------
-		SEG0_OUT, SEG1_OUT: OUT std_logic_vector(6 DOWNTO 0);
-		SEG2_OUT, SEG3_OUT: OUT std_logic_vector(6 DOWNTO 0)
-	);
-END COMPONENT;
+
 
 					-- declare signals used to connect VHDL components
 	SIGNAL PC_plus_4 		: STD_LOGIC_VECTOR( 9 DOWNTO 0 );
@@ -126,7 +128,6 @@ END COMPONENT;
 	SIGNAL ALUSrc 			: STD_LOGIC;
 	SIGNAL Branch 			: STD_LOGIC;
 	SIGNAL Jump				: STD_LOGIC;
-	SIGNAL SpecialAddr      : STD_LOGIC;
 	SIGNAL IsSpecialAddr    : STD_LOGIC;
 	SIGNAL ICommand	        : STD_LOGIC_VECTOR( 3 DOWNTO 0 );
 	SIGNAL shiftValue		: STD_LOGIC_VECTOR( 4 DOWNTO 0 );
@@ -223,20 +224,25 @@ BEGIN
 				write_data 		=> read_data_2,
 				MemRead 		=> MemRead, 
 				Memwrite 		=> MemWrite, 
-				SpecialAddr     => SpecialAddr,
 				SpecialData     => sw_0_7,
 				IsSpecialAddr   =>IsSpecialAddr,
-				SEG0_OUT =>SEG0_OUT,
-				 SEG1_OUT =>SEG1_OUT,
-				SEG2_OUT=> SEG2_OUT,
-				SEG3_OUT=> SEG3_OUT,
-				PORT_LEDG=>PORT_LEDG,
-				PORT_LEDR=>PORT_LEDR,
-				addrOfIO=>addrOfIO,
-
+				addrOfIO		=>addrOfIO,
                 clock 			=> clock,  
 				reset 			=> reset );
 				
-
+IOM :IO_Module 
+		port map (
+		clock			=>clock,
+		Memwrite 		=> MemWrite, 
+		write_data 		=> read_data_2,
+		addrOfIO		=>addrOfIO,
+		IsSpecialAddr   => IsSpecialAddr,
+		seven_seg0 =>SEG0_OUT,
+		seven_seg1 =>SEG1_OUT,
+		seven_seg2 => SEG2_OUT,
+		seven_seg3 => SEG3_OUT,
+		port_ledg=>PORT_LEDG,
+		port_ledr=>PORT_LEDR
+		);
+	END COMPONENT;
 END structure;
-
