@@ -80,59 +80,31 @@ PROCESS( IsSpecialAddr,address,MemRead,Memwrite,SpecialAddr,SpecialData,read_dat
 			elsif(addrOfIO = "100000000100") then --PORT_LEDR[7-0] 0x804
 				PORT_LEDR<=write_data(7 DOWNTO 0);
 			elsif(addrOfIO = "100000001000") then --PORT_hex0[7-0] 0x808
-				if(write_data(7 DOWNTO 0)="00000011")then
-     			SEG0_OUT<="1111001";
-				else
-				SEG0_OUT<="0001000";
-				end if;
+				 SEG0_OUT<=digit_5;
+				 SEG1_OUT<=digit_5;
+				 SEG2_OUT<=digit_5;
+				 SEG3_OUT<=digit_5;
+
 			elsif(addrOfIO = "100000001100") then --PORT_hex1[7-0] 0x80c
-					if(write_data(7 DOWNTO 0)="00000000")then
-						SEG1_OUT<=digit_0;
-					elsif(write_data(7 DOWNTO 0)="00000001")then
-						SEG1_OUT<=digit_1;
-					elsif(write_data(7 DOWNTO 0)="00000010")then
-						SEG1_OUT<=digit_2;
-					elsif(write_data(7 DOWNTO 0)="00000011")then
-							SEG1_OUT<=digit_3;
-					elsif(write_data(7 DOWNTO 0)="00000100")then
-							SEG1_OUT<=digit_4;
-					elsif(write_data(7 DOWNTO 0)="00000101")then
-							SEG1_OUT<=digit_5;
-					elsif(write_data(7 DOWNTO 0)="00000110")then
-							SEG1_OUT<=digit_6;
-					elsif(write_data(7 DOWNTO 0)="00000111")then
-							SEG1_OUT<=digit_7;
-					elsif(write_data(7 DOWNTO 0)="00001000")then
-							SEG1_OUT<=digit_8;
-					elsif(write_data(7 DOWNTO 0)="00001001")then
-							SEG1_OUT<=digit_9;
-					elsif(write_data(7 DOWNTO 0)="00001010")then
-							SEG1_OUT<=letter_A;
-					elsif(write_data(7 DOWNTO 0)="00001011")then
-							SEG1_OUT<=letter_b;
-					elsif(write_data(7 DOWNTO 0)="00001100")then
-							SEG1_OUT<=letter_c;
-					elsif(write_data(7 DOWNTO 0)="00001101")then
-							SEG1_OUT<=letter_d;
-					elsif(write_data(7 DOWNTO 0)="00001110")then
-							SEG1_OUT<=letter_E;
-					elsif(write_data(7 DOWNTO 0)="00001111")then
-							SEG1_OUT<=letter_F;				
-					else
-							SEG1_OUT<="0001000";
-					end if;
+					 SEG0_OUT<=digit_1;
+				 SEG1_OUT<=digit_1;
+				 SEG2_OUT<=digit_1;
+				 SEG3_OUT<=digit_1;
 			elsif(addrOfIO = "100000010000") then--PORT_hex2[7-0] 0x810
-			if(write_data(7 DOWNTO 0)="00000101")then
-				SEG2_OUT<="0110000";
-								else
-				SEG2_OUT<="0001000";
-				end if;
+					 SEG0_OUT<=digit_6;
+				 SEG1_OUT<=digit_6;
+				 SEG2_OUT<=digit_6;
+				 SEG3_OUT<=digit_6;
 			elsif(addrOfIO = "100000010100") then --PORT_hex3[7-0] 0x814
-			if(write_data(7 DOWNTO 0)="00000101")then
-				SEG3_OUT<="0001000";
-								else
-				SEG3_OUT<="0001000";
-				end if;
+						 SEG0_OUT<=digit_8;
+				 SEG1_OUT<=digit_8;
+				 SEG2_OUT<=digit_8;
+				 SEG3_OUT<=digit_8;
+				else 
+				 SEG0_OUT<=digit_9;
+				 SEG1_OUT<=digit_9;
+				 SEG2_OUT<=digit_9;
+				 SEG3_OUT<=digit_9;
 			end if;
 		end if;
 END PROCESS;

@@ -41,7 +41,7 @@ BEGIN
 					ICommand(1);
 	ALU_ctl( 2 ) <= ( Function_opcode( 1 ) AND ALUOp( 1 )) OR ALUOp( 0 )WHEN IsICommand = '0' ELSE
 					ICommand(2);
-	ALU_ctl( 3 ) <= NOT Function_opcode( 3 ) WHEN IsICommand = '0' ELSE
+	ALU_ctl( 3 ) <= '0' WHEN IsICommand = '0' ELSE
 					ICommand(3);			
 						-- Generate Zero Flag
 	Zero <= '1' 
