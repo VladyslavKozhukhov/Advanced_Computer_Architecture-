@@ -1,4 +1,3 @@
-				-- Top Level Structural Model for MIPS Processor Core
 LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.STD_LOGIC_ARITH.ALL;
@@ -31,6 +30,8 @@ ARCHITECTURE structure OF MIPS IS
 	COMPONENT Ifetch
    	     PORT(	Instruction			: OUT 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
         		PC_plus_4_out 		: OUT  	STD_LOGIC_VECTOR( 9 DOWNTO 0 );
+				bubble_out			: OUT	STD_LOGIC;----
+				IsSpecialAddr		: IN    std_logic;
         		Add_result 			: IN 	STD_LOGIC_VECTOR( 7 DOWNTO 0 );
         		Branch 				: IN 	STD_LOGIC;
         		Zero 				: IN 	STD_LOGIC;
@@ -48,6 +49,7 @@ ARCHITECTURE structure OF MIPS IS
         		ALU_result 			: IN 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
         		RegWrite, MemtoReg 	: IN 	STD_LOGIC;
         		RegDst 				: IN 	STD_LOGIC;
+				bubble_out			: IN  	STD_LOGIC;---
         		Sign_extend 		: OUT 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
 				IsSpecialAddr		: OUT    std_logic;
 				IsTEST: OUT std_logic;
@@ -91,32 +93,43 @@ ARCHITECTURE structure OF MIPS IS
 
 	COMPONENT dmemory
 	     PORT(	read_data 			: OUT 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
-        		address 			: IN 	STD_LOGIC_VECTOR( 7 DOWNTO 0 );
+        		address 			: IN 	STD_LOGIC_VECTOR( 9 DOWNTO 0 );
         		write_data 			: IN 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
         		MemRead, Memwrite 	: IN 	STD_LOGIC;
+				SpecialAddr         : IN 	STD_LOGIC;
 				SpecialData         : IN    std_logic_vector(7 DOWNTO 0);
 				IsSpecialAddr		: IN    std_logic;
-				addrOfIO    		: IN 	STD_LOGIC_VECTOR(11 downto 0);--addr of IO
+				Seven_Seg			: OUT 	STD_LOGIC_VECTOR( 15 downto 0 );
+				PORT_LEDG: OUT std_logic_vector(7 DOWNTO 0);-- for IO
+				PORT_LEDR: OUT std_logic_vector(7 DOWNTO 0);-- for IO
+				addrOfIO    :IN STD_LOGIC_VECTOR(11 downto 0);--addr of IO
+
         		Clock,reset			: IN 	STD_LOGIC );
 	END COMPONENT;
-	COMPONENT IO_Module 
-		port (
-		clock 		: IN 	STD_LOGIC;
-		Memwrite 	: IN 	STD_LOGIC;
-		write_data 	: IN 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
-		addrOfIO    : IN 	STD_LOGIC_VECTOR(11 downto 0);--addr of IO
-		IsspecialAddr  : IN    STD_LOGIC;
-		seven_seg0 	: out std_logic_vector(6 downto 0);
-		seven_seg1 	: out std_logic_vector(6 downto 0);
-		seven_seg2 	: out std_logic_vector(6 downto 0);
-		seven_seg3 	: out std_logic_vector(6 downto 0);
-		port_ledg   : OUT std_logic_vector(7 DOWNTO 0);-- for IO
-		port_ledr   : OUT std_logic_vector(7 DOWNTO 0)-- for IO
-		);
-	END COMPONENT;
 		-----------------------------------------------------------------
+COMPONENT sevenSegment IS
+	PORT (
+		HI, LO : IN std_logic_vector(7 DOWNTO 0);
+		----------------------------------------
+		SEG0_OUT, SEG1_OUT: OUT std_logic_vector(6 DOWNTO 0);
+		SEG2_OUT, SEG3_OUT: OUT std_logic_vector(6 DOWNTO 0)
+	);
+END COMPONENT;
 
-
+COMPONENT BCD 
+	port ( 	Binary: 	in  std_logic_vector(3 downto 0);
+			En:			in  std_logic;
+			Hex_out:	out std_logic_vector(6 downto 0));
+end COMPONENT;
+	
+COMPONENT Ndff
+	 GENERIC ( N: integer := 8);
+	 PORT (	d					: in std_logic_vector(N-1 downto 0);
+			clk					: in std_logic;
+			rst					: in std_logic;
+			q					: out std_logic_vector(N-1 downto 0) );
+END COMPONENT;
+--------------------------------------
 					-- declare signals used to connect VHDL components
 	SIGNAL PC_plus_4 		: STD_LOGIC_VECTOR( 9 DOWNTO 0 );
 	SIGNAL read_data_1 		: STD_LOGIC_VECTOR( 31 DOWNTO 0 );
@@ -128,6 +141,7 @@ ARCHITECTURE structure OF MIPS IS
 	SIGNAL ALUSrc 			: STD_LOGIC;
 	SIGNAL Branch 			: STD_LOGIC;
 	SIGNAL Jump				: STD_LOGIC;
+	SIGNAL SpecialAddr      : STD_LOGIC;
 	SIGNAL IsSpecialAddr    : STD_LOGIC;
 	SIGNAL ICommand	        : STD_LOGIC_VECTOR( 3 DOWNTO 0 );
 	SIGNAL shiftValue		: STD_LOGIC_VECTOR( 4 DOWNTO 0 );
@@ -141,6 +155,19 @@ ARCHITECTURE structure OF MIPS IS
 	SIGNAL ALUop 			: STD_LOGIC_VECTOR(  1 DOWNTO 0 );
 	SIGNAL Instruction		: STD_LOGIC_VECTOR( 31 DOWNTO 0 );
 	SIGNAL 			addrOfIO    : STD_LOGIC_VECTOR(11 downto 0);--addr of IO
+		--seven seg vars--------
+	SIGNAL ssg0_out					: STD_LOGIC_VECTOR( 6 DOWNTO 0 );
+	SIGNAL ssg1_out					: STD_LOGIC_VECTOR( 6 DOWNTO 0 );
+	SIGNAL ssg2_out					: STD_LOGIC_VECTOR( 6 DOWNTO 0 );
+	SIGNAL ssg3_out					: STD_LOGIC_VECTOR( 6 DOWNTO 0 );
+	SIGNAL Seven_Seg				: STD_LOGIC_VECTOR( 15 DOWNTO 0 );
+	signal seg_signal_0 : STD_LOGIC_VECTOR( 6 DOWNTO 0 );
+	signal seg_signal_1 : STD_LOGIC_VECTOR( 6 DOWNTO 0 );
+	signal seg_signal_2 : STD_LOGIC_VECTOR( 6 DOWNTO 0 );
+	signal seg_signal_3 : STD_LOGIC_VECTOR( 6 DOWNTO 0 );
+	signal the_one						: STD_LOGIC;
+   -------------------------------------
+	SIGNAL bubble_delay			: STD_LOGIC_VECTOR	(0 downto 0);
 
 BEGIN
 					-- copy important signals to output pins for easy 
@@ -154,10 +181,24 @@ BEGIN
    Zero_out 		<= Zero;
    RegWrite_out 	<= RegWrite;
    MemWrite_out 	<= MemWrite;	
+   -------------------------------------
+   the_one <= '1';
+   SEG0_OUT <= ssg0_out;--seg_signal_0;
+   SEG1_OUT <=ssg1_out;-- seg_signal_1;
+   SEG2_OUT <= ssg2_out;--seg_signal_2;
+   SEG3_OUT <=ssg3_out;-- seg_signal_3;
+   
+   
+   
+   
+   
+   ---------------------------------------
 					-- connect the 5 MIPS components   
   IFE : Ifetch
 	PORT MAP (	Instruction 	=> Instruction,
     	    	PC_plus_4_out 	=> PC_plus_4,
+				bubble_out		=> bubble_delay(0),---
+				IsSpecialAddr   =>IsSpecialAddr,---
 				Add_result 		=> Add_result,
 				Branch 			=> Branch,
 				Zero 			=> Zero,
@@ -171,6 +212,7 @@ BEGIN
    	PORT MAP (	read_data_1 	=> read_data_1,
         		read_data_2 	=> read_data_2,
         		Instruction 	=> Instruction,
+				bubble_out		=> bubble_delay(0),--
         		read_data 		=> read_data,
 				ALU_result 		=> ALU_result,
 				RegWrite 		=> RegWrite,
@@ -220,29 +262,71 @@ BEGIN
 
    MEM:  dmemory
 	PORT MAP (	read_data 		=> read_data,
-				address 		=> ALU_Result (9 DOWNTO 2),--jump memory address by 4
+				address 		=> ALU_Result (9 DOWNTO 2)&"00",--jump memory address by 4
 				write_data 		=> read_data_2,
 				MemRead 		=> MemRead, 
 				Memwrite 		=> MemWrite, 
+				SpecialAddr     => SpecialAddr,
 				SpecialData     => sw_0_7,
 				IsSpecialAddr   =>IsSpecialAddr,
-				addrOfIO		=>addrOfIO,
+				Seven_Seg       =>Seven_Seg,
+				PORT_LEDG=>PORT_LEDG,
+				PORT_LEDR=>PORT_LEDR,
+				addrOfIO=>addrOfIO,
                 clock 			=> clock,  
 				reset 			=> reset );
 				
-IOM :IO_Module 
-		port map (
-		clock			=>clock,
-		Memwrite 		=> MemWrite, 
-		write_data 		=> read_data_2,
-		addrOfIO		=>addrOfIO,
-		IsSpecialAddr   => IsSpecialAddr,
-		seven_seg0 =>SEG0_OUT,
-		seven_seg1 =>SEG1_OUT,
-		seven_seg2 => SEG2_OUT,
-		seven_seg3 => SEG3_OUT,
-		port_ledg=>PORT_LEDG,
-		port_ledr=>PORT_LEDR
-		);
-	END COMPONENT;
+				
+--==========================Convert from binary to hex= write data -> seven_seg===========================				
+BCD0: BCD
+	PORT MAP (
+		Binary 	=> Seven_Seg( 3 downto 0 ),
+		En 		=> the_one,
+		Hex_out => ssg0_out );
+	BCD1: BCD
+	PORT MAP (
+		Binary 	=> Seven_Seg( 7 downto 4 ),
+		En 		=> the_one,
+		Hex_out => ssg1_out );
+	
+	BCD2: BCD
+	PORT MAP (
+		Binary 	=> Seven_Seg( 11 downto 8 ),
+		En 		=> the_one,
+		Hex_out => ssg2_out );		
+	
+	BCD3: BCD
+	PORT MAP (
+		Binary 	=> Seven_Seg( 15 downto 12 ),
+		En 		=> the_one,
+		Hex_out => ssg3_out );
+--=============================seven_segment display with DFF============================
+  seg_signal_reg0: Ndff
+    GENERIC MAP ( N => 7 )
+	PORT MAP (	d 			=> ssg0_out,
+				clk			=> clock,
+				rst			=> reset,
+				q			=> seg_signal_0 ); --goes to Idecode & control too
+				
+  seg_signal_reg1: Ndff
+    GENERIC MAP ( N => 7 )
+	PORT MAP (	d 			=> ssg1_out,
+				clk			=> clock,
+				rst			=> reset,
+				q			=> seg_signal_1 ); --goes to Idecode & control too
+				
+  seg_signal_reg2: Ndff
+    GENERIC MAP ( N => 7 )
+	PORT MAP (	d 			=> ssg2_out,
+				clk			=> clock,
+				rst			=> reset,
+				q			=> seg_signal_2 ); --goes to Idecode & control too
+
+  seg_signal_reg3: Ndff
+    GENERIC MAP ( N => 7 )
+	PORT MAP (	d 			=> ssg3_out,
+				clk			=> clock,
+				rst			=> reset,
+				q			=> seg_signal_3 ); --goes to Idecode & control too
+
 END structure;
