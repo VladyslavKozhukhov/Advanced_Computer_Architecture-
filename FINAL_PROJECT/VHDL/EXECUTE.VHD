@@ -17,8 +17,10 @@ ENTITY  Execute IS
 			ALU_Result 		: OUT	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
 			Add_Result 		: OUT	STD_LOGIC_VECTOR( 7 DOWNTO 0 );
 			PC_plus_4 		: IN 	STD_LOGIC_VECTOR( 9 DOWNTO 0 );
-			ICommand		: IN 	STD_LOGIC_VECTOR( 3 DOWNTO 0 );
-			IsICommand 	 	: IN 	STD_LOGIC;
+						ICommand	: IN 	STD_LOGIC_VECTOR( 3 DOWNTO 0 );
+	SLWCommand	: IN 	STD_LOGIC_VECTOR( 3 DOWNTO 0 );
+	IsICommand  : IN 	STD_LOGIC;
+	IsSWCommand  : IN 	STD_LOGIC;
 			shiftValue		: IN    STD_LOGIC_VECTOR( 4 DOWNTO 0 );
 			clock, reset	: IN 	STD_LOGIC );
 END Execute;
@@ -36,12 +38,19 @@ BEGIN
   		ELSE  Sign_extend( 31 DOWNTO 0 );
 						-- Generate ALU control bits
 	ALU_ctl( 0 ) <= (( Function_opcode( 0 ) OR Function_opcode( 3 ) ) AND ALUOp(1 )) WHEN IsICommand = '0' ELSE
-					ICommand(0);
+					ICommand(0) WHEN IsICommand ='1' ELSE
+					SLWCommand(0)WHEN IsSWCommand ='1'ELSE
+					'0';
 	ALU_ctl( 1 ) <= ( NOT Function_opcode( 2 ) ) OR (NOT ALUOp( 1 ) )WHEN IsICommand = '0' ELSE
-					ICommand(1);
+					ICommand(1) WHEN IsICommand ='1' ELSE
+					SLWCommand(1)WHEN IsSWCommand ='1'ELSE
+					'0';
 	ALU_ctl( 2 ) <= ( Function_opcode( 1 ) AND ALUOp( 1 )) OR ALUOp( 0 )WHEN IsICommand = '0' ELSE
-					ICommand(2);
-	ALU_ctl( 3 ) <= '0' WHEN IsICommand = '0' ELSE
+					ICommand(2) WHEN IsICommand ='1' ELSE
+					SLWCommand(2)WHEN IsSWCommand ='1'ELSE
+					'0';
+	ALU_ctl( 3 ) <= '1' WHEN (Function_opcode = "000000" or Function_opcode = "000010") and IsICommand = '0' and IsSWCommand = '0' ELSE
+					'0' WHEN IsICommand = '0' ELSE
 					ICommand(3);			
 						-- Generate Zero Flag
 	Zero <= '1' 

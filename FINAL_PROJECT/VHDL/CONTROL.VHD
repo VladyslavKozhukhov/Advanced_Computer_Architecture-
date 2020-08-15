@@ -17,7 +17,9 @@ ENTITY control IS
 	ALUop 		: OUT 	STD_LOGIC_VECTOR( 1 DOWNTO 0 );
 	Jump		: OUT 	STD_LOGIC; 
 	ICommand	: OUT 	STD_LOGIC_VECTOR( 3 DOWNTO 0 );
+	SLWCommand	: OUT 	STD_LOGIC_VECTOR( 3 DOWNTO 0 );
 	IsICommand  : OUT 	STD_LOGIC;
+	IsSWCommand  : OUT 	STD_LOGIC;
 	clock, reset	: IN 	STD_LOGIC );
 
 END control;
@@ -51,6 +53,8 @@ BEGIN
 						 "0001" WHEN Ori 	= '1' ELSE
 						 "0100" WHEN Xori = '1' ELSE
 						 "0000";
+	SLWCommand <="0000" WHEN Lw ='1' or SW ='1' ELSE "0000";
+	IsSWCommand <= '1'  WHEN Lw ='1' Or SW ='1' ELSE '0';
 	IsICommand <= '1' WHEN Addi= '1'  OR Andi ='1' OR Xori ='1' OR Ori='1' ELSE
 					'0';
 	ALUOp( 1 ) 	<=  R_format OR Andi OR Xori OR Ori;

@@ -58,11 +58,11 @@ BEGIN
 		ELSE	X"FFFF" & Instruction_immediate_value;
 		IsSpecialAddr <='1' WHEN Instruction(11 downto 0) = "100000000000" ELSE --PORT_LEDG[7-0] 0x800
 						'1' WHEN Instruction(11 downto 0) = "100000000100" ELSE --PORT_LEDR[7-0] 0x804
-						'1' WHEN Instruction(11 downto 0) = "100000001000" ELSE --PORT_LEDR[7-0] 0x808
-						'1' WHEN Instruction(11 downto 0) = "100000001100" ELSE --PORT_LEDR[7-0] 0x80c
-						'1' WHEN Instruction(11 downto 0) = "100000010000" ELSE --PORT_LEDR[7-0] 0x810
-						'1' WHEN Instruction(11 downto 0) = "100000010100" ELSE --PORT_LEDR[7-0] 0x814
-						'1' WHEN Instruction(11 downto 0) = "100000011000" ELSE --PORT_LEDR[7-0] 0x818
+						'1' WHEN Instruction(11 downto 0) = "100000001000" ELSE --PORT_HEX0[7-0] 0x808
+						'1' WHEN Instruction(11 downto 0) = "100000001100" ELSE --PORT_HEX1[7-0] 0x80c
+						'1' WHEN Instruction(11 downto 0) = "100000010000" ELSE --PORT_HEX2[7-0] 0x810
+						'1' WHEN Instruction(11 downto 0) = "100000010100" ELSE --PORT_HEX3[7-0] 0x814
+						'1' WHEN Instruction(11 downto 0) = "100000011000" ELSE --PORT_SW[7-0] 0x818
 						'0';
 		addrOfIO<=	Instruction(11 downto 0);
 		

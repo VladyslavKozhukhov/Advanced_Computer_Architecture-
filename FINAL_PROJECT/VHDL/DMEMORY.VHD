@@ -25,6 +25,7 @@ END dmemory;
 ARCHITECTURE behavior OF dmemory IS
 SIGNAL write_clock 			: STD_LOGIC;
 SIGNAL write_mem_en 		: STD_LOGIC;
+SIGNAL write_seg_en  		: STD_LOGIC;
 SIGNAL read_data_mem		: STD_LOGIC_VECTOR( 31 DOWNTO 0 );
 SIGNAL read_data_tmp		: STD_LOGIC_VECTOR( 31 DOWNTO 0 );
 SIGNAL read_extend_tmp		: STD_LOGIC_VECTOR( 31 DOWNTO 0 ):= (others => '0');
@@ -63,19 +64,21 @@ data_memory : altsyncram
 		
 	Seven_Seg <= SEVEN_SEG_MAP;
 	
-		
+		write_seg_en<='1' when IsSpecialAddr = '1' and Memwrite ='1' else '0';
 
 
 SSG_REG: Ndff_en
 			generic map ( 16 )
 			port map(	d 	 => write_data( 15 downto 0 ),
 						clk	 => write_clock,
-						en	 => IsSpecialAddr,
+						en	 => write_seg_en,
 						rst  => reset,
 						q 	 => SEVEN_SEG_MAP );
 
 		write_mem_en <=Memwrite when IsSpecialAddr = '0' else '0';
-		read_data<=mem_read_data when IsSpecialAddr ='0' else  X"00000000" ;
+		read_data<=mem_read_data when IsSpecialAddr ='0' else 
+					X"000000"&SpecialData when IsSpecialAddr = '1' and MemRead ='1' else 
+					X"00000000";
 --		when MemRead='1'and IsSpecialAddr = '0' else
 	--		X"0000"&SEVEN_SEG_MAP when MemRead='1' and IsSpecialAddr='1'else
 		--	X"00000000";

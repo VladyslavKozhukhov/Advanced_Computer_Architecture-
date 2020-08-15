@@ -1,7 +1,7 @@
 LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.STD_LOGIC_ARITH.ALL;
-
+---finish  sll srl 
 ENTITY MIPS IS
 
 	PORT( reset, clock					: IN 	STD_LOGIC;
@@ -68,8 +68,10 @@ ARCHITECTURE structure OF MIPS IS
              	Branch 				: OUT 	STD_LOGIC;
              	ALUop 				: OUT 	STD_LOGIC_VECTOR( 1 DOWNTO 0 );
 				Jump				: OUT 	STD_LOGIC; 
-				ICommand	        : OUT 	STD_LOGIC_VECTOR( 3 DOWNTO 0 );
-				IsICommand          : OUT 	STD_LOGIC;
+				ICommand	: OUT 	STD_LOGIC_VECTOR( 3 DOWNTO 0 );
+	SLWCommand	: OUT 	STD_LOGIC_VECTOR( 3 DOWNTO 0 );
+	IsICommand  : OUT 	STD_LOGIC;
+	IsSWCommand  : OUT 	STD_LOGIC;
              	clock, reset		: IN 	STD_LOGIC );
 	END COMPONENT;
 
@@ -84,8 +86,10 @@ ARCHITECTURE structure OF MIPS IS
                	ALU_Result 			: OUT	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
                	Add_Result 			: OUT	STD_LOGIC_VECTOR( 7 DOWNTO 0 );
                	PC_plus_4 			: IN 	STD_LOGIC_VECTOR( 9 DOWNTO 0 );
-				ICommand	        : IN 	STD_LOGIC_VECTOR( 3 DOWNTO 0 );
-				IsICommand          : IN 	STD_LOGIC;
+				ICommand	: IN 	STD_LOGIC_VECTOR( 3 DOWNTO 0 );
+	SLWCommand	: IN 	STD_LOGIC_VECTOR( 3 DOWNTO 0 );
+	IsICommand  : IN 	STD_LOGIC;
+	IsSWCommand  : IN 	STD_LOGIC;
 				shiftValue			: IN    STD_LOGIC_VECTOR( 4 DOWNTO 0 );
                	clock, reset		: IN 	STD_LOGIC );
 	END COMPONENT;
@@ -146,6 +150,9 @@ END COMPONENT;
 	SIGNAL ICommand	        : STD_LOGIC_VECTOR( 3 DOWNTO 0 );
 	SIGNAL shiftValue		: STD_LOGIC_VECTOR( 4 DOWNTO 0 );
 	SIGNAL IsICommand       : STD_LOGIC;
+	SIGNAL	SLWCommand	:  	STD_LOGIC_VECTOR( 3 DOWNTO 0 );
+
+	SIGNAL IsSWCommand: STD_LOGIC;
 	SIGNAL RegDst 			: STD_LOGIC;
 	SIGNAL Regwrite 		: STD_LOGIC;
 	SIGNAL Zero 			: STD_LOGIC;
@@ -155,6 +162,8 @@ END COMPONENT;
 	SIGNAL ALUop 			: STD_LOGIC_VECTOR(  1 DOWNTO 0 );
 	SIGNAL Instruction		: STD_LOGIC_VECTOR( 31 DOWNTO 0 );
 	SIGNAL 			addrOfIO    : STD_LOGIC_VECTOR(11 downto 0);--addr of IO
+	SIGNAL address_tmp 			:STD_LOGIC_VECTOR( 9 DOWNTO 0 );
+
 		--seven seg vars--------
 	SIGNAL ssg0_out					: STD_LOGIC_VECTOR( 6 DOWNTO 0 );
 	SIGNAL ssg1_out					: STD_LOGIC_VECTOR( 6 DOWNTO 0 );
@@ -189,7 +198,7 @@ BEGIN
    SEG3_OUT <=ssg3_out;-- seg_signal_3;
    
    
-   
+   address_tmp<= ALU_Result (9 DOWNTO 2)&"00";
    
    
    ---------------------------------------
@@ -239,6 +248,8 @@ BEGIN
 				ALUop 			=> ALUop,
 				Jump 			=> Jump,
 				ICommand		=>ICommand,
+				SLWCommand      =>SLWCommand,
+				IsSWCommand     =>IsSWCommand,
 				IsICommand  	=>IsICommand,
 				clock 			=> clock,
 				reset 			=> reset );
@@ -255,6 +266,8 @@ BEGIN
 				Add_Result 		=> Add_Result,
 				PC_plus_4		=> PC_plus_4,
 				ICommand		=>ICommand,
+				SLWCommand      =>SLWCommand,
+				IsSWCommand     =>IsSWCommand,
 				IsICommand  	=>IsICommand,
 				shiftValue      =>Instruction( 10 DOWNTO 6),
                 Clock			=> clock,
@@ -262,7 +275,7 @@ BEGIN
 
    MEM:  dmemory
 	PORT MAP (	read_data 		=> read_data,
-				address 		=> ALU_Result (9 DOWNTO 2)&"00",--jump memory address by 4
+				address 		=>address_tmp,-- ALU_Result (9 DOWNTO 2)&"00",--jump memory address by 4
 				write_data 		=> read_data_2,
 				MemRead 		=> MemRead, 
 				Memwrite 		=> MemWrite, 
