@@ -47,8 +47,13 @@ BEGIN
 		ELSE '0';    
 						-- Select ALU output        
 	ALU_result <= X"0000000" & B"000"  & ALU_output_mux( 31 ) 
-		WHEN  ALU_ctl = "111" 
+		WHEN  ALU_ctl = "111"
+		Else std_logic_vector(shift_left(ieee.numeric_std.unsigned(Binput), to_integer(ieee.numeric_std.unsigned(shiftValue)))) when Function_opcode ="000000" and ALUOp(1) ='1'
+		else std_logic_vector(shift_right(ieee.numeric_std.unsigned(Binput), to_integer(ieee.numeric_std.unsigned(shiftValue)))) when Function_opcode = "000010" and ALUOp(1) ='1'
 		ELSE  	ALU_output_mux( 31 DOWNTO 0 );
+
+
+
 						-- Adder to compute Branch Address
 	Branch_Add	<= PC_plus_4( 9 DOWNTO 2 ) +  Sign_extend( 7 DOWNTO 0 ) ;
 		Add_result 	<= Branch_Add( 7 DOWNTO 0 );
@@ -63,8 +68,8 @@ PROCESS ( ALU_ctl, Ainput, Binput )
      	WHEN "001" 	=>	ALU_output_mux 	<= Ainput OR Binput;
 						-- ALU performs ALUresult = A_input + B_input +addi
 	 	WHEN "010" 	=>	ALU_output_mux 	<= Ainput + Binput;
-						-- ALU performs ?
- 	 	WHEN "011" 	=>	ALU_output_mux <= X"00000000";
+						-- ALU performs addu
+ 	 	WHEN "011" 	=>	ALU_output_mux <=  Ainput + Binput;
 						-- ALU performs A XOR B
  	 	WHEN "100" 	=>	ALU_output_mux 	<=  Ainput XOR Binput;
 						-- ALU performs ?
