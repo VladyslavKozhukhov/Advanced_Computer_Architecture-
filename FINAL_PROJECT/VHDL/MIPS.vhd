@@ -11,10 +11,12 @@ ENTITY MIPS IS
 		sw_0_7 : IN std_logic_vector(7 DOWNTO 0); --for IO
 		HI_OUT: OUT std_logic_vector(7 DOWNTO 0); -- for IO
 		LO_OUT: OUT std_logic_vector(7 DOWNTO 0); -- for IO
+		addr_out: OUT std_logic_vector(9 DOWNTO 0); -- for IO
 		SEG0_OUT, SEG1_OUT: OUT std_logic_vector(6 DOWNTO 0); -- for IO
 		SEG2_OUT, SEG3_OUT: OUT std_logic_vector(6 DOWNTO 0); -- for IO
 		PORT_LEDG: OUT std_logic_vector(7 DOWNTO 0);-- for IO
 		PORT_LEDR: OUT std_logic_vector(7 DOWNTO 0);-- for IO
+			wrReg_out_t	:  OUT	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
 
 	-----------------------------------------------------------
 		-- Output important signals to pins for easy display in Simulator
@@ -31,6 +33,8 @@ ARCHITECTURE structure OF MIPS IS
    	     PORT(	Instruction			: OUT 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
         		PC_plus_4_out 		: OUT  	STD_LOGIC_VECTOR( 9 DOWNTO 0 );
 				bubble_out			: OUT	STD_LOGIC;----
+	 IsSWCommand  : in 	STD_LOGIC;
+
 				IsSpecialAddr		: IN    std_logic;
         		Add_result 			: IN 	STD_LOGIC_VECTOR( 7 DOWNTO 0 );
         		Branch 				: IN 	STD_LOGIC;
@@ -50,6 +54,8 @@ ARCHITECTURE structure OF MIPS IS
         		RegWrite, MemtoReg 	: IN 	STD_LOGIC;
         		RegDst 				: IN 	STD_LOGIC;
 				bubble_out			: IN  	STD_LOGIC;---
+			wrReg_out	: OUT 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
+
         		Sign_extend 		: OUT 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
 				IsSpecialAddr		: OUT    std_logic;
 				IsTEST: OUT std_logic;
@@ -151,6 +157,7 @@ END COMPONENT;
 	SIGNAL shiftValue		: STD_LOGIC_VECTOR( 4 DOWNTO 0 );
 	SIGNAL IsICommand       : STD_LOGIC;
 	SIGNAL	SLWCommand	:  	STD_LOGIC_VECTOR( 3 DOWNTO 0 );
+			Signal wrReg_out	:  	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
 
 	SIGNAL IsSWCommand: STD_LOGIC;
 	SIGNAL RegDst 			: STD_LOGIC;
@@ -189,7 +196,9 @@ BEGIN
    Branch_out 		<= Branch;
    Zero_out 		<= Zero;
    RegWrite_out 	<= RegWrite;
-   MemWrite_out 	<= MemWrite;	
+   MemWrite_out 	<= MemWrite;
+wrReg_out_t<=wrReg_out;
+addr_out<=	ALU_Result (9 DOWNTO 2)&"00";
    -------------------------------------
    the_one <= '1';
    SEG0_OUT <= ssg0_out;--seg_signal_0;
@@ -215,6 +224,8 @@ BEGIN
 				sw_8_run	    => sw_8_run,
 				PC_out 			=> PC,        		
 				clock 			=> clock,  
+	 IsSWCommand =>IsSWCommand,
+
 				reset 			=> reset );
 
    ID : Idecode
@@ -231,7 +242,7 @@ BEGIN
 				IsSpecialAddr   => IsSpecialAddr,
 				IsTEST=>IsTEST,
 				addrOfIO=>addrOfIO,
-
+				wrReg_out=>wrReg_out,
         		clock 			=> clock,  
 				reset 			=> reset );
 

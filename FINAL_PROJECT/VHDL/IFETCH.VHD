@@ -16,6 +16,8 @@ ENTITY Ifetch IS
         	SIGNAL Zero 			: IN 	STD_LOGIC;
 			SIGNAL Jump				: IN 	STD_LOGIC;
 			SIGNAL bubble_out		: OUT	STD_LOGIC;
+	SIGNAL IsSWCommand  : in 	STD_LOGIC;
+
 			SIGNAL sw_8_run			: IN 	std_logic;
       		SIGNAL PC_out 			: OUT	STD_LOGIC_VECTOR( 9 DOWNTO 0 );
         	SIGNAL clock, reset 	: IN 	STD_LOGIC);
@@ -59,13 +61,13 @@ inst_memory: altsyncram
 		J_PC(7 DOWNTO 6) <= PC_plus_4(9 DOWNTO 8 );
 						-- Mux to select Branch Address or PC + 4        
 		Next_PC  <= X"00" WHEN Reset = '1' ELSE
-			
+			--PC( 9 DOWNTO 2 )       WHEN bubble = '1'ELSE
 			J_PC(7 DOWNTO 0) WHEN Jump = '1' ELSE
 			Add_result  WHEN ( ( Branch = '1' ) AND ( Zero = '1' ) AND(Inst( 31 DOWNTO 26 ) = "000100") ) ELSE
 			Add_result WHEN ( ( Branch = '1' ) AND ( Zero = '0' ) AND(Inst( 31 DOWNTO 26 ) = "000101") ) ELSE
 			PC_plus_4( 9 DOWNTO 2 );
-		--	PC       WHEN bubble = '1' ELSE
-			bubble<=IsSpecialAddr;
+
+			bubble<=IsSpecialAddr or IsSWCommand;
 			bubble_out <= bubble;
 	PROCESS
 		BEGIN
