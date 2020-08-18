@@ -6,6 +6,7 @@ USE IEEE.STD_LOGIC_ARITH.ALL;
 USE IEEE.STD_LOGIC_SIGNED.ALL;
 use ieee.numeric_std.all;
 
+
 ENTITY  Execute IS
 	PORT(	Read_data_1 	: IN 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
 			Read_data_2 	: IN 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
@@ -29,6 +30,9 @@ ARCHITECTURE behavior OF Execute IS
 SIGNAL Ainput, Binput 		: STD_LOGIC_VECTOR( 31 DOWNTO 0 );
 SIGNAL ALU_output_mux		: STD_LOGIC_VECTOR( 31 DOWNTO 0 );
 SIGNAL Branch_Add 			: STD_LOGIC_VECTOR( 7 DOWNTO 0 );
+signal r_Unsigned_L : STD_LOGIC_VECTOR (31 downto 0) := x"00000000";
+signal r_Unsigned_R :STD_LOGIC_VECTOR (31 downto 0) := x"00000000";
+
 SIGNAL ALU_ctl				: STD_LOGIC_VECTOR( 2 DOWNTO 0 );
 BEGIN
 	Ainput <= Read_data_1;
@@ -48,12 +52,24 @@ BEGIN
 						-- Select ALU output        
 	ALU_result <= X"0000000" & B"000"  & ALU_output_mux( 31 ) 
 		WHEN  ALU_ctl = "111"
-		Else std_logic_vector(shift_left(ieee.numeric_std.unsigned(Binput), to_integer(ieee.numeric_std.unsigned(shiftValue)))) when Function_opcode ="000000" and ALUOp(1) ='1'
-		else std_logic_vector(shift_right(ieee.numeric_std.unsigned(Binput), to_integer(ieee.numeric_std.unsigned(shiftValue)))) when Function_opcode = "000010" and ALUOp(1) ='1'
+	Else r_Unsigned_L  when Function_opcode ="000000" and ALUOp(1) ='1'
+	--	else       r_Unsigned_R  when Function_opcode ="000010" and ALUOp(1) ='1'   --std_logic_vector(shift_right(ieee.numeric_std.unsigned(Binput), to_integer(ieee.numeric_std.unsigned(shiftValue)))) when Function_opcode = "000010" and ALUOp(1) ='1'
 		ELSE  	ALU_output_mux( 31 DOWNTO 0 );
 
+       r_Unsigned_L <= Binput(28 downto 0)&"000" when shiftValue = "00011" else--3
+					   Binput(29 downto 0)&"00" when shiftValue = "00010" else --2
+					   Binput(30 downto 0)&"0" when shiftValue = "00001" else --1
+						Binput(15 downto 0)& x"0000" when shiftValue = "01000" else--16
+					   x"00000000" when shiftValue = "10000" else --32
+					Binput;
 
-
+   --  r_Unsigned_R <= "0"&Binput(31 downto 1) when shiftValue = "00001";-- else --1
+--"000"&Binput(31 downto 3) when shiftValue = "00011" else--3
+					--  "00"&Binput(31 downto 2) when shiftValue = "00010" else --2
+					
+				--x"0000"&Binput(31 downto 16) when shiftValue = "01000" else--16
+				--	   x"00000000" when shiftValue = "10000" else --32
+				--	Binput;
 						-- Adder to compute Branch Address
 	Branch_Add	<= PC_plus_4( 9 DOWNTO 2 ) +  Sign_extend( 7 DOWNTO 0 ) ;
 		Add_result 	<= Branch_Add( 7 DOWNTO 0 );
