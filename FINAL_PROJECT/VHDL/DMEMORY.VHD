@@ -62,8 +62,11 @@ data_memory : altsyncram
 		data_a => write_data,
 		q_a => mem_read_data);
 		
-	Seven_Seg <= SEVEN_SEG_MAP;
-	
+	Seven_Seg <= x"000"&SEVEN_SEG_MAP(3  downto 0) when addrOfIO ="100000001000" ELSE --PORT_HEX0[7-0] 0x808
+				x"00"&SEVEN_SEG_MAP(3  downto 0)&x"0" when addrOfIO="100000001100" ELSE --PORT_HEX1[7-0] 0x80c
+			x"0"&SEVEN_SEG_MAP(3  downto 0)&x"00" when addrOfIO="100000010000" ELSE --PORT_HEX2[7-0] 0x810
+			SEVEN_SEG_MAP(3  downto 0)&x"000" when addrOfIO="100000010100" ELSE --PORT_HEX3[7-0] 0x814
+			x"0000";
 		write_seg_en<='1' when IsSpecialAddr = '1' and Memwrite ='1' else '0';
 
 

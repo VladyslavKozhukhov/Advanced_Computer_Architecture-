@@ -17,8 +17,10 @@ ENTITY Idecode IS
 			RegDst 		: IN 	STD_LOGIC;
 			Sign_extend : OUT 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
 			IsSpecialAddr : OUT    std_logic;
-			IsTEST		: OUT std_logic;
-			addrOfIO    :OUT STD_LOGIC_VECTOR(11 downto 0);--addr of IO
+ first						: OUT STD_LOGIC;
+	 second						: OUT STD_LOGIC;
+	 third						: OUT STD_LOGIC;
+	 four						: OUT STD_LOGIC;			addrOfIO    :OUT STD_LOGIC_VECTOR(11 downto 0);--addr of IO
 			clock,reset	: IN 	STD_LOGIC );
 END Idecode;
 
@@ -69,15 +71,14 @@ BEGIN
 						'0';
 		addrOfIO<=	Instruction(11 downto 0);
 wrReg_out<= register_array( CONV_INTEGER( write_register_address));
-		
-	IsTEST<='1' WHEN Instruction(11 downto 0) = "100000000000" ELSE --PORT_LEDG[7-0] 0x800
-			'1' WHEN Instruction(11 downto 0) = "100000000100" ELSE --PORT_LEDR[7-0] 0x804
-			'1' WHEN Instruction(11 downto 0) = "100000001000" ELSE --PORT_LEDR[7-0] 0x808
-			'1' WHEN Instruction(11 downto 0) = "100000001100" ELSE --PORT_LEDR[7-0] 0x80c
-			'1' WHEN Instruction(11 downto 0) = "100000010000" ELSE --PORT_LEDR[7-0] 0x810
-			'1' WHEN Instruction(11 downto 0) = "100000010100" ELSE --PORT_LEDR[7-0] 0x814
-			'1' WHEN Instruction(11 downto 0) = "100000011000" ELSE --PORT_LEDR[7-0] 0x818
-			'0';
+		 first	<='1' WHEN Instruction(11 downto 0) = "100000001000" ELSE '0'; --PORT_HEX0[7-0] 0x808					
+	 second			<='1' WHEN Instruction(11 downto 0) = "100000001100" ELSE '0'; --PORT_HEX1[7-0] 0x810
+			
+	 third		<='1' WHEN Instruction(11 downto 0) = "100000010000" ELSE '0';--PORT_HEX2[7-0] 0x810
+
+	 four						<='1' WHEN Instruction(11 downto 0) = "100000010100" ELSE '0';--PORT_HEX3[7-0] 0x814
+			
+
 PROCESS
 	BEGIN
 		WAIT UNTIL clock'EVENT AND clock = '1';
