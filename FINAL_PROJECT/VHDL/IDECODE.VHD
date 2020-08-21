@@ -15,6 +15,8 @@ ENTITY Idecode IS
 			RegWrite 	: IN 	STD_LOGIC;
 			MemtoReg 	: IN 	STD_LOGIC;
 			RegDst 		: IN 	STD_LOGIC;
+			Memwrite 		: IN 	STD_LOGIC;
+			Memread 		: IN 	STD_LOGIC;
 			Sign_extend : OUT 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
 			IsSpecialAddr : OUT    std_logic;
  first						: OUT STD_LOGIC;
@@ -61,13 +63,13 @@ BEGIN
 		WHEN Instruction_immediate_value(15) = '0'
 		ELSE	X"FFFF" & Instruction_immediate_value;
 --register _array(CONV_INTEGER( read_register_1_address ) ) When Instruction( 31 DOWNTO 26 ) ="100011" and Instruction_immediate_value=x"0000" else
-		IsSpecialAddr <='1' WHEN Instruction(11 downto 0) = "100000000000" ELSE --PORT_LEDG[7-0] 0x800
-						'1' WHEN Instruction(11 downto 0) = "100000000100" ELSE --PORT_LEDR[7-0] 0x804
-						'1' WHEN Instruction(11 downto 0) = "100000001000" ELSE --PORT_HEX0[7-0] 0x808
-						'1' WHEN Instruction(11 downto 0) = "100000001100" ELSE --PORT_HEX1[7-0] 0x80c
-						'1' WHEN Instruction(11 downto 0) = "100000010000" ELSE --PORT_HEX2[7-0] 0x810
-						'1' WHEN Instruction(11 downto 0) = "100000010100" ELSE --PORT_HEX3[7-0] 0x814
-						'1' WHEN Instruction(11 downto 0) = "100000011000" ELSE --PORT_SW[7-0] 0x818
+		IsSpecialAddr <='1' WHEN Instruction(11 downto 0) = "100000000000" and (Memwrite='1' or Memread ='1')ELSE --PORT_LEDG[7-0] 0x800
+						'1' WHEN Instruction(11 downto 0) = "100000000100"and (Memwrite='1' or Memread ='1')ELSE --PORT_LEDR[7-0] 0x804
+						'1' WHEN Instruction(11 downto 0) = "100000001000"and (Memwrite='1' or Memread ='1') ELSE --PORT_HEX0[7-0] 0x808
+						'1' WHEN Instruction(11 downto 0) = "100000001100" and (Memwrite='1' or Memread ='1')ELSE--PORT_HEX1[7-0] 0x80c
+						'1' WHEN Instruction(11 downto 0) = "100000010000" and (Memwrite='1' or Memread ='1')ELSE --PORT_HEX2[7-0] 0x810
+						'1' WHEN Instruction(11 downto 0) = "100000010100" and (Memwrite='1' or Memread ='1')ELSE --PORT_HEX3[7-0] 0x814
+						'1' WHEN Instruction(11 downto 0) = "100000011000" and (Memwrite='1' or Memread ='1')ELSE --PORT_SW[7-0] 0x818
 						'0';
 		addrOfIO<=	Instruction(11 downto 0);
 wrReg_out<= register_array( CONV_INTEGER( write_register_address));

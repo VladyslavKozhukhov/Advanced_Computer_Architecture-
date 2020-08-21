@@ -18,7 +18,8 @@ ENTITY dmemory IS
 			PORT_LEDG           : OUT std_logic_vector(7 DOWNTO 0);-- for IO
 			PORT_LEDR       	: OUT std_logic_vector(7 DOWNTO 0);-- for IO
 			addrOfIO    		: IN STD_LOGIC_VECTOR(11 downto 0);--addr of IO
-
+			 seg_out : out std_logic_vector(6 downto 0);
+			 seg_out1 : out std_logic_vector(6 downto 0);
             clock,reset			: IN 	STD_LOGIC );
 END dmemory;
 
@@ -32,18 +33,21 @@ SIGNAL read_extend_tmp		: STD_LOGIC_VECTOR( 31 DOWNTO 0 ):= (others => '0');
 SIGNAL write_data_tmp		: STD_LOGIC_VECTOR( 31 DOWNTO 0 );
 SIGNAL write_data_mem		: STD_LOGIC_VECTOR( 31 DOWNTO 0 );
 SIGNAL SEVEN_SEG_MAP	    : STD_LOGIC_VECTOR ( 15 downto 0 );
+SIGNAL SEVEN_SEG_MAPP	    : STD_LOGIC_VECTOR ( 15 downto 0 );
 SIGNAL mem_read_data		: STD_LOGIC_VECTOR ( 31 downto 0 );
+SIGNAL seg_out_tmp :  std_logic_vector(6 downto 0);
+SIGNAL			 seg_out1_tmp :  std_logic_vector(6 downto 0);
 
-COMPONENT Ndff_en 
-	generic ( N: integer := 8);
-	port (	
-			d: 	  		in std_logic_vector(N-1 downto 0);
-			clk:		in std_logic;
-			en:			in std_logic;
-			rst:		in std_logic;
-			q: 			out std_logic_vector(N-1 downto 0));
+COMPONENT led_clock2 
+  port ( clk : in STD_LOGIC;
+			 reset_n : in STD_LOGIC;
+				IsSpecialAddr		: IN    std_logic;
+
+			data :in std_logic_vector(3 downto 0);
+			 seg_out : OUT std_logic_vector(6 downto 0);
+			 seg_out1 : OUT std_logic_vector(6 downto 0)
+			);
 end COMPONENT;
-
 BEGIN
 data_memory : altsyncram
 	GENERIC MAP  (
@@ -62,38 +66,28 @@ data_memory : altsyncram
 		data_a => write_data,
 		q_a => mem_read_data);
 		
-	Seven_Seg <= x"000"&SEVEN_SEG_MAP(3  downto 0) when addrOfIO ="100000001000" ELSE --PORT_HEX0[7-0] 0x808
-				x"00"&SEVEN_SEG_MAP(3  downto 0)&x"0" when addrOfIO="100000001100" ELSE --PORT_HEX1[7-0] 0x80c
-			x"0"&SEVEN_SEG_MAP(3  downto 0)&x"00" when addrOfIO="100000010000" ELSE --PORT_HEX2[7-0] 0x810
-			SEVEN_SEG_MAP(3  downto 0)&x"000" when addrOfIO="100000010100" ELSE --PORT_HEX3[7-0] 0x814
-			x"0000";
-		write_seg_en<='1' when IsSpecialAddr = '1' and Memwrite ='1' else '0';
 
 
-SSG_REG: Ndff_en
-			generic map ( 16 )
-			port map(	d 	 => write_data( 15 downto 0 ),
-						clk	 => write_clock,
-						en	 => write_seg_en,
-						rst  => reset,
-						q 	 => SEVEN_SEG_MAP );
+
+--sve: led_clock2 port MAP( clock,not reset,IsSpecialAddr,write_data(3 downto 0),seg_out,seg_out1);
+
+	--Seven_Seg<=SEVEN_SEG_MAP;
+--SEVEN_SEG_MAP <=  write_data( 15 downto 0 ) when IsSpecialAddr = '1' and Memwrite  ='1' else SEVEN_SEG_MAP ;
+		--write_seg_en<='1' when IsSpecialAddr = '1' and Memwrite ='1' else '0';
+	
+--SSG_REG: Ndff_en
+	--		generic map ( 16 )
+	--		port map(	d 	 => write_data( 15 downto 0 ),
+		--				clk	 => write_clock,
+			--			en	 => write_seg_en,
+				--		rst  => reset,
+					--	q 	 => SEVEN_SEG_MAP );
 
 		write_mem_en <=Memwrite when IsSpecialAddr = '0' else '0';
 		read_data<=mem_read_data when IsSpecialAddr ='0' else 
 					X"000000"&SpecialData when IsSpecialAddr = '1' and MemRead ='1' else 
 					X"00000000";
---		when MemRead='1'and IsSpecialAddr = '0' else
-	--		X"0000"&SEVEN_SEG_MAP when MemRead='1' and IsSpecialAddr='1'else
-		--	X"00000000";
-	--Seven_Seg<= read_data_tmp(15 downto 0) when IsSpecialAddr ='1' and MemRead='1';
-	--read_data<=read_data_tmp;
-	--	PROCESS( IsSpecialAddr,address,MemRead,Memwrite,SpecialAddr,SpecialData)
-	--	BEGIN
-	---	if(IsSpecialAddr ='1' and Memwrite='1') then
-	--Seven_Seg<=write_data(15 downto 0);
-	--end if;
-	--end process;
-	-- Load memory address register with write clock
+
 
 		write_clock <= NOT clock;
 END behavior;

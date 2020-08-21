@@ -1,7 +1,7 @@
 LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.STD_LOGIC_ARITH.ALL;
----finish  sll srl 
+---finish   srl 
 ENTITY MIPS IS
 
 	PORT( reset, clock					: IN 	STD_LOGIC;
@@ -16,12 +16,11 @@ ENTITY MIPS IS
 		SEG2_OUT, SEG3_OUT: OUT std_logic_vector(6 DOWNTO 0); -- for IO
 		PORT_LEDG: OUT std_logic_vector(7 DOWNTO 0);-- for IO
 		PORT_LEDR: OUT std_logic_vector(7 DOWNTO 0);-- for IO
-			wrReg_out_t	:  OUT	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
         		PC_plus_4_oout 		: OUT  	STD_LOGIC_VECTOR( 9 DOWNTO 0 );
-	first_out						: OUT STD_LOGIC;
-	 second_out					: OUT STD_LOGIC;
-	 third_out						: OUT STD_LOGIC;
-	 four_out						: OUT STD_LOGIC;
+	
+	 isSpecial_out						: OUT STD_LOGIC;
+	 J_out						: OUT STD_LOGIC;
+	 Seven_Seg_out_top				:out STD_LOGIC_VECTOR( 15 DOWNTO 0 );
 	-----------------------------------------------------------
 		-- Output important signals to pins for easy display in Simulator
 		pc_oout								: OUT  STD_LOGIC_VECTOR( 9 DOWNTO 0 );
@@ -57,7 +56,8 @@ ARCHITECTURE structure OF MIPS IS
         		RegWrite, MemtoReg 	: IN 	STD_LOGIC;
         		RegDst 				: IN 	STD_LOGIC;
 			wrReg_out	: OUT 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
-
+Memread 			: in 	STD_LOGIC;
+             	Memwrite 			: in 	STD_LOGIC;
         		Sign_extend 		: OUT 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
 				IsSpecialAddr		: OUT    std_logic;
 				addrOfIO    :OUT STD_LOGIC_VECTOR(11 downto 0);--addr of IO
@@ -65,6 +65,7 @@ ARCHITECTURE structure OF MIPS IS
 	 second						: OUT STD_LOGIC;
 	 third						: OUT STD_LOGIC;
 	 four						: OUT STD_LOGIC;
+
         		clock, reset		: IN 	STD_LOGIC );
 	END COMPONENT;
 
@@ -118,13 +119,16 @@ ARCHITECTURE structure OF MIPS IS
 				PORT_LEDG: OUT std_logic_vector(7 DOWNTO 0);-- for IO
 				PORT_LEDR: OUT std_logic_vector(7 DOWNTO 0);-- for IO
 				addrOfIO    :IN STD_LOGIC_VECTOR(11 downto 0);--addr of IO
-
+			 seg_out : OUT std_logic_vector(6 downto 0);
+			 seg_out1 : OUT std_logic_vector(6 downto 0);
         		Clock,reset			: IN 	STD_LOGIC );
 	END COMPONENT;
 		-----------------------------------------------------------------
 COMPONENT sevenSegment IS
 	PORT (
 		HI, LO : IN std_logic_vector(7 DOWNTO 0);
+		IsSpecialAddr		: IN    std_logic;
+
 		----------------------------------------
 		SEG0_OUT, SEG1_OUT: OUT std_logic_vector(6 DOWNTO 0);
 		SEG2_OUT, SEG3_OUT: OUT std_logic_vector(6 DOWNTO 0)
@@ -145,14 +149,41 @@ COMPONENT Ndff
 			q					: out std_logic_vector(N-1 downto 0) );
 END COMPONENT;
 
-COMPONENT Ndff_en is
-generic ( N: integer := 8);
+COMPONENT Ndff_en 
+generic ( N: integer := 4);
 port (	
-		d: 	  		in std_logic_vector(N-1 downto 0);
+		d: 	  		in std_logic_vector(3 downto 0);
 		clk:		in std_logic;
 		en:			in std_logic;
 		rst:		in std_logic;
-		q: 			out std_logic_vector(N-1 downto 0));
+		q: 			out std_logic_vector(3 downto 0));
+end COMPONENT;
+
+COMPONENT led_clock2 
+  port ( clk : in STD_LOGIC;
+			 reset_n : in STD_LOGIC;
+				IsSpecialAddr		: IN    std_logic;
+			writeMem		: IN    std_logic;
+
+			dataa :in std_logic_vector(3 downto 0);
+			 seg_out : OUT std_logic_vector(6 downto 0);
+			 seg_out1 : OUT std_logic_vector(6 downto 0)
+			);
+end COMPONENT;
+
+
+COMPONENT IO_Register 
+port (
+	clock 		: IN 	STD_LOGIC;
+	Memwrite 	: IN 	STD_LOGIC;
+	address 		: IN 	STD_LOGIC_VECTOR( 11 DOWNTO 0 );
+	sevseg_sel  : IN    STD_LOGIC;
+	write_data 	: IN 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
+	seven_seg0 	: out std_logic_vector(6 downto 0);
+	seven_seg1 	: out std_logic_vector(6 downto 0);
+	seven_seg2 	: out std_logic_vector(6 downto 0);
+	seven_seg3 	: out std_logic_vector(6 downto 0)
+	);
 end COMPONENT;
 --------------------------------------
 					-- declare signals used to connect VHDL components
@@ -189,12 +220,13 @@ end COMPONENT;
 	SIGNAL address_tmp 			:STD_LOGIC_VECTOR( 9 DOWNTO 0 );
 
 		--seven seg vars--------
-	SIGNAL ssg0_out					: STD_LOGIC_VECTOR( 6 DOWNTO 0 );
+	SIGNAL ssg0_out					: STD_LOGIC_VECTOR( 3 DOWNTO 0 );
 	SIGNAL ssg1_out					: STD_LOGIC_VECTOR( 6 DOWNTO 0 );
 	SIGNAL ssg2_out					: STD_LOGIC_VECTOR( 6 DOWNTO 0 );
 	SIGNAL ssg3_out					: STD_LOGIC_VECTOR( 6 DOWNTO 0 );
+	SIGNAL tt					: STD_LOGIC_VECTOR( 3 DOWNTO 0 );
 	SIGNAL Seven_Seg				: STD_LOGIC_VECTOR( 15 DOWNTO 0 );
-	signal seg_signal_0 : STD_LOGIC_VECTOR( 6 DOWNTO 0 );
+	signal seg_signal_0 : STD_LOGIC_VECTOR( 3 DOWNTO 0 );
 	signal seg_signal_1 : STD_LOGIC_VECTOR( 6 DOWNTO 0 );
 	signal seg_signal_2 : STD_LOGIC_VECTOR( 6 DOWNTO 0 );
 	signal seg_signal_3 : STD_LOGIC_VECTOR( 6 DOWNTO 0 );
@@ -202,11 +234,14 @@ end COMPONENT;
 	signal the_two						: STD_LOGIC;
 	signal the_three						: STD_LOGIC;
 	signal the_four						: STD_LOGIC;
+	signal NR						: STD_LOGIC;
 	signal ebf						: STD_LOGIC;
+	signal esbf						: STD_LOGIC;
    -------------------------------------
 	SIGNAL bubble_delay			: STD_LOGIC_VECTOR	(0 downto 0);
 
 BEGIN
+NR<= not reset;
 					-- copy important signals to output pins for easy 
 					-- display in Simulator
    Instruction_out 	<= Instruction;
@@ -215,24 +250,23 @@ BEGIN
    read_data_2_out 	<= read_data_2;
    write_data_out  	<= read_data WHEN MemtoReg = '1' ELSE ALU_result;
    Branch_out 		<= Branch;
+J_out <= Jump;
    Zero_out 		<= Zero;
    RegWrite_out 	<= RegWrite;
    MemWrite_out 	<= MemWrite;
+isSpecial_out<=IsSpecialAddr;
 pc_oout<=PC;
 PC_plus_4_oout<=PC_plus_4;
-wrReg_out_t<=wrReg_out;
 addr_out<=	ALU_Result (9 DOWNTO 2)&"00";
+Seven_Seg_out_top<=Seven_Seg;
    -------------------------------------
 ebf<='1';
-   SEG0_OUT <= seg_signal_0;
-   SEG1_OUT <=seg_signal_1;
-   SEG2_OUT <= seg_signal_2;
-   SEG3_OUT <=seg_signal_3;
-   
-   first_out<=the_one;						
-	 second_out<=the_two;						
-	 third_out<=the_three;						
-	 four_out<=the_four;						
+			
+--  SEG0_OUT <= ssg0_out;--seg_signal_0;
+ --  SEG1_OUT <=ssg1_out;--seg_signal_1;
+  -- SEG2_OUT <= ssg2_out;-- seg_signal_2;
+   --SEG3_OUT <=seg_signal_3;--ssg3_out ;--seg_signal_3;
+  						
    address_tmp<= ALU_Result (9 DOWNTO 2)&"00";
    
    
@@ -251,7 +285,7 @@ ebf<='1';
 				clock 			=> clock,  
 	 IsSWCommand =>IsSWCommand,
 
-				reset 			=> reset );
+				reset 			=> NR );
 
    ID : Idecode
    	PORT MAP (	read_data_1 	=> read_data_1,
@@ -269,11 +303,12 @@ first=>the_one,
 second=>	 the_two,						
 	third=> the_three,						
 	 four=>the_four	,					
-
+Memread 		=> MemRead,
+				Memwrite 		=> MemWrite,
 				addrOfIO=>addrOfIO,
 				wrReg_out=>wrReg_out,
         		clock 			=> clock,  
-				reset 			=> reset );
+				reset 			=> NR );
 
 
    CTL:   control
@@ -292,7 +327,7 @@ second=>	 the_two,
 				IsSWCommand     =>IsSWCommand,
 				IsICommand  	=>IsICommand,
 				clock 			=> clock,
-				reset 			=> reset );
+				reset 			=> NR );
 
    EXE:  Execute
    	PORT MAP (	Read_data_1 	=> read_data_1,
@@ -311,7 +346,7 @@ second=>	 the_two,
 				IsICommand  	=>IsICommand,
 				shiftValue      =>Instruction( 10 DOWNTO 6),
                 Clock			=> clock,
-				Reset			=> reset );
+				Reset			=> NR );
 
    MEM:  dmemory
 	PORT MAP (	read_data 		=> read_data,
@@ -326,68 +361,87 @@ second=>	 the_two,
 				PORT_LEDG=>PORT_LEDG,
 				PORT_LEDR=>PORT_LEDR,
 				addrOfIO=>addrOfIO,
+seg_out=>SEG1_OUT,
+seg_out1=>SEG3_OUT,
                 clock 			=> clock,  
-				reset 			=> reset );
+				reset 			=> NR );
 				
-				
+
+
+	--	sevenSEG : sevenSegment PORT MAP(Seven_Seg(15 downto 8), Seven_Seg(7 downto 4),Seven_Seg(3 downto 0), IsSpecialAddr,SEG0_OUT, SEG1_OUT, SEG2_OUT, SEG3_OUT);
+--========================================================================================================
+--IO:IO_Register 
+--port map(
+--	clock 		=>clock,
+--	Memwrite 	=>Memwrite,
+--	address =>addrOfIO,
+--	sevseg_sel  => IsSpecialAddr,
+--	write_data =>read_data_2,
+--	seven_seg0 =>SEG0_OUT,
+--	seven_seg1 =>SEG1_OUT,
+--	seven_seg2 	=>SEG2_OUT,
+--	seven_seg3 	=>SEG3_OUT
+--	);			
 --==========================Convert from binary to hex= write data -> seven_seg===========================				
-BCD0: BCD
-	PORT MAP (
-		Binary 	=> Seven_Seg( 3 downto 0 ),
-		En 		=> ebf,
-		Hex_out => ssg0_out );
-	BCD1: BCD
-	PORT MAP (
-		Binary 	=> Seven_Seg( 7 downto 4 ),
-		En 		=> ebf,
-		Hex_out => ssg1_out );
+--BCD0: BCD
+	--PORT MAP (
+	--	Binary 	=> Seven_Seg( 3 downto 0 ),
+	-----	En 		=> the_one,
+	--	Hex_out => ssg0_out );
+	--BCD1: BCD
+	--PORT MAP (
+	--	Binary 	=> Seven_Seg( 7 downto 4 ),
+	--	En 		=> the_two,
+	--	Hex_out => ssg1_out );
 	
-	BCD2: BCD
-	PORT MAP (
-		Binary 	=> Seven_Seg( 11 downto 8 ),
-		En 		=> ebf,
-		Hex_out => ssg2_out );		
+	--BCD2: BCD
+	--PORT MAP (
+	--	Binary 	=> Seven_Seg( 11 downto 8 ),
+	--	En 		=> the_three,
+	--	Hex_out => ssg2_out );		
 	
-	BCD3: BCD
-	PORT MAP (
-		Binary 	=> Seven_Seg( 15 downto 12 ),
-		En 		=> ebf,
-		Hex_out => ssg3_out );
+	--BCD3: BCD
+	--PORT MAP (
+		--Binary 	=> Seven_Seg( 15 downto 12 ),
+		--En 		=> the_four,
+		--Hex_out => ssg3_out );
 --=============================seven_segment display with DFF============================
-  seg_signal_reg0: Ndff_en
-    GENERIC MAP ( N => 7 )
-	PORT MAP (	d 			=> ssg0_out,
-				clk			=>  clock,
-				rst			=> reset,
-				En 		=> the_one,
 
-				q			=> seg_signal_0 ); --goes to Idecode & control too
+sve: led_clock2 port MAP( clock, reset,IsSpecialAddr,Memwrite,read_data_2(3 downto 0),SEG0_OUT,SEG2_OUT);
+
+  --seg_signal_reg0: Ndff_en
+ --  GENERIC MAP ( N => 4 )
+	--PORT MAP (	d 			=> read_data_2(3 downto 0),
+		--	clk			=>  clock,
+			--	rst			=> NR,
+				--En 		=> IsSpecialAddr,
+			--	q			=> seg_signal_0 ); --goes to Idecode & control too
 				
-  seg_signal_reg1: Ndff_en
-    GENERIC MAP ( N => 7 )
-	PORT MAP (	d 			=> ssg1_out,
-				clk			=>  clock,
-		En 		=> the_two,
+ -- seg_signal_reg1: Ndff_en
+  -- GENERIC MAP ( N => 4 )
+--PORT MAP (	d 			=> ssg1_out,
+	--			clk			=>  clock,
+		--En 		=> the_two,-
 
-				rst			=> reset,
-				q			=> seg_signal_1 ); --goes to Idecode & control too
+			--	rst			=> NR,
+				--q			=> seg_signal_1 ); --goes to Idecode & control too
 				
-  seg_signal_reg2: Ndff_en
-    GENERIC MAP ( N => 7 )
-	PORT MAP (	d 			=> ssg2_out,
-				clk			=>  clock,
-				rst			=> reset,
-		En 		=> the_three,
+  --seg_signal_reg2: Ndff_en
+   -- GENERIC MAP ( N => 7 )
+	--PORT MAP (	d 			=> ssg2_out,
+	--			clk			=>  clock,
+	--			rst			=> NR,
+	--	En 		=> the_three,
 
-				q			=> seg_signal_2 ); --goes to Idecode & control too
+--				q			=> seg_signal_2 ); --goes to Idecode & control too
 
-  seg_signal_reg3: Ndff_en
-    GENERIC MAP ( N => 7 )
-	PORT MAP (	d 			=> ssg3_out,
-				clk			=>  clock,
-				rst			=> reset,
-		En 		=> the_four,
+  --seg_signal_reg3: Ndff_en
+   -- GENERIC MAP ( N => 7 )
+	--PORT MAP (	d 			=> ssg3_out,
+	--			clk			=>  clock,
+	--			rst			=> NR,
+	--	En 		=> the_four,
 
-				q			=> seg_signal_3 ); --goes to Idecode & control too
+				--q			=> seg_signal_3 ); --goes to Idecode & control too
 
 END structure;
