@@ -35,8 +35,6 @@ SIGNAL write_data_mem		: STD_LOGIC_VECTOR( 31 DOWNTO 0 );
 SIGNAL SEVEN_SEG_MAP	    : STD_LOGIC_VECTOR ( 15 downto 0 );
 SIGNAL SEVEN_SEG_MAPP	    : STD_LOGIC_VECTOR ( 15 downto 0 );
 SIGNAL mem_read_data		: STD_LOGIC_VECTOR ( 31 downto 0 );
-SIGNAL seg_out_tmp :  std_logic_vector(6 downto 0);
-SIGNAL			 seg_out1_tmp :  std_logic_vector(6 downto 0);
 
 COMPONENT led_clock2 
   port ( clk : in STD_LOGIC;

@@ -1,25 +1,34 @@
 LIBRARY IEEE;
-USE  IEEE.STD_LOGIC_1164.all;
-USE  IEEE.STD_LOGIC_ARITH.all;
-USE  IEEE.STD_LOGIC_UNSIGNED.all;
+USE IEEE.STD_LOGIC_1164.ALL;
+USE IEEE.STD_LOGIC_ARITH.ALL;
+USE IEEE.STD_LOGIC_UNSIGNED.ALL;
 
-entity led_clock2 is
-  port ( clk : in STD_LOGIC;
-			 reset_n : in STD_LOGIC;
-			IsSpecialAddr		: IN    std_logic;
-			writeMem		: IN    std_logic;
-			dataa     :in std_logic_vector(3 downto 0);
-			 seg_out : OUT std_logic_vector(6 downto 0);
-			 seg_out1 : OUT std_logic_vector(6 downto 0)
+ENTITY led_clock2 IS
+	PORT (
+		clk : IN STD_LOGIC;
+		reset_n : IN STD_LOGIC;
+		is_one : IN STD_LOGIC;
+		is_two : IN STD_LOGIC;
+		is_three : IN STD_LOGIC;
+		is_four : IN STD_LOGIC;
 
-);
-end  led_clock2;
+		IsSpecialAddr : IN std_logic;
+		writeMem : IN std_logic;
+		dataa : IN std_logic_vector(3 DOWNTO 0);
+		seg_out : OUT std_logic_vector(6 DOWNTO 0);
+		seg_out1 : OUT std_logic_vector(6 DOWNTO 0);
+		seg_out2 : OUT std_logic_vector(6 DOWNTO 0);
+		seg_out3 : OUT std_logic_vector(6 DOWNTO 0)
+	);
+END led_clock2;
 
-architecture Behavioral of led_clock2 is
-signal clk_sig : std_logic;
-signal num : integer;
-signal num2 : integer;
-CONSTANT value_0 : std_logic_vector(3 DOWNTO 0) := "0000";
+ARCHITECTURE Behavioral OF led_clock2 IS
+	SIGNAL clk_sig : std_logic;
+	SIGNAL num0 : INTEGER RANGE 0 TO 16 := 0;
+	SIGNAL num1 : INTEGER RANGE 0 TO 16 := 0;
+	SIGNAL num2 : INTEGER RANGE 0 TO 16 := 0;
+	SIGNAL num3 : INTEGER RANGE 0 TO 16 := 0;
+	CONSTANT value_0 : std_logic_vector(3 DOWNTO 0) := "0000";
 	CONSTANT value_1 : std_logic_vector(3 DOWNTO 0) := "0001";
 	CONSTANT value_2 : std_logic_vector(3 DOWNTO 0) := "0010";
 	CONSTANT value_3 : std_logic_vector(3 DOWNTO 0) := "0011";
@@ -35,57 +44,182 @@ CONSTANT value_0 : std_logic_vector(3 DOWNTO 0) := "0000";
 	CONSTANT value_d : std_logic_vector(3 DOWNTO 0) := "1101";
 	CONSTANT value_E : std_logic_vector(3 DOWNTO 0) := "1110";
 	CONSTANT value_F : std_logic_vector(3 DOWNTO 0) := "1111";
-type bcd_num is array (0 to 9) of std_logic_vector(6 downto 0);
-signal seg_nums : bcd_num := ("1000000", --0
-										"1111001", --1
-										"0100100", --2
-										"0110000", --3
-										"0011001", --4
-										"0010010", --5
-										"0000011", --6
-										"1111000", --7
-										"0000000", --8
-										"0011000"); --9
+	TYPE bcd_num IS ARRAY (0 TO 15) OF std_logic_vector(6 DOWNTO 0);
+	SIGNAL seg_nums : bcd_num := ("1000000", --0
+		"1111001", --1
+		"0100100", --2
+		"0110000", --3
+		"0011001", --4
+		"0010010", --5
+		"0000010", --6
+		"1111000", --7
+		"0000000", --8
+		"0011000", --9
+		"0001000", --A
+		"0000011", --B
+		"1000110", --C
+		"0100001", --D
+		"0000110", --E
+	"0001110"); --F
+BEGIN
+	PROCESS (reset_n, clk, dataa)
+	VARIABLE cnt : INTEGER RANGE 0 TO 25000000;
+	--variable num : integer;
+	BEGIN
+		IF (reset_n = '0') THEN
 
-begin
-process(reset_n,clk,dataa)
-variable cnt : integer range 0 to 25000000;
---variable num : integer;
-begin
-	if (reset_n='0') then
+			num0 <= 0;
+			num1 <= 0;
+			num2 <= 0;
+			num3 <= 0;
+		ELSIF (writeMem = '1' AND IsSpecialAddr = '1'AND is_one = '1' AND rising_edge(clk)) THEN --rising_edge(clk)) and IsSpecialAddr = '1'
+			IF (dataa = value_0) THEN
+				num0 <= 0;
+			ELSIF (dataa = value_1) THEN
+				num0 <= 1;
+			ELSIF (dataa = value_2) THEN
+				num0 <= 2;
+			ELSIF (dataa = value_3) THEN
+				num0 <= 3;
+			ELSIF (dataa = value_4) THEN
+				num0 <= 4;
+			ELSIF (dataa = value_5) THEN
+				num0 <= 5;
+			ELSIF (dataa = value_6) THEN
+				num0 <= 6;
+			ELSIF (dataa = value_7) THEN
+				num0 <= 7;
+			ELSIF (dataa = value_8) THEN
+				num0 <= 8;
+			ELSIF (dataa = value_9) THEN
+				num0 <= 9;
+			ELSIF (dataa = value_A) THEN
+				num0 <= 10;
+			ELSIF (dataa = value_b) THEN
+				num0 <= 11;
+			ELSIF (dataa = value_c) THEN
+				num0 <= 12;
+			ELSIF (dataa = value_d) THEN
+				num0 <= 13;
+			ELSIF (dataa = value_E) THEN
+				num0 <= 14;
+			ELSIF (dataa = value_F) THEN
+				num0 <= 15;
+			END IF;
+ELSIF (writeMem = '1' AND IsSpecialAddr = '1'AND is_two = '1' AND rising_edge(clk)) THEN --rising_edge(clk)) and IsSpecialAddr = '1'
+			IF (dataa = value_0) THEN
+				num1 <= 0;
+			ELSIF (dataa = value_1) THEN
+				num1 <= 1;
+			ELSIF (dataa = value_2) THEN
+				num1 <= 2;
+			ELSIF (dataa = value_3) THEN
+				num1 <= 3;
+			ELSIF (dataa = value_4) THEN
+				num1 <= 4;
+			ELSIF (dataa = value_5) THEN
+				num1 <= 5;
+			ELSIF (dataa = value_6) THEN
+				num1 <= 6;
+			ELSIF (dataa = value_7) THEN
+				num1 <= 7;
+			ELSIF (dataa = value_8) THEN
+				num1 <= 8;
+			ELSIF (dataa = value_9) THEN
+				num1 <= 9;
+			ELSIF (dataa = value_A) THEN
+				num1 <= 10;
+			ELSIF (dataa = value_b) THEN
+				num1 <= 11;
+			ELSIF (dataa = value_c) THEN
+				num1 <= 12;
+			ELSIF (dataa = value_d) THEN
+				num1 <= 13;
+			ELSIF (dataa = value_E) THEN
+				num1 <= 14;
+			ELSIF (dataa = value_F) THEN
+				num1 <= 15;
+			END IF;
+ELSIF (writeMem = '1' AND IsSpecialAddr = '1'AND is_three = '1' AND rising_edge(clk)) THEN --rising_edge(clk)) and IsSpecialAddr = '1'
+			IF (dataa = value_0) THEN
+				num2 <= 0;
+			ELSIF (dataa = value_1) THEN
+				num2 <= 1;
+			ELSIF (dataa = value_2) THEN
+				num2 <= 2;
+			ELSIF (dataa = value_3) THEN
+				num2 <= 3;
+			ELSIF (dataa = value_4) THEN
+				num2 <= 4;
+			ELSIF (dataa = value_5) THEN
+				num2 <= 5;
+			ELSIF (dataa = value_6) THEN
+				num2 <= 6;
+			ELSIF (dataa = value_7) THEN
+				num2 <= 7;
+			ELSIF (dataa = value_8) THEN
+				num2 <= 8;
+			ELSIF (dataa = value_9) THEN
+				num2 <= 9;
+			ELSIF (dataa = value_A) THEN
+				num2 <= 10;
+			ELSIF (dataa = value_b) THEN
+				num2 <= 11;
+			ELSIF (dataa = value_c) THEN
+				num2 <= 12;
+			ELSIF (dataa = value_d) THEN
+				num2 <= 13;
+			ELSIF (dataa = value_E) THEN
+				num2 <= 14;
+			ELSIF (dataa = value_F) THEN
+				num2 <= 15;
+			END IF;
+ELSIF (writeMem = '1' AND IsSpecialAddr = '1'AND is_four = '1' AND rising_edge(clk)) THEN --rising_edge(clk)) and IsSpecialAddr = '1'
+			IF (dataa = value_0) THEN
+				num3 <= 0;
+			ELSIF (dataa = value_1) THEN
+				num3 <= 1;
+			ELSIF (dataa = value_2) THEN
+				num3 <= 2;
+			ELSIF (dataa = value_3) THEN
+				num3 <= 3;
+			ELSIF (dataa = value_4) THEN
+				num3 <= 4;
+			ELSIF (dataa = value_5) THEN
+				num3 <= 5;
+			ELSIF (dataa = value_6) THEN
+				num3 <= 6;
+			ELSIF (dataa = value_7) THEN
+				num3 <= 7;
+			ELSIF (dataa = value_8) THEN
+				num3 <= 8;
+			ELSIF (dataa = value_9) THEN
+				num3 <= 9;
+			ELSIF (dataa = value_A) THEN
+				num3 <= 10;
+			ELSIF (dataa = value_b) THEN
+				num3 <= 11;
+			ELSIF (dataa = value_c) THEN
+				num3 <= 12;
+			ELSIF (dataa = value_d) THEN
+				num3 <= 13;
+			ELSIF (dataa = value_E) THEN
+				num3 <= 14;
+			ELSIF (dataa = value_F) THEN
+				num3 <= 15;
+			END IF;
 
-		num<=0;
-		num2<=0;
-	elsif  (writeMem='1' and IsSpecialAddr = '1' and rising_edge(clk)  )then --rising_edge(clk)) and IsSpecialAddr = '1'
-			if (dataa=value_0) then
-				num<=0;
-			elsif (dataa=value_1 )then
-				num<=1;
-			elsif (dataa=value_2 )then
-							num<=2;
-							--num2<=2;
+		ELSE
+			num0 <= num0;
+			num2 <= num2;
+			num1 <= num1;
+			num3 <= num3;
+		END IF;
+	END PROCESS;
 
-						elsif (dataa=value_3 )then
-							num<=3;
-			elsif (dataa=value_4 )then
-							--num<=0;
-							num<=4;
-							num2<=4;
-						elsif (dataa=value_5 )then
-							num<=5;
-			elsif (dataa=value_6 )then
-							num<=6;
-						elsif (dataa=value_7 )then
-							num<=7;
-			elsif (dataa=value_8 )then
-							num<=8;
-			end if;
-else 
-num<=num;
-num2<=num2;
-		end if;
-end process;
+	seg_out <= seg_nums(num0);
+	seg_out1 <= seg_nums(num1);
+	seg_out2 <= seg_nums(num2);
+	seg_out3 <= seg_nums(num3);
 
-seg_out<=seg_nums(num);
-seg_out1<=seg_nums(num2);
-end Behavioral;
+END Behavioral;

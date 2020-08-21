@@ -74,7 +74,7 @@ BEGIN
 		addrOfIO<=	Instruction(11 downto 0);
 wrReg_out<= register_array( CONV_INTEGER( write_register_address));
 		 first	<='1' WHEN Instruction(11 downto 0) = "100000001000" ELSE '0'; --PORT_HEX0[7-0] 0x808					
-	 second			<='1' WHEN Instruction(11 downto 0) = "100000001100" ELSE '0'; --PORT_HEX1[7-0] 0x810
+	 second			<='1' WHEN Instruction(11 downto 0) = "100000001100" ELSE '0'; --PORT_HEX1[7-0] 0x80c
 			
 	 third		<='1' WHEN Instruction(11 downto 0) = "100000010000" ELSE '0';--PORT_HEX2[7-0] 0x810
 

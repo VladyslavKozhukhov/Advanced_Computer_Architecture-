@@ -56,10 +56,22 @@ BEGIN
 	--	else       r_Unsigned_R  when Function_opcode ="000010" and ALUOp(1) ='1'   --std_logic_vector(shift_right(ieee.numeric_std.unsigned(Binput), to_integer(ieee.numeric_std.unsigned(shiftValue)))) when Function_opcode = "000010" and ALUOp(1) ='1'
 		ELSE  	ALU_output_mux( 31 DOWNTO 0 );
 
-       r_Unsigned_L <= Binput(28 downto 0)&"000" when shiftValue = "00011" else--3
+       r_Unsigned_L <= Binput(30 downto 0)&"0" when shiftValue = "00001" else --1
 					   Binput(29 downto 0)&"00" when shiftValue = "00010" else --2
-					   Binput(30 downto 0)&"0" when shiftValue = "00001" else --1
-						Binput(15 downto 0)& x"0000" when shiftValue = "01000" else--16
+					   Binput(28 downto 0)&"000" when shiftValue = "00011" else--3
+					   Binput(27 downto 0)&"0000" when shiftValue = "00100" else--4
+					   Binput(26 downto 0)&"00000" when shiftValue = "00101" else --5
+					   Binput(25 downto 0)&"000000" when shiftValue = "000110" else --6
+					   Binput(24 downto 0)&"0000000" when shiftValue = "00111" else--7
+					   Binput(23 downto 0)&"00000000" when shiftValue = "01000" else --8
+					   Binput(22 downto 0)&"000000000" when shiftValue = "01001" else --9
+					   Binput(21 downto 0)&"0000000000" when shiftValue = "01010" else--10
+					   Binput(20 downto 0)&"00000000000" when shiftValue = "01011" else --11
+					   Binput(19 downto 0)&"000000000000" when shiftValue = "01100" else --12
+					   Binput(18 downto 0)&"0000000000000" when shiftValue = "01101" else--13
+					   Binput(17 downto 0)&"00000000000000" when shiftValue = "01110" else --14
+					   Binput(16 downto 0)&"000000000000000" when shiftValue = "01111" else --15
+					   Binput(15 downto 0)& x"0000" when shiftValue = "10000" else--16
 					   x"00000000" when shiftValue = "10000" else --32
 					Binput;
 

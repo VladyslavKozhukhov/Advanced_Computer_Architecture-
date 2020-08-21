@@ -119,8 +119,6 @@ Memread 			: in 	STD_LOGIC;
 				PORT_LEDG: OUT std_logic_vector(7 DOWNTO 0);-- for IO
 				PORT_LEDR: OUT std_logic_vector(7 DOWNTO 0);-- for IO
 				addrOfIO    :IN STD_LOGIC_VECTOR(11 downto 0);--addr of IO
-			 seg_out : OUT std_logic_vector(6 downto 0);
-			 seg_out1 : OUT std_logic_vector(6 downto 0);
         		Clock,reset			: IN 	STD_LOGIC );
 	END COMPONENT;
 		-----------------------------------------------------------------
@@ -162,12 +160,18 @@ end COMPONENT;
 COMPONENT led_clock2 
   port ( clk : in STD_LOGIC;
 			 reset_n : in STD_LOGIC;
+			is_one:  in STD_LOGIC;
+			is_two:  in STD_LOGIC;
+			is_three:  in STD_LOGIC;
+			is_four:  in STD_LOGIC;
 				IsSpecialAddr		: IN    std_logic;
 			writeMem		: IN    std_logic;
 
 			dataa :in std_logic_vector(3 downto 0);
 			 seg_out : OUT std_logic_vector(6 downto 0);
-			 seg_out1 : OUT std_logic_vector(6 downto 0)
+			 seg_out1 : OUT std_logic_vector(6 downto 0);
+			 seg_out2 : OUT std_logic_vector(6 downto 0);
+			 seg_out3 : OUT std_logic_vector(6 downto 0)
 			);
 end COMPONENT;
 
@@ -361,8 +365,6 @@ Memread 		=> MemRead,
 				PORT_LEDG=>PORT_LEDG,
 				PORT_LEDR=>PORT_LEDR,
 				addrOfIO=>addrOfIO,
-seg_out=>SEG1_OUT,
-seg_out1=>SEG3_OUT,
                 clock 			=> clock,  
 				reset 			=> NR );
 				
@@ -407,7 +409,7 @@ seg_out1=>SEG3_OUT,
 		--Hex_out => ssg3_out );
 --=============================seven_segment display with DFF============================
 
-sve: led_clock2 port MAP( clock, reset,IsSpecialAddr,Memwrite,read_data_2(3 downto 0),SEG0_OUT,SEG2_OUT);
+sve: led_clock2 port MAP( clock, reset,the_one,the_two,the_three,the_four,IsSpecialAddr,Memwrite,read_data_2(3 downto 0),SEG0_OUT,SEG1_OUT,SEG2_OUT,SEG3_OUT);
 
   --seg_signal_reg0: Ndff_en
  --  GENERIC MAP ( N => 4 )
