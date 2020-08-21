@@ -1,101 +1,90 @@
-						--  Idecode module (implements the register file for
-LIBRARY IEEE; 			-- the MIPS computer)
+LIBRARY IEEE; -- the MIPS computer)
 USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.STD_LOGIC_ARITH.ALL;
 USE IEEE.STD_LOGIC_UNSIGNED.ALL;
-
 ENTITY Idecode IS
-	  PORT(	read_data_1	: OUT 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
-			read_data_2	: OUT 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
-			wrReg_out	: OUT 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
-			Instruction : IN 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
-			bubble_out	: IN  	STD_LOGIC;
-			read_data 	: IN 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
-			ALU_result	: IN 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
-			RegWrite 	: IN 	STD_LOGIC;
-			MemtoReg 	: IN 	STD_LOGIC;
-			RegDst 		: IN 	STD_LOGIC;
-			Memwrite 		: IN 	STD_LOGIC;
-			Memread 		: IN 	STD_LOGIC;
-			Sign_extend : OUT 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
-			IsSpecialAddr : OUT    std_logic;
- first						: OUT STD_LOGIC;
-	 second						: OUT STD_LOGIC;
-	 third						: OUT STD_LOGIC;
-	 four						: OUT STD_LOGIC;			addrOfIO    :OUT STD_LOGIC_VECTOR(11 downto 0);--addr of IO
-			clock,reset	: IN 	STD_LOGIC );
+	PORT (
+		read_data_1   : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+		read_data_2   : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+		wrReg_out     : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+		Instruction   : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+		bubble_out    : IN STD_LOGIC;
+		read_data     : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+		ALU_result    : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+		RegWrite      : IN STD_LOGIC;
+		MemtoReg      : IN STD_LOGIC;
+		RegDst        : IN STD_LOGIC;
+		Memwrite      : IN STD_LOGIC;
+		Memread       : IN STD_LOGIC;
+		Sign_extend   : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+		IsSpecialAddr : OUT std_logic;
+		first         : OUT STD_LOGIC;
+		second        : OUT STD_LOGIC;
+		third         : OUT STD_LOGIC;
+		four          : OUT STD_LOGIC;
+		addrOfIO      : OUT STD_LOGIC_VECTOR(11 DOWNTO 0);--addr of IO
+		clock, reset  : IN STD_LOGIC
+	);
 END Idecode;
-
-
 ARCHITECTURE behavior OF Idecode IS
-TYPE register_file IS ARRAY ( 0 TO 31 ) OF STD_LOGIC_VECTOR( 31 DOWNTO 0 );
-
-	SIGNAL register_array				: register_file;
-	SIGNAL write_register_address 		: STD_LOGIC_VECTOR( 4 DOWNTO 0 );
-	SIGNAL write_data					: STD_LOGIC_VECTOR( 31 DOWNTO 0 );
-	SIGNAL read_register_1_address		: STD_LOGIC_VECTOR( 4 DOWNTO 0 );
-	SIGNAL read_register_2_address		: STD_LOGIC_VECTOR( 4 DOWNTO 0 );
-	SIGNAL write_register_address_1		: STD_LOGIC_VECTOR( 4 DOWNTO 0 );
-	SIGNAL write_register_address_0		: STD_LOGIC_VECTOR( 4 DOWNTO 0 );
-	SIGNAL Instruction_immediate_value	: STD_LOGIC_VECTOR( 15 DOWNTO 0 );
-
+	TYPE register_file IS ARRAY (0 TO 31) OF STD_LOGIC_VECTOR(31 DOWNTO 0);
+	SIGNAL register_array              : register_file;
+	SIGNAL write_register_address      : STD_LOGIC_VECTOR(4 DOWNTO 0);
+	SIGNAL write_data                  : STD_LOGIC_VECTOR(31 DOWNTO 0);
+	SIGNAL read_register_1_address     : STD_LOGIC_VECTOR(4 DOWNTO 0);
+	SIGNAL read_register_2_address     : STD_LOGIC_VECTOR(4 DOWNTO 0);
+	SIGNAL write_register_address_1    : STD_LOGIC_VECTOR(4 DOWNTO 0);
+	SIGNAL write_register_address_0    : STD_LOGIC_VECTOR(4 DOWNTO 0);
+	SIGNAL Instruction_immediate_value : STD_LOGIC_VECTOR(15 DOWNTO 0);
 BEGIN
-	read_register_1_address 	<= Instruction( 25 DOWNTO 21 );
-   	read_register_2_address 	<= Instruction( 20 DOWNTO 16 );
-   	write_register_address_1	<= Instruction( 15 DOWNTO 11 );
-   	write_register_address_0 	<= Instruction( 20 DOWNTO 16 );
-   	Instruction_immediate_value <= Instruction( 15 DOWNTO 0 );
+	read_register_1_address     <= Instruction(25 DOWNTO 21);
+	read_register_2_address     <= Instruction(20 DOWNTO 16);
+	write_register_address_1    <= Instruction(15 DOWNTO 11);
+	write_register_address_0    <= Instruction(20 DOWNTO 16);
+	Instruction_immediate_value <= Instruction(15 DOWNTO 0);
+	read_data_1                 <= register_array(CONV_INTEGER(read_register_1_address));
+	-- Read Register 2 Operation
+	read_data_2 <= register_array(CONV_INTEGER(read_register_2_address));
+	-- Mux for Register Write Address
+	write_register_address <= write_register_address_1
+		WHEN RegDst = '1' ELSE
+		write_register_address_0;
+		-- Mux to bypass data memory for Rformat instructions
+		write_data <= ALU_result(31 DOWNTO 0)
+			WHEN (MemtoReg = '0') ELSE read_data;
+			-- Sign Extend 16-bits to 32-bits
+			Sign_extend <= X"0000" & Instruction_immediate_value
+				WHEN Instruction_immediate_value(15) = '0'
+				ELSE X"FFFF" & Instruction_immediate_value;
+				--register _array(CONV_INTEGER(read_register_1_address ) ) When Instruction(31 DOWNTO 26 ) ="100011" and Instruction_immediate_value=x"0000" else
+				IsSpecialAddr <= '1' WHEN Instruction(11 DOWNTO 0) = "100000000000" AND (Memwrite = '1' OR Memread = '1')ELSE --PORT_LEDG[7-0] 0x800
+				                 '1' WHEN Instruction(11 DOWNTO 0) = "100000000100"AND (Memwrite = '1' OR Memread = '1')ELSE --PORT_LEDR[7-0] 0x804
+				                 '1' WHEN Instruction(11 DOWNTO 0) = "100000001000"AND (Memwrite = '1' OR Memread = '1') ELSE --PORT_HEX0[7-0] 0x808
+				                 '1' WHEN Instruction(11 DOWNTO 0) = "100000001100" AND (Memwrite = '1' OR Memread = '1')ELSE--PORT_HEX1[7-0] 0x80c
+				                 '1' WHEN Instruction(11 DOWNTO 0) = "100000010000" AND (Memwrite = '1' OR Memread = '1')ELSE --PORT_HEX2[7-0] 0x810
+				                 '1' WHEN Instruction(11 DOWNTO 0) = "100000010100" AND (Memwrite = '1' OR Memread = '1')ELSE --PORT_HEX3[7-0] 0x814
+				                 '1' WHEN Instruction(11 DOWNTO 0) = "100000011000" AND (Memwrite = '1' OR Memread = '1')ELSE --PORT_SW[7-0] 0x818
+				                 '0';
+				addrOfIO  <= Instruction(11 DOWNTO 0);
+				wrReg_out <= register_array(CONV_INTEGER(write_register_address));
+				first     <= '1' WHEN Instruction(11 DOWNTO 0) = "100000001000" ELSE '0'; --PORT_HEX0[7-0] 0x808
+				second    <= '1' WHEN Instruction(11 DOWNTO 0) = "100000001100" ELSE '0'; --PORT_HEX1[7-0] 0x80c
+				third     <= '1' WHEN Instruction(11 DOWNTO 0) = "100000010000" ELSE '0';--PORT_HEX2[7-0] 0x810
+				four      <= '1' WHEN Instruction(11 DOWNTO 0) = "100000010100" ELSE '0';--PORT_HEX3[7-0] 0x814
 
-
-
-	read_data_1 <=register_array( CONV_INTEGER( read_register_1_address ) ) ;
-					-- Read Register 2 Operation		 
-	read_data_2 <=   register_array( CONV_INTEGER( read_register_2_address ) ) ;
-
-					-- Mux for Register Write Address
-   write_register_address <= write_register_address_1 
-			WHEN RegDst = '1'  			ELSE write_register_address_0;
-					-- Mux to bypass data memory for Rformat instructions
-	write_data <= ALU_result( 31 DOWNTO 0 ) 
-			WHEN ( MemtoReg = '0' ) 	ELSE read_data;
-					-- Sign Extend 16-bits to 32-bits
-    	Sign_extend <=  X"0000" & Instruction_immediate_value
-		WHEN Instruction_immediate_value(15) = '0'
-		ELSE	X"FFFF" & Instruction_immediate_value;
---register _array(CONV_INTEGER( read_register_1_address ) ) When Instruction( 31 DOWNTO 26 ) ="100011" and Instruction_immediate_value=x"0000" else
-		IsSpecialAddr <='1' WHEN Instruction(11 downto 0) = "100000000000" and (Memwrite='1' or Memread ='1')ELSE --PORT_LEDG[7-0] 0x800
-						'1' WHEN Instruction(11 downto 0) = "100000000100"and (Memwrite='1' or Memread ='1')ELSE --PORT_LEDR[7-0] 0x804
-						'1' WHEN Instruction(11 downto 0) = "100000001000"and (Memwrite='1' or Memread ='1') ELSE --PORT_HEX0[7-0] 0x808
-						'1' WHEN Instruction(11 downto 0) = "100000001100" and (Memwrite='1' or Memread ='1')ELSE--PORT_HEX1[7-0] 0x80c
-						'1' WHEN Instruction(11 downto 0) = "100000010000" and (Memwrite='1' or Memread ='1')ELSE --PORT_HEX2[7-0] 0x810
-						'1' WHEN Instruction(11 downto 0) = "100000010100" and (Memwrite='1' or Memread ='1')ELSE --PORT_HEX3[7-0] 0x814
-						'1' WHEN Instruction(11 downto 0) = "100000011000" and (Memwrite='1' or Memread ='1')ELSE --PORT_SW[7-0] 0x818
-						'0';
-		addrOfIO<=	Instruction(11 downto 0);
-wrReg_out<= register_array( CONV_INTEGER( write_register_address));
-		 first	<='1' WHEN Instruction(11 downto 0) = "100000001000" ELSE '0'; --PORT_HEX0[7-0] 0x808					
-	 second			<='1' WHEN Instruction(11 downto 0) = "100000001100" ELSE '0'; --PORT_HEX1[7-0] 0x80c
-			
-	 third		<='1' WHEN Instruction(11 downto 0) = "100000010000" ELSE '0';--PORT_HEX2[7-0] 0x810
-
-	 four						<='1' WHEN Instruction(11 downto 0) = "100000010100" ELSE '0';--PORT_HEX3[7-0] 0x814
-			
-
-PROCESS
+				PROCESS
 	BEGIN
 		WAIT UNTIL clock'EVENT AND clock = '1';
 		IF reset = '1' THEN
-					-- Initial register values on reset are register = reg#
-					-- use loop to automatically generate reset logic 
-					-- for all registers
+			-- Initial register values on reset are register = reg#
+			-- use loop to automatically generate reset logic
+			-- for all registers
 			FOR i IN 0 TO 31 LOOP
-				register_array(i) <= CONV_STD_LOGIC_VECTOR( i, 32 );
- 			END LOOP;
-					-- Write back to register - don't write to register 0
-  		ELSIF RegWrite = '1' AND write_register_address /= 0 THEN
-		      register_array( CONV_INTEGER( write_register_address)) <= write_data;
+				register_array(i) <= CONV_STD_LOGIC_VECTOR(i, 32);
+			END LOOP;
+			-- Write back to register - don't write to register 0
+		ELSIF RegWrite = '1' AND write_register_address /= 0 THEN
+			register_array(CONV_INTEGER(write_register_address)) <= write_data;
 		END IF;
 	END PROCESS;
 END behavior;
-
-
