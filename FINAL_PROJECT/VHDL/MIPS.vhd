@@ -62,6 +62,8 @@ ARCHITECTURE structure OF MIPS IS
 			second             : OUT STD_LOGIC;
 			third              : OUT STD_LOGIC;
 			four               : OUT STD_LOGIC;
+			is_ledg					:OUT STD_LOGIC;
+			is_ledr					:OUT STD_LOGIC;
 			clock, reset       : IN STD_LOGIC
 		);
 	END COMPONENT;
@@ -114,9 +116,9 @@ ARCHITECTURE structure OF MIPS IS
 			SpecialData       : IN std_logic_vector(7 DOWNTO 0);
 			IsSpecialAddr     : IN std_logic;
 			Seven_Seg         : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
-			PORT_LEDG         : OUT std_logic_vector(7 DOWNTO 0);-- for IO
-			PORT_LEDR         : OUT std_logic_vector(7 DOWNTO 0);-- for IO
 			addrOfIO          : IN STD_LOGIC_VECTOR(11 DOWNTO 0);--addr of IO
+PORT_LEDG           : OUT std_logic_vector(7 DOWNTO 0);
+		PORT_LEDR          : OUT std_logic_vector(7 DOWNTO 0);
 			Clock, reset      : IN STD_LOGIC
 		);
 	END COMPONENT;
@@ -186,6 +188,20 @@ ARCHITECTURE structure OF MIPS IS
 			seven_seg3 : OUT std_logic_vector(6 DOWNTO 0)
 		);
 	END COMPONENT;
+
+COMPONENT led_out 
+	PORT (
+		clk : IN STD_LOGIC;
+		reset_n : IN STD_LOGIC;
+		is_ledr : IN STD_LOGIC;
+		is_ledg : IN STD_LOGIC;
+		IsSpecialAddr : IN std_logic;
+		writeMem : IN std_logic;
+		data : IN std_logic_vector(7 DOWNTO 0);
+		led_R : OUT std_logic_vector(7 DOWNTO 0);
+		led_G : OUT std_logic_vector(7 DOWNTO 0)
+	);
+END COMPONENT;
 	--------------------------------------
 	-- declare signals used to connect VHDL components
 	SIGNAL PC_plus_4     : STD_LOGIC_VECTOR(9 DOWNTO 0);
@@ -221,6 +237,8 @@ ARCHITECTURE structure OF MIPS IS
 	SIGNAL ssg0_out     : STD_LOGIC_VECTOR(3 DOWNTO 0);
 	SIGNAL ssg1_out     : STD_LOGIC_VECTOR(6 DOWNTO 0);
 	SIGNAL ssg2_out     : STD_LOGIC_VECTOR(6 DOWNTO 0);
+	SIGNAL port_f     : STD_LOGIC_VECTOR(7 DOWNTO 0);
+	SIGNAL port_g     : STD_LOGIC_VECTOR(7 DOWNTO 0);
 	SIGNAL ssg3_out     : STD_LOGIC_VECTOR(6 DOWNTO 0);
 	SIGNAL tt           : STD_LOGIC_VECTOR(3 DOWNTO 0);
 	SIGNAL Seven_Seg    : STD_LOGIC_VECTOR(15 DOWNTO 0);
@@ -232,6 +250,8 @@ ARCHITECTURE structure OF MIPS IS
 	SIGNAL the_two      : STD_LOGIC;
 	SIGNAL the_three    : STD_LOGIC;
 	SIGNAL the_four     : STD_LOGIC;
+	SIGNAL is_ledr     : STD_LOGIC;
+	SIGNAL is_ledg    : STD_LOGIC;
 	SIGNAL NR           : STD_LOGIC;
 	SIGNAL ebf          : STD_LOGIC;
 	SIGNAL esbf         : STD_LOGIC;
@@ -295,7 +315,8 @@ BEGIN
 		RegDst        => RegDst,
 		Sign_extend   => Sign_extend,
 		IsSpecialAddr => IsSpecialAddr,
-
+is_ledg=>is_ledg,
+is_ledr=>is_ledr,
 		first         => the_one,
 		second        => the_two,
 		third         => the_three,
@@ -357,10 +378,10 @@ BEGIN
 		SpecialData   => sw_0_7,
 		IsSpecialAddr => IsSpecialAddr,
 		Seven_Seg     => Seven_Seg,
-		PORT_LEDG     => PORT_LEDG,
-		PORT_LEDR     => PORT_LEDR,
 		addrOfIO      => addrOfIO,
 		clock         => clock,
+PORT_LEDG          => port_g,
+		PORT_LEDR          => port_f,
 		reset         => NR
 	);
 	-- sevenSEG : sevenSegment PORT MAP(Seven_Seg(15 downto 8), Seven_Seg(7 downto 4),Seven_Seg(3 downto 0), IsSpecialAddr,SEG0_OUT, SEG1_OUT, SEG2_OUT, SEG3_OUT);
@@ -400,9 +421,10 @@ BEGIN
 	--En => the_four,
 	--Hex_out => ssg3_out );
 	--=============================seven_segment display with DFF============================
-	sve : led_clock2
-	PORT MAP(clock, reset, the_one, the_two, the_three, the_four, IsSpecialAddr, Memwrite, read_data_2(3 DOWNTO 0), SEG0_OUT, SEG1_OUT, SEG2_OUT, SEG3_OUT);
-	--seg_signal_reg0: Ndff_en
+	sve : led_clock2 PORT MAP(clock, reset, the_one, the_two, the_three, the_four, IsSpecialAddr, Memwrite, read_data_2(3 DOWNTO 0), SEG0_OUT, SEG1_OUT, SEG2_OUT, SEG3_OUT);
+	ledd: led_out PORT MAP(clock,reset,	is_ledr,is_ledg ,IsSpecialAddr,	Memwrite,read_data_2(7 DOWNTO 0),PORT_LEDR,PORT_LEDG);
+
+--seg_signal_reg0: Ndff_en
 	-- GENERIC MAP (N => 4 )
 	--PORT MAP (d => read_data_2(3 downto 0),
 	-- clk => clock,

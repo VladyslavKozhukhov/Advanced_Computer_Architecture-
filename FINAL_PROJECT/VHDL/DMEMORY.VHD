@@ -14,11 +14,9 @@ ENTITY dmemory IS
 		SpecialData       : IN std_logic_vector(7 DOWNTO 0);
 		IsSpecialAddr     : IN std_logic;
 		Seven_Seg         : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
-		PORT_LEDG         : OUT std_logic_vector(7 DOWNTO 0);-- for IO
-		PORT_LEDR         : OUT std_logic_vector(7 DOWNTO 0);-- for IO
 		addrOfIO          : IN STD_LOGIC_VECTOR(11 DOWNTO 0);--addr of IO
-		seg_out           : OUT std_logic_vector(6 DOWNTO 0);
-		seg_out1          : OUT std_logic_vector(6 DOWNTO 0);
+		PORT_LEDG           : OUT std_logic_vector(7 DOWNTO 0);
+		PORT_LEDR          : OUT std_logic_vector(7 DOWNTO 0);
 		clock, reset      : IN STD_LOGIC
 	);
 END dmemory;
@@ -34,16 +32,6 @@ ARCHITECTURE behavior OF dmemory IS
 	SIGNAL SEVEN_SEG_MAP   : STD_LOGIC_VECTOR (15 DOWNTO 0);
 	SIGNAL SEVEN_SEG_MAPP  : STD_LOGIC_VECTOR (15 DOWNTO 0);
 	SIGNAL mem_read_data   : STD_LOGIC_VECTOR (31 DOWNTO 0);
-	COMPONENT led_clock2
-		PORT (
-			clk           : IN STD_LOGIC;
-			reset_n       : IN STD_LOGIC;
-			IsSpecialAddr : IN std_logic;
-			data          : IN std_logic_vector(3 DOWNTO 0);
-			seg_out       : OUT std_logic_vector(6 DOWNTO 0);
-			seg_out1      : OUT std_logic_vector(6 DOWNTO 0)
-		);
-	END COMPONENT;
 BEGIN
 	data_memory : altsyncram
 		GENERIC MAP(
@@ -63,20 +51,25 @@ BEGIN
 			q_a       => mem_read_data
 		);
 
-			--sve: led_clock2 port MAP(clock,not reset,IsSpecialAddr,write_data(3 downto 0),seg_out,seg_out1);
-			--Seven_Seg<=SEVEN_SEG_MAP;
-			--SEVEN_SEG_MAP <= write_data(15 downto 0 ) when IsSpecialAddr = '1' and Memwrite ='1' else SEVEN_SEG_MAP;
-			--write_seg_en<='1' when IsSpecialAddr = '1' and Memwrite ='1' else '0';
-			--SSG_REG: Ndff_en
-			-- generic map (16 )
-			-- port map(d => write_data(15 downto 0 ),
-			-- clk => write_clock,
-			-- en => write_seg_en,
-			-- rst => reset,
-			-- q => SEVEN_SEG_MAP );
+
+--PROCESS( IsSpecialAddr,address,Memwrite,SpecialAddr)
+		--BEGIN
+			--if (IsSpecialAddr ='1' and Memwrite='1') then
+			--	if(addrOfIO = "100000000000")then --PORT_LEDG[7-0] 0x800
+				--	PORT_LEDG<=write_data(7 DOWNTO 0);
+			--	elsif(addrOfIO = "100000000100") then --PORT_LEDR[7-0] 0x804
+		--			PORT_LEDR<=write_data(7 DOWNTO 0);
+	--			end if;
+--end if;
+--end Process;
 			write_mem_en <= Memwrite WHEN IsSpecialAddr = '0' ELSE '0';
 			read_data    <= mem_read_data WHEN IsSpecialAddr = '0' ELSE
 			             X"000000" & SpecialData WHEN IsSpecialAddr = '1' AND MemRead = '1' ELSE
 			             X"00000000";
 			write_clock <= NOT clock;
+
+
+
+
+
 END behavior;

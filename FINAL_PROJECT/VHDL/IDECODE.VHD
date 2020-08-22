@@ -22,6 +22,8 @@ ENTITY Idecode IS
 		second        : OUT STD_LOGIC;
 		third         : OUT STD_LOGIC;
 		four          : OUT STD_LOGIC;
+	is_ledr			  :out STD_LOGIC;
+is_ledg					:OUT STD_LOGIC;
 		addrOfIO      : OUT STD_LOGIC_VECTOR(11 DOWNTO 0);--addr of IO
 		clock, reset  : IN STD_LOGIC
 	);
@@ -71,7 +73,8 @@ BEGIN
 				second    <= '1' WHEN Instruction(11 DOWNTO 0) = "100000001100" ELSE '0'; --PORT_HEX1[7-0] 0x80c
 				third     <= '1' WHEN Instruction(11 DOWNTO 0) = "100000010000" ELSE '0';--PORT_HEX2[7-0] 0x810
 				four      <= '1' WHEN Instruction(11 DOWNTO 0) = "100000010100" ELSE '0';--PORT_HEX3[7-0] 0x814
-
+				is_ledg				 <= '1' WHEN Instruction(11 DOWNTO 0) = "100000000000" and Memwrite = '1' ELSE '0';--PORT_ledg 0x800	
+				is_ledr				 <= '1' WHEN Instruction(11 DOWNTO 0) = "100000000100" and Memwrite = '1'ELSE '0';--PORT_ledr 0x804
 				PROCESS
 	BEGIN
 		WAIT UNTIL clock'EVENT AND clock = '1';
