@@ -1,4 +1,3 @@
--- Ifetch module (provides the PC and instruction
 --memory for the MIPS computer)
 LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;

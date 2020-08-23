@@ -1,11 +1,7 @@
---  Execute module (implements the data ALU and Branch Address Adder  
---  for the MIPS computer)
 LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.STD_LOGIC_ARITH.ALL;
-USE IEEE.STD_LOGIC_SIGNED.ALL;
-use ieee.numeric_std.all;
-
+USE IEEE.STD_LOGIC_unSIGNED.ALL;
 
 ENTITY  Execute IS
 	PORT(	Read_data_1 	: IN 	STD_LOGIC_VECTOR( 31 DOWNTO 0 );
@@ -50,14 +46,13 @@ BEGIN
 	Zero <= '1' 
 		WHEN ( ALU_output_mux( 31 DOWNTO 0 ) = X"00000000"  )
 		ELSE '0';    
-						-- Select ALU output        
+r_Unsigned_L<=to_stdlogicvector(to_bitvector(Binput) sll conv_integer(unsigned(shiftValue(4 downto 0))));				
+
+		-- Select ALU output        
 	ALU_result <= X"0000000" & B"000"  & ALU_output_mux( 31 ) 
-		WHEN  ALU_ctl = "111"
-		--else r_Unsigned_L  when Function_opcode ="000000" and ALUOp(1) ='1'
-	--else SHIFTED when ALUOp(1)='1'
---Else r_Unsigned_L  when Function_opcode ="000000" and ALUOp(1) ='1'
-	--else       r_Unsigned_R  when Function_opcode ="000010" and ALUOp(1) ='1'   --std_logic_vector(shift_right(ieee.numeric_std.unsigned(Binput), to_integer(ieee.numeric_std.unsigned(shiftValue)))) when Function_opcode = "000010" and ALUOp(1) ='1'
-		ELSE  	ALU_output_mux( 31 DOWNTO 0 );
+		WHEN  ALU_ctl = "111" Else
+		r_Unsigned_L when  Function_opcode ="000000" and ALUOp(1) ='1' and IsICommand ='0' Else
+		  	ALU_output_mux( 31 DOWNTO 0 );
 --SHIFTED<= r_Unsigned_L when Function_opcode ="000000" else
 			--r_Unsigned_R when Function_opcode ="000010" else
 		--	x"00000000";
@@ -128,4 +123,3 @@ PROCESS ( ALU_ctl, Ainput, Binput )
   	END CASE;
   END PROCESS;
 END behavior;
-
