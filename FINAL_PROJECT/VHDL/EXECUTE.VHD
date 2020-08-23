@@ -46,13 +46,15 @@ BEGIN
 	Zero <= '1' 
 		WHEN ( ALU_output_mux( 31 DOWNTO 0 ) = X"00000000"  )
 		ELSE '0';    
-r_Unsigned_L<=to_stdlogicvector(to_bitvector(Binput) sll conv_integer(unsigned(shiftValue(4 downto 0))));				
+r_Unsigned_L<=to_stdlogicvector(to_bitvector(Binput) sll conv_integer(unsigned(shiftValue(4 downto 0))));
+r_Unsigned_R<=to_stdlogicvector(to_bitvector(Binput) srl conv_integer(unsigned(shiftValue(4 downto 0))));
+					  
+					-- Select ALU output        
+	ALU_result <= X"0000000" & B"000"  & ALU_output_mux( 31 ) 	WHEN  ALU_ctl = "111" Else
+				r_Unsigned_L when  Function_opcode ="000000" and ALUOp(1) ='1' and IsICommand ='0' Else
+				r_Unsigned_R when Function_opcode ="000010" and ALUOp(1) ='1' and IsICommand ='0' ELSE
+				ALU_output_mux( 31 DOWNTO 0 );
 
-		-- Select ALU output        
-	ALU_result <= X"0000000" & B"000"  & ALU_output_mux( 31 ) 
-		WHEN  ALU_ctl = "111" Else
-		r_Unsigned_L when  Function_opcode ="000000" and ALUOp(1) ='1' and IsICommand ='0' Else
-		  	ALU_output_mux( 31 DOWNTO 0 );
 --SHIFTED<= r_Unsigned_L when Function_opcode ="000000" else
 			--r_Unsigned_R when Function_opcode ="000010" else
 		--	x"00000000";
